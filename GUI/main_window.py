@@ -1,41 +1,43 @@
 # makingGUI with python and Pyside6
-from PySide6.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QPushButton,
-    QVBoxLayout,
-    QWidget,
-    QSplitter,
-    QHBoxLayout,
-    QLabel,
-    QFrame,
-    QComboBox,
-    QSpinBox,
-    QDoubleSpinBox,
-    QCheckBox,
-    QSlider,
-    QDial,
-)
-from PySide6.QtGui import QIcon, QPixmap, QFont, QAction, QKeySequence, QImage
-from PySide6.QtCore import (
-    Qt,
-    QSize,
-    Slot,
-    QTimer,
-)
-import sys
 import os
 import sqlite3
-from typing import Dict, List, Tuple
+import sys
 from datetime import datetime
+from typing import Dict, List, Tuple
+
+from PySide6.QtCore import (
+    QSize,
+    Qt,
+    QTimer,
+    Slot,
+)
+from PySide6.QtGui import QAction, QFont, QIcon, QImage, QKeySequence, QPixmap
+from PySide6.QtWidgets import (
+    QApplication,
+    QCheckBox,
+    QComboBox,
+    QDial,
+    QDoubleSpinBox,
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QMainWindow,
+    QPushButton,
+    QSlider,
+    QSpinBox,
+    QSplitter,
+    QVBoxLayout,
+    QWidget,
+)
+
+from BATTLE import battle_manager
+from GUI.field_panel import FieldPanel
+from GUI.pokemon_panel import PokemonPanel
+from GUI.result_panel import ResultPanel
 
 # pannel import
 from POKEMON.instance import PokemonInstance
 from POKEMON.manager import learnt_move_names_to_dict
-from GUI.pokemon_panel import PokemonPanel
-from GUI.result_panel import ResultPanel
-from GUI.field_panel import FieldPanel
-from BATTLE import battle_manager
 
 
 class MainWindow(QMainWindow):
@@ -85,7 +87,7 @@ class MainWindow(QMainWindow):
     def load_stylesheet(self, stylesheet_path: str):
         """Load a stylesheet from a file and apply it to the main window."""
         if os.path.exists(stylesheet_path):
-            with open(stylesheet_path, "r") as f:
+            with open(stylesheet_path, "r", encoding="utf-8") as f:
                 self.setStyleSheet(f.read())
         else:
             print(f"Stylesheet file not found: {stylesheet_path}")

@@ -1,6 +1,5 @@
 import sys
 
-import PySide6
 from PySide6 import QtCore
 from PySide6.QtCore import QMetaObject, Qt
 from PySide6.QtWidgets import QApplication

@@ -1,42 +1,39 @@
 # Pokemon Panel for the GUI select pokemon and show its details
 # makingGUI with python and Pyside6
-from POKEMON import manager, instance, factory
-
+import signal
 from dataclasses import dataclass, fields
-from typing import Dict
-from FIELD.state import BattleField
-from .field_panel import FieldPanel
+from typing import Dict, List, Tuple
+
+from PySide6.QtCore import QSize, Qt, QTimer, Signal, Slot
+from PySide6.QtGui import (
+    QAction,
+    QFont,
+    QIcon,
+    QKeySequence,
+    QPixmap,
+)
 from PySide6.QtWidgets import (
     QApplication,
-    QMainWindow,
-    QPushButton,
-    QVBoxLayout,
-    QWidget,
+    QCheckBox,
+    QComboBox,
+    QDial,
+    QDoubleSpinBox,
+    QFrame,
     QHBoxLayout,
     QLabel,
-    QFrame,
-    QComboBox,
-    QSpinBox,
-    QDoubleSpinBox,
-    QCheckBox,
+    QMainWindow,
+    QPushButton,
     QSlider,
-    QDial,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtGui import (
-    QIcon,
-    QPixmap,
-    QFont,
-    QAction,
-    QKeySequence,
-)
-from PySide6.QtCore import (
-    Qt,
-    QSize,
-    QTimer,
-)
-from typing import List, Tuple
-from GUI import panel_logic
-from GUI import field_panel
+
+from FIELD.state import BattleField
+from GUI import field_panel, panel_logic
+from POKEMON import factory, instance, manager
+
+from .field_panel import FieldPanel
 
 
 class PokemonPanel(QFrame):
@@ -66,6 +63,7 @@ class PokemonPanel(QFrame):
         self.setLayout(main_layout)
 
     # if pokemon is selected, emit pokemon instance
+    @Slot()
     def emit_updated_pokemon_instance(self):
         id = self.pokemon_combo.currentData()
         maked_instance = factory.create_pokemon_by_id(id)
