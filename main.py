@@ -1,5 +1,7 @@
+import os
 import sys
 
+import scalene
 from PySide6 import QtCore
 from PySide6.QtCore import QMetaObject, Qt
 from PySide6.QtWidgets import QApplication
@@ -7,6 +9,9 @@ from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
 from GUI.main_window import MainWindow
+
+os.environ["QT_QUICK_BACKEND"] = "software"
+os.environ["LIBGL_ALWAYS_SOFTWARE"] = "1"
 
 
 # 監視用のイベントハンドラを少しシンプルにする

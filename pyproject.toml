@@ -9,6 +9,8 @@ dependencies = [
     "numpy>=2.5.1",
     "pyside6>=6.11.1",
     "requests>=2.34.2",
+    "scalene>=2.3.0",
     "toml>=0.10.2",
+    "tuna>=0.5.15",
     "watchdog>=6.0.0",
 ]

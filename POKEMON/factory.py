@@ -1,10 +1,13 @@
 import functools
 import json
 import sqlite3
+import sys
 import time
-from calendar import c
 from contextlib import contextmanager
+from functools import lru_cache
 from typing import Optional
+
+from memory_profiler import profile
 
 DB_PATH = "pokemon_champions.db"
 STAT_KEYS = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"]
@@ -32,19 +35,22 @@ def timer(func):
     return wrapper
 
 
-@timer
+# 💡 jsonファイル全体を1回だけ読み込んで保持する関数を作る
+@lru_cache(maxsize=1)
+def load_all_pokemon_data() -> dict:
+    with open("JSON/pokemon.json", "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+@profile(stream=sys.stdout)
 def fetch_pokedata_by_id(id: int) -> dict | None:
-    filename = "JSON/pokemon.json"
-    with open(filename, "r", encoding="utf-8") as f:
-        all_pokemon = json.load(f)
-        print(len(all_pokemon))
+    all_pokemon = load_all_pokemon_data()
     if str(id) in all_pokemon:
         return all_pokemon[str(id)]
     else:
         return None
 
 
-@timer
 def fetch_pokedata_fromDB(id: int) -> dict | None:
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -53,7 +59,3 @@ def fetch_pokedata_fromDB(id: int) -> dict | None:
     result = cursor.fetchone()
     conn.close()
     return result
-
-
-print(fetch_pokedata_fromDB(3))
-print(fetch_pokedata_by_id(3))

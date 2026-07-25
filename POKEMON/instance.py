@@ -1,6 +1,4 @@
-import threading
 from dataclasses import dataclass, field
-from re import M
 from typing import Dict, List
 
 
@@ -48,9 +46,9 @@ class PokemonInstance:
     )
     gender_Id: int = 0
     nature_Id: int = 0
-    stat_change: Dict[str, int] = field(
+    stat_change: Dict[str, float] = field(
         default_factory=dict,
-        metadata={"description": "性格によるステート変化, int = 0.9 or 1.1"},
+        metadata={"description": "性格によるステート変化, float = 0.9 or 1.1"},
     )
     item_Id: int = 0
 
@@ -71,3 +69,20 @@ class PokemonInstance:
             return self.base_stats["HP"]
         else:
             return self.base_stats[stat_name]
+
+    def reset_ranks(self) -> None:
+        """交代時や戦闘終了時にランクをすべて0に戻す"""
+        for key in self.rank:
+            self.rank[key] = 0
+
+    def set_move(self, slot_index: int, move_id: int) -> None:
+        """技スロット（0〜3）に技をセットする"""
+        if 0 <= slot_index < 4:
+            if move_id in self.learnt_move_ids:
+                self.selected_move_ids[slot_index] = move_id
+
+    def to_dict(self) -> dict:
+        """JSON化や保存用にデータクラスを辞書化する"""
+        import dataclasses
+
+        return dataclasses.asdict(self)
