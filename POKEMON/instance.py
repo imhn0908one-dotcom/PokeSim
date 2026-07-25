@@ -1,5 +1,51 @@
 from dataclasses import dataclass, field
+from enum import Enum, auto
+from pickle import NONE
 from typing import Dict, List
+
+from flask.cli import F
+
+
+class Condition(Enum):
+    """状態異常の種類"""
+
+    NONE = "なし"
+    SLEEP = "ねむり"
+    POISON = "どく"
+    BAD_POISON = "もうどく"
+    PARALYSIS = "まひ"
+    BURN = "やけど"
+    FROZEN = "こおり"
+
+
+class VolatileCondition(Enum):
+    """状態変化の種類"""
+
+    NONE = "なし"
+    CONFUSION = "こんらん"
+    FLINCH = "ひるみ"
+    ATTRACT = "めろめろ"
+    DROWSY = "ねむけ"
+    BOUND = "バインド"
+    CURSE = "のろい"
+    CANT_ESCAPE = "にげられない"
+    LEECH_SEED = "やどりぎのタネ"
+    SUBSTITUTE = "みがわり"
+    TORMENT = "いちゃもん"
+    IMPRISON = "ふういん"
+    THROAT_CHOP = "じごくづき"
+    SALT_CURE = "しおづけ"
+    AQUA_RING = "アクアリング"
+    INGRAIN = "ねをはる"
+    NO_ABILITY = "いえきによって特性の効果が消えた"
+    TAR_SHOT = "タールショット"
+    SMACK_DOWN = "うちおとす"
+    FLASH_FIRE = "もらいび"
+    DESTINY_BOND = "みちづれ"
+    GRUDGE = "おんねん"
+    TRANSFORM = "へんしん"
+    UPROAR = "さわぐ"
+    STOCKPILE = "たくわえる"
 
 
 @dataclass(slots=True)
