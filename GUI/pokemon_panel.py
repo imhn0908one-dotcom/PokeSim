@@ -66,11 +66,10 @@ class PokemonPanel(QFrame):
     @Slot()
     def emit_updated_pokemon_instance(self):
         id = self.pokemon_combo.currentData()
-        maked_instance = factory.create_pokemon_by_id(id)
         if self.instance_atk_or_def == "attacker":
-            self.battle_manager.set_attacker(maked_instance)
+            print(self.battle_manager.attacker, id)
         elif self.instance_atk_or_def == "defender":
-            self.battle_manager.set_defender(maked_instance)
+            print(f"defender{id}")
 
 
 # pokemon view(details)

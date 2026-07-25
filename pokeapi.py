@@ -26,7 +26,7 @@ def get_pokemondetail(id):
     abilities = []
     name = response.json()["name"]
     moveids = []
-    stats = dict()    
+    stats = dict()
     for ability in response.json()["abilities"]:
         dc = {}
         dc["ability_id"] = int(ability["ability"]["url"].split("/")[-2])
@@ -38,7 +38,7 @@ def get_pokemondetail(id):
     for stat in response.json()["stats"]:
         stats[stat["stat"]["name"]] = stat["base_stat"]
     return name, abilities, moveids, stats
-    
+
 
 def save_pokemon():
     entry_numbers = get_entried_pokemon()
@@ -58,7 +58,6 @@ def save_pokemon():
 
     # 2. ループを回してデータを取得していく
     for index, id in enumerate(entry_numbers, 1):
-        
         # すでに保存済みのIDならスキップ（途中から再開できる！）
         if str(id) in all_pokemon:
             print(f"[{index}/{total_count}] ID: {id} は保存済みのためスキップします。")
@@ -76,13 +75,13 @@ def save_pokemon():
             "name": name,
             "abilities": abilities,
             "moves": moveids,
-            "stats": stats
+            "stats": stats,
         }
 
         json_string = json.dumps(all_pokemon, ensure_ascii=False)
 
         nice_json_string = json_string.replace('},"', '},\n"')
-        
+
         with open(filename, "w", encoding="utf-8") as f:
             f.write(nice_json_string)
 
@@ -118,6 +117,3 @@ def add_info_to_json():
     json_string = json.dumps(all_pokemon, ensure_ascii=False)
     with open(filename, "w", encoding="utf-8") as f:
         f.write(json_string)
-
-
-add_info_to_json()
