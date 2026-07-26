@@ -1,9 +1,17 @@
 from dataclasses import dataclass, field
-from enum import Enum, auto
-from pickle import NONE
+from enum import Enum
 from typing import Dict, List
 
-from flask.cli import F
+
+class stats(Enum):
+    """基本ステータスの種類"""
+
+    HP = "HP"
+    Atk = "Attack"
+    Def = "Defense"
+    SpA = "Special Attack"
+    SpD = "Special Defense"
+    Spe = "Speed"
 
 
 class Condition(Enum):
@@ -19,73 +27,109 @@ class Condition(Enum):
 
 
 class VolatileCondition(Enum):
-    """状態変化の種類"""
+    """状態変化の種類、バトンタッチによって移動するか"""
 
-    NONE = "なし"
-    CONFUSION = "こんらん"
-    FLINCH = "ひるみ"
-    ATTRACT = "めろめろ"
-    DROWSY = "ねむけ"
-    BOUND = "バインド"
-    CURSE = "のろい"
-    CANT_ESCAPE = "にげられない"
-    LEECH_SEED = "やどりぎのタネ"
-    SUBSTITUTE = "みがわり"
-    TORMENT = "いちゃもん"
-    IMPRISON = "ふういん"
-    THROAT_CHOP = "じごくづき"
-    SALT_CURE = "しおづけ"
-    AQUA_RING = "アクアリング"
-    INGRAIN = "ねをはる"
-    NO_ABILITY = "いえきによって特性の効果が消えた"
-    TAR_SHOT = "タールショット"
-    SMACK_DOWN = "うちおとす"
-    FLASH_FIRE = "もらいび"
-    DESTINY_BOND = "みちづれ"
-    GRUDGE = "おんねん"
-    TRANSFORM = "へんしん"
-    UPROAR = "さわぐ"
-    STOCKPILE = "たくわえる"
+    CONFUSION = ("こんらん", True)
+    FLINCH = ("ひるみ", True)
+    CURSE = ("のろい", True)
+    CANT_ESCAPE = ("にげられない", True)
+    LEECH_SEED = ("やどりぎのタネ", True)
+    SUBSTITUTE = ("みがわり", True)
+    THROAT_CHOP = ("じごくづき", True)
+    SALT_CURE = ("しおづけ", True)
+    AQUA_RING = ("アクアリング", True)
+    INGRAIN = ("ねをはる", True)
+    NO_ABILITY = ("いえきによって特性の効果が消えた", True)
+    TAR_SHOT = ("タールショット", True)
+    SMACK_DOWN = ("うちおとす", True)
+    FLASH_FIRE = ("もらいび", True)
+    DESTINY_BOND = ("みちづれ", True)
+    GRUDGE = ("おんねん", True)
+    UPROAR = ("さわぐ", True)
+    STOCKPILE = ("たくわえる", True)
+
+    TRANSFORM = ("へんしん", False)
+    TORMENT = ("いちゃもん", False)
+    IMPRISON = ("ふういん", False)
+    ATTRACT = ("めろめろ", False)
+    DROWSY = ("ねむけ", False)
+    BOUND = ("バインド", False)
+    DEFENCE_CURL = ("まるくなる", False)
+
+
+@dataclass(slots=True)
+class VolatileInstance:
+    """基本状態異常クラス
+    TODO: if volatile have Special function, overload this dataclass
+    """
+
+    Volatile_stat: VolatileCondition
+    turn: int = field(metadata={"description": "-1 は無制限"})
+
+    def __str__(self):
+        return f"{self.Volatile_stat.name}"
+
+
+# =======================================================
+# 特殊状態異常の子クラス
+# =======================================================
+@dataclass
+class SubstituteEffect(VolatileInstance):
+    """身代わり用。hp要素をふくむ。"""
+
+    Volatile_stat: VolatileCondition = VolatileCondition.SUBSTITUTE
+    hp: int = 0
+
+    def __init__(self, hp: int, turn: int = -1):
+        self.hp = hp
+        self.Volatile_stat = VolatileCondition.SUBSTITUTE
+        self.turn = turn
+
+
+# =======================================================
+# ポケモンインスタンスのデータクラス
+# =======================================================
 
 
 @dataclass(slots=True)
 class PokemonInstance:
-    id: int = field(metadata={"description": "pokemon ID"})  # pokemon ID
+    id: int = field(metadata={"description": "pokemon ID"})
     name: str = field(metadata={"description": "pokemon name"})
-    level: int
+    level: int = field(default=50, metadata={"description": "pokemon level"})
     types: List[str] = field(
         default_factory=list, metadata={"description": "length 1~4"}
     )
-    base_stats: Dict[str, int] = field(
+
+    base_stats: Dict[stats, int] = field(
         metadata={"description": "種族値"},
         default_factory=lambda: {
-            "HP": 0,
-            "Atk": 0,
-            "Def": 0,
-            "SpA": 0,
-            "SpD": 0,
-            "Spe": 0,
+            stats.HP: 0,
+            stats.Atk: 0,
+            stats.Def: 0,
+            stats.Spe: 0,
+            stats.SpA: 0,
+            stats.SpD: 0,
         },
     )
-    evs: Dict[str, int] = field(
+    evs: Dict[stats, int] = field(
         metadata={"description": "努力値"},
         default_factory=lambda: {
-            "HP": 0,
-            "Atk": 0,
-            "Def": 0,
-            "SpA": 0,
-            "SpD": 0,
-            "Spe": 0,
+            stats.HP: 0,
+            stats.Atk: 0,
+            stats.Def: 0,
+            stats.Spe: 0,
+            stats.SpA: 0,
+            stats.SpD: 0,
         },
     )
-    rank: Dict[str, int] = field(
+    rank: Dict[stats | str, int] = field(
         metadata={"description": "ランク"},
         default_factory=lambda: {
-            "Atk": 0,
-            "Def": 0,
-            "SpA": 0,
-            "SpD": 0,
-            "Spe": 0,
+            stats.Atk: 0,
+            stats.Def: 0,
+            stats.Spe: 0,
+            stats.SpA: 0,
+            stats.SpD: 0,
             "Accuracy_rate": 0,
             "Evasion_rate": 0,
         },
@@ -101,6 +145,8 @@ class PokemonInstance:
     # moves
     learnt_move_ids: List[int] = field(default_factory=list)
     selected_move_ids: List[int] = field(default_factory=lambda: [0, 0, 0, 0])
+    # Conditions
+    condition: Condition = Condition.NONE
 
     def calculate_real_stat(self, stat_name: str) -> int:
         """目的ステータス名を引数に実数値を返す
@@ -112,9 +158,9 @@ class PokemonInstance:
             int: 実数値
         """
         if stat_name == "HP":
-            return self.base_stats["HP"]
+            return self.base_stats[stats.HP]
         else:
-            return self.base_stats[stat_name]
+            return self.base_stats[stats[stat_name]]
 
     def reset_ranks(self) -> None:
         """交代時や戦闘終了時にランクをすべて0に戻す"""
