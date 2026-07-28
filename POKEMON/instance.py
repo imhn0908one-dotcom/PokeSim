@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List
 from dataclasses import dataclass
+import json
 
 
 class stats(Enum):
@@ -133,10 +134,6 @@ class PokemonInstance:
     )
     gender_Id: int = 0
     nature_Id: int = 0
-    stat_change: Dict[str, float] = field(
-        default_factory=dict,
-        metadata={"description": "性格によるステート変化, float = 0.9 or 1.1"},
-    )
     item_Id: int = 0
 
     # moves
@@ -144,6 +141,18 @@ class PokemonInstance:
     selected_move_ids: List[int] = field(default_factory=lambda: [0, 0, 0, 0])
     # Conditions
     condition: Condition = Condition.NONE
+
+    def nature_change_rate(stat_name:str, ID: int) -> int:
+        natures_path = "JSON/stat_change.json"
+        with open(natures_path, "r") as j:
+            natures_rate_file = json.load(j)
+        if ID in natures_rate_file["natures"][stat_name]["rate_up"]:
+            return 1.1
+        elif ID in natures_rate_file["natures"][stat_name]["rate_dw"]:
+            return 0.9
+        else:
+            return 1
+
 
     def calculate_real_stat(self, stat_name: str) -> int:
         """目的ステータス名を引数に実数値を返す
@@ -155,9 +164,10 @@ class PokemonInstance:
             int: 実数値
         """
         if stat_name == "HP":
-            return self.base_stats[stats.HP]
+            return self.base_stats[stats.HP] + self.evs[stats.HP] + 75
         else:
-            return self.base_stats[stats[stat_name]]
+            change_rate = self.nature_change_rate(stat_name, self.nature_Id)
+            return  int((self.base_stats[stats.stat_name] + self.evs[stats.stat_name] + 20)* change_rate)
 
     def reset_ranks(self) -> None:
         """交代時や戦闘終了時にランクをすべて0に戻す"""
