@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List
+from dataclasses import dataclass
 
 
 class stats(Enum):
@@ -73,17 +74,13 @@ class VolatileInstance:
 # =======================================================
 # 特殊状態異常の子クラス
 # =======================================================
-@dataclass
+#@dataclass
 class SubstituteEffect(VolatileInstance):
     """身代わり用。hp要素をふくむ。"""
 
     Volatile_stat: VolatileCondition = VolatileCondition.SUBSTITUTE
     hp: int = 0
 
-    def __init__(self, hp: int, turn: int = -1):
-        self.hp = hp
-        self.Volatile_stat = VolatileCondition.SUBSTITUTE
-        self.turn = turn
 
 
 # =======================================================

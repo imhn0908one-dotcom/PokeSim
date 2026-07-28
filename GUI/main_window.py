@@ -61,7 +61,14 @@ class MainWindow(QMainWindow):
         self.bottom_pannel.setObjectName("bottom_pannel")
 
         # window size
-        self.setMinimumSize(1500, 1000)
+        screen = QApplication.primaryScreen()
+        geometry = screen.availableGeometry()
+        H_size = geometry.height() * 0.7
+        W_size = H_size * 1.5
+
+        self.resize(int(W_size), int(H_size))
+
+        self.setMinimumSize(750, 500)
 
         # layout by splitter
         self.sep1 = QSplitter(Qt.Orientation.Vertical)

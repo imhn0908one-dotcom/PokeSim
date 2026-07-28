@@ -7,7 +7,6 @@ from contextlib import contextmanager
 from functools import lru_cache
 from typing import Optional
 
-from memory_profiler import profile
 
 DB_PATH = "pokemon_champions.db"
 STAT_KEYS = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"]
@@ -42,7 +41,6 @@ def load_all_pokemon_data() -> dict:
         return json.load(f)
 
 
-@profile(stream=sys.stdout)
 def fetch_pokedata_by_id(id: int) -> dict | None:
     all_pokemon = load_all_pokemon_data()
     if str(id) in all_pokemon:
