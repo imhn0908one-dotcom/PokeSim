@@ -1,12 +1,12 @@
 import functools
 import json
-import sqlite3
 import sys
 import time
 from contextlib import contextmanager
 from functools import lru_cache
 from typing import Optional
 
+from POKEMON.instance import PokemonInstance, stats
 
 DB_PATH = "pokemon_champions.db"
 STAT_KEYS = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"]
@@ -49,11 +49,16 @@ def fetch_pokedata_by_id(id: int) -> dict | None:
         return None
 
 
-def fetch_pokedata_fromDB(id: int) -> dict | None:
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    sql = "SELECT * FROM pokemon WHERE id = ?"
-    cursor.execute(sql, (id,))
-    result = cursor.fetchone()
-    conn.close()
-    return result
+def make_pokemoninstance(id: int) -> Optional[PokemonInstance]:
+    pokedata = fetch_pokedata_by_id(id)
+    if pokedata is None:
+        return None
+
+    return PokemonInstance(
+        id=id,
+        name=pokedata["name"],
+        ability_Id=0,
+        level=50,
+        types=[pokedata["type1"], pokedata["type2"]],
+        base_stats={},
+    )

@@ -83,7 +83,11 @@
         },
         "gender": 1,
         "weight": 1000,
-        "height": 20
+        "height": 20,
+        "types": [
+            12,
+            4
+        ]
     },
     "6": {
         "name": "charizard",
@@ -184,7 +188,11 @@
         },
         "gender": 1,
         "weight": 905,
-        "height": 17
+        "height": 17,
+        "types": [
+            10,
+            3
+        ]
     },
     "9": {
         "name": "blastoise",
@@ -286,7 +294,10 @@
         },
         "gender": 1,
         "weight": 855,
-        "height": 16
+        "height": 16,
+        "types": [
+            11
+        ]
     },
     "15": {
         "name": "beedrill",
@@ -368,7 +379,11 @@
         },
         "gender": 4,
         "weight": 295,
-        "height": 10
+        "height": 10,
+        "types": [
+            7,
+            4
+        ]
     },
     "18": {
         "name": "pidgeot",
@@ -433,7 +448,11 @@
         },
         "gender": 4,
         "weight": 395,
-        "height": 15
+        "height": 15,
+        "types": [
+            1,
+            3
+        ]
     },
     "24": {
         "name": "arbok",
@@ -537,7 +556,10 @@
         },
         "gender": 4,
         "weight": 650,
-        "height": 35
+        "height": 35,
+        "types": [
+            4
+        ]
     },
     "25": {
         "name": "pikachu",
@@ -626,7 +648,10 @@
         },
         "gender": 4,
         "weight": 60,
-        "height": 4
+        "height": 4,
+        "types": [
+            13
+        ]
     },
     "26": {
         "name": "raichu",
@@ -721,7 +746,10 @@
         },
         "gender": 4,
         "weight": 300,
-        "height": 8
+        "height": 8,
+        "types": [
+            13
+        ]
     },
     "36": {
         "name": "clefable",
@@ -846,7 +874,10 @@
         },
         "gender": 6,
         "weight": 400,
-        "height": 13
+        "height": 13,
+        "types": [
+            18
+        ]
     },
     "38": {
         "name": "ninetales",
@@ -942,7 +973,10 @@
         },
         "gender": 6,
         "weight": 199,
-        "height": 11
+        "height": 11,
+        "types": [
+            10
+        ]
     },
     "45": {
         "name": "vileplume",
@@ -1025,7 +1059,11 @@
         },
         "gender": 4,
         "weight": 186,
-        "height": 12
+        "height": 12,
+        "types": [
+            12,
+            4
+        ]
     },
     "59": {
         "name": "arcanine",
@@ -1116,7 +1154,10 @@
         },
         "gender": 2,
         "weight": 1550,
-        "height": 19
+        "height": 19,
+        "types": [
+            10
+        ]
     },
     "65": {
         "name": "alakazam",
@@ -1210,7 +1251,10 @@
         },
         "gender": 2,
         "weight": 480,
-        "height": 15
+        "height": 15,
+        "types": [
+            14
+        ]
     },
     "68": {
         "name": "machamp",
@@ -1310,7 +1354,10 @@
         },
         "gender": 2,
         "weight": 1300,
-        "height": 16
+        "height": 16,
+        "types": [
+            2
+        ]
     },
     "71": {
         "name": "victreebel",
@@ -1398,7 +1445,11 @@
         },
         "gender": 4,
         "weight": 155,
-        "height": 17
+        "height": 17,
+        "types": [
+            12,
+            4
+        ]
     },
     "80": {
         "name": "slowbro",
@@ -1510,7 +1561,11 @@
         },
         "gender": 4,
         "weight": 785,
-        "height": 16
+        "height": 16,
+        "types": [
+            11,
+            14
+        ]
     },
     "94": {
         "name": "gengar",
@@ -1610,7 +1665,11 @@
         },
         "gender": 4,
         "weight": 405,
-        "height": 15
+        "height": 15,
+        "types": [
+            8,
+            4
+        ]
     },
     "115": {
         "name": "kangaskhan",
@@ -1711,7 +1770,10 @@
         },
         "gender": 8,
         "weight": 800,
-        "height": 22
+        "height": 22,
+        "types": [
+            1
+        ]
     },
     "121": {
         "name": "starmie",
@@ -1807,7 +1869,11 @@
         },
         "gender": -1,
         "weight": 800,
-        "height": 11
+        "height": 11,
+        "types": [
+            11,
+            14
+        ]
     },
     "127": {
         "name": "pinsir",
@@ -1894,7 +1960,10 @@
         },
         "gender": 4,
         "weight": 550,
-        "height": 15
+        "height": 15,
+        "types": [
+            7
+        ]
     },
     "128": {
         "name": "tauros",
@@ -1985,7 +2054,10 @@
         },
         "gender": 0,
         "weight": 884,
-        "height": 14
+        "height": 14,
+        "types": [
+            1
+        ]
     },
     "130": {
         "name": "gyarados",
@@ -2081,7 +2153,11 @@
         },
         "gender": 4,
         "weight": 2350,
-        "height": 65
+        "height": 65,
+        "types": [
+            11,
+            3
+        ]
     },
     "132": {
         "name": "ditto",
@@ -2111,7 +2187,10 @@
         },
         "gender": -1,
         "weight": 40,
-        "height": 3
+        "height": 3,
+        "types": [
+            1
+        ]
     },
     "134": {
         "name": "vaporeon",
@@ -2199,7 +2278,10 @@
         },
         "gender": 1,
         "weight": 290,
-        "height": 10
+        "height": 10,
+        "types": [
+            11
+        ]
     },
     "135": {
         "name": "jolteon",
@@ -2287,7 +2369,10 @@
         },
         "gender": 1,
         "weight": 245,
-        "height": 8
+        "height": 8,
+        "types": [
+            13
+        ]
     },
     "136": {
         "name": "flareon",
@@ -2373,7 +2458,10 @@
         },
         "gender": 1,
         "weight": 250,
-        "height": 9
+        "height": 9,
+        "types": [
+            10
+        ]
     },
     "142": {
         "name": "aerodactyl",
@@ -2465,7 +2553,11 @@
         },
         "gender": 1,
         "weight": 590,
-        "height": 18
+        "height": 18,
+        "types": [
+            6,
+            3
+        ]
     },
     "143": {
         "name": "snorlax",
@@ -2582,7 +2674,10 @@
         },
         "gender": 1,
         "weight": 4600,
-        "height": 21
+        "height": 21,
+        "types": [
+            1
+        ]
     },
     "149": {
         "name": "dragonite",
@@ -2694,7 +2789,11 @@
         },
         "gender": 4,
         "weight": 2100,
-        "height": 22
+        "height": 22,
+        "types": [
+            16,
+            3
+        ]
     },
     "154": {
         "name": "meganium",
@@ -2784,7 +2883,10 @@
         },
         "gender": 1,
         "weight": 1005,
-        "height": 18
+        "height": 18,
+        "types": [
+            12
+        ]
     },
     "157": {
         "name": "typhlosion",
@@ -2876,7 +2978,10 @@
         },
         "gender": 1,
         "weight": 795,
-        "height": 17
+        "height": 17,
+        "types": [
+            10
+        ]
     },
     "160": {
         "name": "feraligatr",
@@ -2987,7 +3092,10 @@
         },
         "gender": 1,
         "weight": 888,
-        "height": 23
+        "height": 23,
+        "types": [
+            11
+        ]
     },
     "168": {
         "name": "ariados",
@@ -3085,7 +3193,11 @@
         },
         "gender": 4,
         "weight": 335,
-        "height": 11
+        "height": 11,
+        "types": [
+            7,
+            4
+        ]
     },
     "181": {
         "name": "ampharos",
@@ -3181,7 +3293,10 @@
         },
         "gender": 4,
         "weight": 615,
-        "height": 14
+        "height": 14,
+        "types": [
+            13
+        ]
     },
     "184": {
         "name": "azumarill",
@@ -3281,7 +3396,11 @@
         },
         "gender": 4,
         "weight": 285,
-        "height": 8
+        "height": 8,
+        "types": [
+            11,
+            18
+        ]
     },
     "186": {
         "name": "politoed",
@@ -3372,7 +3491,10 @@
         },
         "gender": 4,
         "weight": 339,
-        "height": 11
+        "height": 11,
+        "types": [
+            11
+        ]
     },
     "196": {
         "name": "espeon",
@@ -3468,7 +3590,10 @@
         },
         "gender": 1,
         "weight": 265,
-        "height": 9
+        "height": 9,
+        "types": [
+            14
+        ]
     },
     "197": {
         "name": "umbreon",
@@ -3564,7 +3689,10 @@
         },
         "gender": 1,
         "weight": 270,
-        "height": 10
+        "height": 10,
+        "types": [
+            17
+        ]
     },
     "199": {
         "name": "slowking",
@@ -3683,7 +3811,11 @@
         },
         "gender": 4,
         "weight": 795,
-        "height": 20
+        "height": 20,
+        "types": [
+            11,
+            14
+        ]
     },
     "205": {
         "name": "forretress",
@@ -3781,7 +3913,11 @@
         },
         "gender": 4,
         "weight": 1258,
-        "height": 12
+        "height": 12,
+        "types": [
+            7,
+            9
+        ]
     },
     "208": {
         "name": "steelix",
@@ -3881,7 +4017,11 @@
         },
         "gender": 4,
         "weight": 4000,
-        "height": 92
+        "height": 92,
+        "types": [
+            9,
+            5
+        ]
     },
     "211": {
         "name": "qwilfish",
@@ -3979,7 +4119,11 @@
         },
         "gender": 4,
         "weight": 39,
-        "height": 5
+        "height": 5,
+        "types": [
+            11,
+            4
+        ]
     },
     "212": {
         "name": "scizor",
@@ -4077,7 +4221,11 @@
         },
         "gender": 4,
         "weight": 1180,
-        "height": 18
+        "height": 18,
+        "types": [
+            7,
+            9
+        ]
     },
     "214": {
         "name": "heracross",
@@ -4177,7 +4325,11 @@
         },
         "gender": 4,
         "weight": 540,
-        "height": 15
+        "height": 15,
+        "types": [
+            7,
+            2
+        ]
     },
     "227": {
         "name": "skarmory",
@@ -4262,7 +4414,11 @@
         },
         "gender": 4,
         "weight": 505,
-        "height": 17
+        "height": 17,
+        "types": [
+            9,
+            3
+        ]
     },
     "229": {
         "name": "houndoom",
@@ -4363,7 +4519,11 @@
         },
         "gender": 4,
         "weight": 350,
-        "height": 14
+        "height": 14,
+        "types": [
+            17,
+            10
+        ]
     },
     "248": {
         "name": "tyranitar",
@@ -4484,7 +4644,11 @@
         },
         "gender": 4,
         "weight": 2020,
-        "height": 20
+        "height": 20,
+        "types": [
+            6,
+            17
+        ]
     },
     "254": {
         "name": "sceptile",
@@ -4590,7 +4754,10 @@
         },
         "gender": 1,
         "weight": 522,
-        "height": 17
+        "height": 17,
+        "types": [
+            12
+        ]
     },
     "257": {
         "name": "blaziken",
@@ -4697,7 +4864,11 @@
         },
         "gender": 1,
         "weight": 520,
-        "height": 19
+        "height": 19,
+        "types": [
+            10,
+            2
+        ]
     },
     "260": {
         "name": "swampert",
@@ -4803,7 +4974,11 @@
         },
         "gender": 1,
         "weight": 819,
-        "height": 15
+        "height": 15,
+        "types": [
+            11,
+            5
+        ]
     },
     "279": {
         "name": "pelipper",
@@ -4890,7 +5065,11 @@
         },
         "gender": 4,
         "weight": 280,
-        "height": 12
+        "height": 12,
+        "types": [
+            11,
+            3
+        ]
     },
     "282": {
         "name": "gardevoir",
@@ -5004,7 +5183,11 @@
         },
         "gender": 4,
         "weight": 484,
-        "height": 16
+        "height": 16,
+        "types": [
+            14,
+            18
+        ]
     },
     "302": {
         "name": "sableye",
@@ -5126,7 +5309,11 @@
         },
         "gender": 4,
         "weight": 110,
-        "height": 5
+        "height": 5,
+        "types": [
+            17,
+            8
+        ]
     },
     "303": {
         "name": "mawile",
@@ -5228,7 +5415,11 @@
         },
         "gender": 4,
         "weight": 115,
-        "height": 6
+        "height": 6,
+        "types": [
+            9,
+            18
+        ]
     },
     "306": {
         "name": "aggron",
@@ -5345,7 +5536,11 @@
         },
         "gender": 4,
         "weight": 3600,
-        "height": 21
+        "height": 21,
+        "types": [
+            9,
+            6
+        ]
     },
     "308": {
         "name": "medicham",
@@ -5451,7 +5646,11 @@
         },
         "gender": 4,
         "weight": 315,
-        "height": 13
+        "height": 13,
+        "types": [
+            2,
+            14
+        ]
     },
     "310": {
         "name": "manectric",
@@ -5534,7 +5733,10 @@
         },
         "gender": 4,
         "weight": 402,
-        "height": 15
+        "height": 15,
+        "types": [
+            13
+        ]
     },
     "319": {
         "name": "sharpedo",
@@ -5620,7 +5822,11 @@
         },
         "gender": 4,
         "weight": 888,
-        "height": 18
+        "height": 18,
+        "types": [
+            11,
+            17
+        ]
     },
     "323": {
         "name": "camerupt",
@@ -5721,7 +5927,11 @@
         },
         "gender": 4,
         "weight": 2200,
-        "height": 19
+        "height": 19,
+        "types": [
+            10,
+            5
+        ]
     },
     "324": {
         "name": "torkoal",
@@ -5812,7 +6022,10 @@
         },
         "gender": 4,
         "weight": 804,
-        "height": 5
+        "height": 5,
+        "types": [
+            10
+        ]
     },
     "334": {
         "name": "altaria",
@@ -5906,7 +6119,11 @@
         },
         "gender": 4,
         "weight": 206,
-        "height": 11
+        "height": 11,
+        "types": [
+            16,
+            3
+        ]
     },
     "350": {
         "name": "milotic",
@@ -6001,7 +6218,10 @@
         },
         "gender": 4,
         "weight": 1620,
-        "height": 62
+        "height": 62,
+        "types": [
+            11
+        ]
     },
     "351": {
         "name": "castform",
@@ -6062,7 +6282,10 @@
         },
         "gender": 4,
         "weight": 8,
-        "height": 3
+        "height": 3,
+        "types": [
+            1
+        ]
     },
     "354": {
         "name": "banette",
@@ -6162,7 +6385,10 @@
         },
         "gender": 4,
         "weight": 125,
-        "height": 11
+        "height": 11,
+        "types": [
+            8
+        ]
     },
     "358": {
         "name": "chimecho",
@@ -6251,7 +6477,10 @@
         },
         "gender": 4,
         "weight": 10,
-        "height": 6
+        "height": 6,
+        "types": [
+            14
+        ]
     },
     "359": {
         "name": "absol",
@@ -6356,7 +6585,10 @@
         },
         "gender": 4,
         "weight": 470,
-        "height": 12
+        "height": 12,
+        "types": [
+            17
+        ]
     },
     "362": {
         "name": "glalie",
@@ -6444,7 +6676,10 @@
         },
         "gender": 4,
         "weight": 2565,
-        "height": 15
+        "height": 15,
+        "types": [
+            15
+        ]
     },
     "376": {
         "name": "metagross",
@@ -6541,7 +6776,11 @@
         },
         "gender": -1,
         "weight": 5500,
-        "height": 16
+        "height": 16,
+        "types": [
+            9,
+            14
+        ]
     },
     "389": {
         "name": "torterra",
@@ -6642,7 +6881,11 @@
         },
         "gender": 1,
         "weight": 3100,
-        "height": 22
+        "height": 22,
+        "types": [
+            12,
+            5
+        ]
     },
     "392": {
         "name": "infernape",
@@ -6759,7 +7002,11 @@
         },
         "gender": 1,
         "weight": 550,
-        "height": 12
+        "height": 12,
+        "types": [
+            10,
+            2
+        ]
     },
     "395": {
         "name": "empoleon",
@@ -6862,7 +7109,11 @@
         },
         "gender": 1,
         "weight": 845,
-        "height": 17
+        "height": 17,
+        "types": [
+            11,
+            9
+        ]
     },
     "398": {
         "name": "staraptor",
@@ -6934,7 +7185,11 @@
         },
         "gender": 4,
         "weight": 249,
-        "height": 12
+        "height": 12,
+        "types": [
+            1,
+            3
+        ]
     },
     "405": {
         "name": "luxray",
@@ -7021,7 +7276,10 @@
         },
         "gender": 4,
         "weight": 420,
-        "height": 14
+        "height": 14,
+        "types": [
+            13
+        ]
     },
     "407": {
         "name": "roserade",
@@ -7106,7 +7364,11 @@
         },
         "gender": 4,
         "weight": 145,
-        "height": 9
+        "height": 9,
+        "types": [
+            12,
+            4
+        ]
     },
     "409": {
         "name": "rampardos",
@@ -7209,7 +7471,10 @@
         },
         "gender": 1,
         "weight": 1025,
-        "height": 16
+        "height": 16,
+        "types": [
+            6
+        ]
     },
     "411": {
         "name": "bastiodon",
@@ -7306,7 +7571,11 @@
         },
         "gender": 1,
         "weight": 1495,
-        "height": 13
+        "height": 13,
+        "types": [
+            6,
+            9
+        ]
     },
     "428": {
         "name": "lopunny",
@@ -7416,7 +7685,10 @@
         },
         "gender": 4,
         "weight": 333,
-        "height": 12
+        "height": 12,
+        "types": [
+            1
+        ]
     },
     "442": {
         "name": "spiritomb",
@@ -7499,7 +7771,11 @@
         },
         "gender": 4,
         "weight": 1080,
-        "height": 10
+        "height": 10,
+        "types": [
+            8,
+            17
+        ]
     },
     "445": {
         "name": "garchomp",
@@ -7586,7 +7862,11 @@
         },
         "gender": 4,
         "weight": 950,
-        "height": 19
+        "height": 19,
+        "types": [
+            16,
+            5
+        ]
     },
     "448": {
         "name": "lucario",
@@ -7703,7 +7983,11 @@
         },
         "gender": 1,
         "weight": 540,
-        "height": 12
+        "height": 12,
+        "types": [
+            2,
+            9
+        ]
     },
     "450": {
         "name": "hippowdon",
@@ -7783,7 +8067,10 @@
         },
         "gender": 4,
         "weight": 3000,
-        "height": 20
+        "height": 20,
+        "types": [
+            5
+        ]
     },
     "454": {
         "name": "toxicroak",
@@ -7898,7 +8185,11 @@
         },
         "gender": 4,
         "weight": 444,
-        "height": 13
+        "height": 13,
+        "types": [
+            4,
+            2
+        ]
     },
     "460": {
         "name": "abomasnow",
@@ -7992,7 +8283,11 @@
         },
         "gender": 4,
         "weight": 1355,
-        "height": 22
+        "height": 22,
+        "types": [
+            12,
+            15
+        ]
     },
     "461": {
         "name": "weavile",
@@ -8093,7 +8388,11 @@
         },
         "gender": 4,
         "weight": 340,
-        "height": 11
+        "height": 11,
+        "types": [
+            17,
+            15
+        ]
     },
     "464": {
         "name": "rhyperior",
@@ -8218,7 +8517,11 @@
         },
         "gender": 4,
         "weight": 2828,
-        "height": 24
+        "height": 24,
+        "types": [
+            5,
+            6
+        ]
     },
     "470": {
         "name": "leafeon",
@@ -8305,7 +8608,10 @@
         },
         "gender": 1,
         "weight": 255,
-        "height": 10
+        "height": 10,
+        "types": [
+            12
+        ]
     },
     "471": {
         "name": "glaceon",
@@ -8392,7 +8698,10 @@
         },
         "gender": 1,
         "weight": 259,
-        "height": 8
+        "height": 8,
+        "types": [
+            15
+        ]
     },
     "472": {
         "name": "gliscor",
@@ -8500,7 +8809,11 @@
         },
         "gender": 4,
         "weight": 425,
-        "height": 20
+        "height": 20,
+        "types": [
+            5,
+            3
+        ]
     },
     "473": {
         "name": "mamoswine",
@@ -8597,7 +8910,11 @@
         },
         "gender": 4,
         "weight": 2910,
-        "height": 25
+        "height": 25,
+        "types": [
+            15,
+            5
+        ]
     },
     "475": {
         "name": "gallade",
@@ -8736,7 +9053,11 @@
         },
         "gender": 0,
         "weight": 520,
-        "height": 16
+        "height": 16,
+        "types": [
+            14,
+            2
+        ]
     },
     "478": {
         "name": "froslass",
@@ -8833,7 +9154,11 @@
         },
         "gender": 8,
         "weight": 266,
-        "height": 13
+        "height": 13,
+        "types": [
+            15,
+            8
+        ]
     },
     "479": {
         "name": "rotom",
@@ -8899,7 +9224,11 @@
         },
         "gender": -1,
         "weight": 3,
-        "height": 3
+        "height": 3,
+        "types": [
+            13,
+            8
+        ]
     },
     "497": {
         "name": "serperior",
@@ -8981,7 +9310,10 @@
         },
         "gender": 1,
         "weight": 630,
-        "height": 33
+        "height": 33,
+        "types": [
+            12
+        ]
     },
     "500": {
         "name": "emboar",
@@ -9089,7 +9421,11 @@
         },
         "gender": 1,
         "weight": 1500,
-        "height": 16
+        "height": 16,
+        "types": [
+            10,
+            2
+        ]
     },
     "503": {
         "name": "samurott",
@@ -9179,7 +9515,10 @@
         },
         "gender": 1,
         "weight": 946,
-        "height": 15
+        "height": 15,
+        "types": [
+            11
+        ]
     },
     "505": {
         "name": "watchog",
@@ -9265,7 +9604,10 @@
         },
         "gender": 4,
         "weight": 270,
-        "height": 11
+        "height": 11,
+        "types": [
+            1
+        ]
     },
     "510": {
         "name": "liepard",
@@ -9359,7 +9701,10 @@
         },
         "gender": 4,
         "weight": 375,
-        "height": 11
+        "height": 11,
+        "types": [
+            17
+        ]
     },
     "512": {
         "name": "simisage",
@@ -9438,7 +9783,10 @@
         },
         "gender": 1,
         "weight": 305,
-        "height": 11
+        "height": 11,
+        "types": [
+            12
+        ]
     },
     "514": {
         "name": "simisear",
@@ -9522,7 +9870,10 @@
         },
         "gender": 1,
         "weight": 280,
-        "height": 10
+        "height": 10,
+        "types": [
+            10
+        ]
     },
     "516": {
         "name": "simipour",
@@ -9603,7 +9954,10 @@
         },
         "gender": 1,
         "weight": 290,
-        "height": 10
+        "height": 10,
+        "types": [
+            11
+        ]
     },
     "518": {
         "name": "musharna",
@@ -9687,7 +10041,10 @@
         },
         "gender": 4,
         "weight": 605,
-        "height": 11
+        "height": 11,
+        "types": [
+            14
+        ]
     },
     "530": {
         "name": "excadrill",
@@ -9774,7 +10131,11 @@
         },
         "gender": 4,
         "weight": 404,
-        "height": 7
+        "height": 7,
+        "types": [
+            5,
+            9
+        ]
     },
     "531": {
         "name": "audino",
@@ -9877,7 +10238,10 @@
         },
         "gender": 4,
         "weight": 310,
-        "height": 11
+        "height": 11,
+        "types": [
+            1
+        ]
     },
     "534": {
         "name": "conkeldurr",
@@ -9972,7 +10336,10 @@
         },
         "gender": 2,
         "weight": 870,
-        "height": 14
+        "height": 14,
+        "types": [
+            2
+        ]
     },
     "545": {
         "name": "scolipede",
@@ -10059,7 +10426,11 @@
         },
         "gender": 4,
         "weight": 2005,
-        "height": 25
+        "height": 25,
+        "types": [
+            7,
+            4
+        ]
     },
     "547": {
         "name": "whimsicott",
@@ -10143,7 +10514,11 @@
         },
         "gender": 4,
         "weight": 66,
-        "height": 7
+        "height": 7,
+        "types": [
+            12,
+            18
+        ]
     },
     "553": {
         "name": "krookodile",
@@ -10260,7 +10635,11 @@
         },
         "gender": 4,
         "weight": 963,
-        "height": 15
+        "height": 15,
+        "types": [
+            5,
+            17
+        ]
     },
     "560": {
         "name": "scrafty",
@@ -10376,7 +10755,11 @@
         },
         "gender": 4,
         "weight": 300,
-        "height": 11
+        "height": 11,
+        "types": [
+            17,
+            2
+        ]
     },
     "563": {
         "name": "cofagrigus",
@@ -10454,7 +10837,10 @@
         },
         "gender": 4,
         "weight": 765,
-        "height": 17
+        "height": 17,
+        "types": [
+            8
+        ]
     },
     "569": {
         "name": "garbodor",
@@ -10541,7 +10927,10 @@
         },
         "gender": 4,
         "weight": 1073,
-        "height": 19
+        "height": 19,
+        "types": [
+            4
+        ]
     },
     "571": {
         "name": "zoroark",
@@ -10635,7 +11024,10 @@
         },
         "gender": 1,
         "weight": 811,
-        "height": 16
+        "height": 16,
+        "types": [
+            17
+        ]
     },
     "579": {
         "name": "reuniclus",
@@ -10735,7 +11127,10 @@
         },
         "gender": 4,
         "weight": 201,
-        "height": 10
+        "height": 10,
+        "types": [
+            14
+        ]
     },
     "584": {
         "name": "vanilluxe",
@@ -10810,7 +11205,10 @@
         },
         "gender": 4,
         "weight": 575,
-        "height": 13
+        "height": 13,
+        "types": [
+            15
+        ]
     },
     "587": {
         "name": "emolga",
@@ -10885,7 +11283,11 @@
         },
         "gender": 4,
         "weight": 50,
-        "height": 4
+        "height": 4,
+        "types": [
+            13,
+            3
+        ]
     },
     "604": {
         "name": "eelektross",
@@ -10984,7 +11386,10 @@
         },
         "gender": 4,
         "weight": 805,
-        "height": 21
+        "height": 21,
+        "types": [
+            13
+        ]
     },
     "609": {
         "name": "chandelure",
@@ -11072,7 +11477,11 @@
         },
         "gender": 4,
         "weight": 343,
-        "height": 10
+        "height": 10,
+        "types": [
+            8,
+            10
+        ]
     },
     "614": {
         "name": "beartic",
@@ -11181,7 +11590,10 @@
         },
         "gender": 4,
         "weight": 2600,
-        "height": 26
+        "height": 26,
+        "types": [
+            15
+        ]
     },
     "618": {
         "name": "stunfisk",
@@ -11263,7 +11675,11 @@
         },
         "gender": 4,
         "weight": 110,
-        "height": 7
+        "height": 7,
+        "types": [
+            5,
+            13
+        ]
     },
     "623": {
         "name": "golurk",
@@ -11375,7 +11791,11 @@
         },
         "gender": -1,
         "weight": 3300,
-        "height": 28
+        "height": 28,
+        "types": [
+            5,
+            8
+        ]
     },
     "635": {
         "name": "hydreigon",
@@ -11477,7 +11897,11 @@
         },
         "gender": 4,
         "weight": 1600,
-        "height": 18
+        "height": 18,
+        "types": [
+            17,
+            16
+        ]
     },
     "637": {
         "name": "volcarona",
@@ -11563,7 +11987,11 @@
         },
         "gender": 4,
         "weight": 460,
-        "height": 16
+        "height": 16,
+        "types": [
+            7,
+            10
+        ]
     },
     "652": {
         "name": "chesnaught",
@@ -11679,7 +12107,11 @@
         },
         "gender": 1,
         "weight": 900,
-        "height": 16
+        "height": 16,
+        "types": [
+            12,
+            2
+        ]
     },
     "655": {
         "name": "delphox",
@@ -11780,7 +12212,11 @@
         },
         "gender": 1,
         "weight": 390,
-        "height": 15
+        "height": 15,
+        "types": [
+            10,
+            14
+        ]
     },
     "658": {
         "name": "greninja",
@@ -11873,7 +12309,11 @@
         },
         "gender": 1,
         "weight": 400,
-        "height": 15
+        "height": 15,
+        "types": [
+            11,
+            17
+        ]
     },
     "660": {
         "name": "diggersby",
@@ -11965,7 +12405,11 @@
         },
         "gender": 4,
         "weight": 424,
-        "height": 10
+        "height": 10,
+        "types": [
+            1,
+            5
+        ]
     },
     "663": {
         "name": "talonflame",
@@ -12044,7 +12488,11 @@
         },
         "gender": 4,
         "weight": 245,
-        "height": 12
+        "height": 12,
+        "types": [
+            10,
+            3
+        ]
     },
     "666": {
         "name": "vivillon",
@@ -12121,7 +12569,11 @@
         },
         "gender": 4,
         "weight": 170,
-        "height": 12
+        "height": 12,
+        "types": [
+            7,
+            3
+        ]
     },
     "668": {
         "name": "pyroar-male",
@@ -12204,7 +12656,11 @@
         },
         "gender": 7,
         "weight": 815,
-        "height": 15
+        "height": 15,
+        "types": [
+            10,
+            1
+        ]
     },
     "670": {
         "name": "floette",
@@ -12232,7 +12688,10 @@
         },
         "gender": 8,
         "weight": 9,
-        "height": 2
+        "height": 2,
+        "types": [
+            18
+        ]
     },
     "671": {
         "name": "florges",
@@ -12307,7 +12766,10 @@
         },
         "gender": 8,
         "weight": 100,
-        "height": 11
+        "height": 11,
+        "types": [
+            18
+        ]
     },
     "675": {
         "name": "pangoro",
@@ -12421,7 +12883,11 @@
         },
         "gender": 4,
         "weight": 1360,
-        "height": 21
+        "height": 21,
+        "types": [
+            2,
+            17
+        ]
     },
     "676": {
         "name": "furfrou",
@@ -12485,7 +12951,10 @@
         },
         "gender": 4,
         "weight": 280,
-        "height": 12
+        "height": 12,
+        "types": [
+            1
+        ]
     },
     "678": {
         "name": "meowstic-male",
@@ -12578,7 +13047,10 @@
         },
         "gender": 4,
         "weight": 85,
-        "height": 6
+        "height": 6,
+        "types": [
+            14
+        ]
     },
     "681": {
         "name": "aegislash-shield",
@@ -12647,7 +13119,11 @@
         },
         "gender": 4,
         "weight": 530,
-        "height": 17
+        "height": 17,
+        "types": [
+            9,
+            8
+        ]
     },
     "683": {
         "name": "aromatisse",
@@ -12724,7 +13200,10 @@
         },
         "gender": 4,
         "weight": 155,
-        "height": 8
+        "height": 8,
+        "types": [
+            18
+        ]
     },
     "685": {
         "name": "slurpuff",
@@ -12795,7 +13274,10 @@
         },
         "gender": 4,
         "weight": 50,
-        "height": 8
+        "height": 8,
+        "types": [
+            18
+        ]
     },
     "687": {
         "name": "malamar",
@@ -12897,7 +13379,11 @@
         },
         "gender": 4,
         "weight": 470,
-        "height": 15
+        "height": 15,
+        "types": [
+            17,
+            14
+        ]
     },
     "689": {
         "name": "barbaracle",
@@ -13002,7 +13488,11 @@
         },
         "gender": 4,
         "weight": 960,
-        "height": 13
+        "height": 13,
+        "types": [
+            6,
+            11
+        ]
     },
     "691": {
         "name": "dragalge",
@@ -13088,7 +13578,11 @@
         },
         "gender": 4,
         "weight": 815,
-        "height": 18
+        "height": 18,
+        "types": [
+            4,
+            16
+        ]
     },
     "693": {
         "name": "clawitzer",
@@ -13164,7 +13658,10 @@
         },
         "gender": 4,
         "weight": 353,
-        "height": 13
+        "height": 13,
+        "types": [
+            11
+        ]
     },
     "695": {
         "name": "heliolisk",
@@ -13261,7 +13758,11 @@
         },
         "gender": 4,
         "weight": 210,
-        "height": 10
+        "height": 10,
+        "types": [
+            13,
+            1
+        ]
     },
     "697": {
         "name": "tyrantrum",
@@ -13354,7 +13855,11 @@
         },
         "gender": 1,
         "weight": 2700,
-        "height": 25
+        "height": 25,
+        "types": [
+            6,
+            16
+        ]
     },
     "699": {
         "name": "aurorus",
@@ -13439,7 +13944,11 @@
         },
         "gender": 1,
         "weight": 2250,
-        "height": 27
+        "height": 27,
+        "types": [
+            6,
+            15
+        ]
     },
     "700": {
         "name": "sylveon",
@@ -13523,7 +14032,10 @@
         },
         "gender": 1,
         "weight": 235,
-        "height": 10
+        "height": 10,
+        "types": [
+            18
+        ]
     },
     "701": {
         "name": "hawlucha",
@@ -13631,7 +14143,11 @@
         },
         "gender": 4,
         "weight": 215,
-        "height": 8
+        "height": 8,
+        "types": [
+            2,
+            3
+        ]
     },
     "702": {
         "name": "dedenne",
@@ -13715,7 +14231,11 @@
         },
         "gender": 4,
         "weight": 22,
-        "height": 2
+        "height": 2,
+        "types": [
+            13,
+            18
+        ]
     },
     "706": {
         "name": "goodra",
@@ -13814,7 +14334,10 @@
         },
         "gender": 4,
         "weight": 1505,
-        "height": 20
+        "height": 20,
+        "types": [
+            16
+        ]
     },
     "707": {
         "name": "klefki",
@@ -13887,7 +14410,11 @@
         },
         "gender": 4,
         "weight": 30,
-        "height": 2
+        "height": 2,
+        "types": [
+            9,
+            18
+        ]
     },
     "709": {
         "name": "trevenant",
@@ -13994,7 +14521,11 @@
         },
         "gender": 4,
         "weight": 710,
-        "height": 15
+        "height": 15,
+        "types": [
+            8,
+            12
+        ]
     },
     "711": {
         "name": "gourgeist-average",
@@ -14088,7 +14619,11 @@
         },
         "gender": 4,
         "weight": 125,
-        "height": 9
+        "height": 9,
+        "types": [
+            8,
+            12
+        ]
     },
     "713": {
         "name": "avalugg",
@@ -14171,7 +14706,10 @@
         },
         "gender": 4,
         "weight": 5050,
-        "height": 20
+        "height": 20,
+        "types": [
+            15
+        ]
     },
     "715": {
         "name": "noivern",
@@ -14269,7 +14807,11 @@
         },
         "gender": 4,
         "weight": 850,
-        "height": 15
+        "height": 15,
+        "types": [
+            3,
+            16
+        ]
     },
     "724": {
         "name": "decidueye",
@@ -14364,7 +14906,11 @@
         },
         "gender": 1,
         "weight": 366,
-        "height": 16
+        "height": 16,
+        "types": [
+            12,
+            8
+        ]
     },
     "727": {
         "name": "incineroar",
@@ -14470,7 +15016,11 @@
         },
         "gender": 1,
         "weight": 830,
-        "height": 18
+        "height": 18,
+        "types": [
+            10,
+            17
+        ]
     },
     "730": {
         "name": "primarina",
@@ -14562,7 +15112,11 @@
         },
         "gender": 1,
         "weight": 440,
-        "height": 18
+        "height": 18,
+        "types": [
+            11,
+            18
+        ]
     },
     "733": {
         "name": "toucannon",
@@ -14649,7 +15203,11 @@
         },
         "gender": 4,
         "weight": 260,
-        "height": 11
+        "height": 11,
+        "types": [
+            1,
+            3
+        ]
     },
     "740": {
         "name": "crabominable",
@@ -14746,7 +15304,11 @@
         },
         "gender": 4,
         "weight": 1800,
-        "height": 17
+        "height": 17,
+        "types": [
+            2,
+            15
+        ]
     },
     "745": {
         "name": "lycanroc-midday",
@@ -14838,7 +15400,10 @@
         },
         "gender": 4,
         "weight": 250,
-        "height": 8
+        "height": 8,
+        "types": [
+            6
+        ]
     },
     "748": {
         "name": "toxapex",
@@ -14923,7 +15488,11 @@
         },
         "gender": 4,
         "weight": 145,
-        "height": 7
+        "height": 7,
+        "types": [
+            4,
+            11
+        ]
     },
     "750": {
         "name": "mudsdale",
@@ -15002,7 +15571,10 @@
         },
         "gender": 4,
         "weight": 9200,
-        "height": 25
+        "height": 25,
+        "types": [
+            5
+        ]
     },
     "752": {
         "name": "araquanid",
@@ -15082,7 +15654,11 @@
         },
         "gender": 4,
         "weight": 820,
-        "height": 18
+        "height": 18,
+        "types": [
+            11,
+            7
+        ]
     },
     "758": {
         "name": "salazzle",
@@ -15181,7 +15757,11 @@
         },
         "gender": 8,
         "weight": 222,
-        "height": 12
+        "height": 12,
+        "types": [
+            4,
+            10
+        ]
     },
     "763": {
         "name": "tsareena",
@@ -15269,7 +15849,10 @@
         },
         "gender": 8,
         "weight": 214,
-        "height": 12
+        "height": 12,
+        "types": [
+            12
+        ]
     },
     "765": {
         "name": "oranguru",
@@ -15367,7 +15950,11 @@
         },
         "gender": 4,
         "weight": 760,
-        "height": 15
+        "height": 15,
+        "types": [
+            1,
+            14
+        ]
     },
     "766": {
         "name": "passimian",
@@ -15462,7 +16049,10 @@
         },
         "gender": 4,
         "weight": 828,
-        "height": 20
+        "height": 20,
+        "types": [
+            2
+        ]
     },
     "778": {
         "name": "mimikyu-disguised",
@@ -15546,7 +16136,11 @@
         },
         "gender": 4,
         "weight": 7,
-        "height": 2
+        "height": 2,
+        "types": [
+            8,
+            18
+        ]
     },
     "780": {
         "name": "drampa",
@@ -15646,7 +16240,11 @@
         },
         "gender": 4,
         "weight": 1850,
-        "height": 30
+        "height": 30,
+        "types": [
+            1,
+            16
+        ]
     },
     "784": {
         "name": "kommo-o",
@@ -15758,7 +16356,11 @@
         },
         "gender": 4,
         "weight": 782,
-        "height": 16
+        "height": 16,
+        "types": [
+            16,
+            2
+        ]
     },
     "823": {
         "name": "corviknight",
@@ -15847,7 +16449,11 @@
         },
         "gender": 4,
         "weight": 750,
-        "height": 22
+        "height": 22,
+        "types": [
+            3,
+            9
+        ]
     },
     "841": {
         "name": "flapple",
@@ -15925,7 +16531,11 @@
         },
         "gender": 4,
         "weight": 10,
-        "height": 3
+        "height": 3,
+        "types": [
+            12,
+            16
+        ]
     },
     "842": {
         "name": "appletun",
@@ -16010,7 +16620,11 @@
         },
         "gender": 4,
         "weight": 130,
-        "height": 4
+        "height": 4,
+        "types": [
+            12,
+            16
+        ]
     },
     "844": {
         "name": "sandaconda",
@@ -16092,7 +16706,10 @@
         },
         "gender": 4,
         "weight": 655,
-        "height": 38
+        "height": 38,
+        "types": [
+            5
+        ]
     },
     "855": {
         "name": "polteageist",
@@ -16167,7 +16784,10 @@
         },
         "gender": -1,
         "weight": 4,
-        "height": 2
+        "height": 2,
+        "types": [
+            8
+        ]
     },
     "858": {
         "name": "hatterene",
@@ -16260,7 +16880,11 @@
         },
         "gender": 8,
         "weight": 51,
-        "height": 21
+        "height": 21,
+        "types": [
+            14,
+            18
+        ]
     },
     "861": {
         "name": "grimmsnarl",
@@ -16358,7 +16982,11 @@
         },
         "gender": 0,
         "weight": 610,
-        "height": 15
+        "height": 15,
+        "types": [
+            17,
+            18
+        ]
     },
     "866": {
         "name": "mr-rime",
@@ -16485,7 +17113,11 @@
         },
         "gender": 4,
         "weight": 582,
-        "height": 15
+        "height": 15,
+        "types": [
+            15,
+            14
+        ]
     },
     "867": {
         "name": "runerigus",
@@ -16578,7 +17210,11 @@
         },
         "gender": 4,
         "weight": 666,
-        "height": 16
+        "height": 16,
+        "types": [
+            5,
+            8
+        ]
     },
     "869": {
         "name": "alcremie",
@@ -16656,7 +17292,10 @@
         },
         "gender": 8,
         "weight": 5,
-        "height": 3
+        "height": 3,
+        "types": [
+            18
+        ]
     },
     "870": {
         "name": "falinks",
@@ -16736,7 +17375,10 @@
         },
         "gender": -1,
         "weight": 620,
-        "height": 30
+        "height": 30,
+        "types": [
+            2
+        ]
     },
     "877": {
         "name": "morpeko-full-belly",
@@ -16825,7 +17467,11 @@
         },
         "gender": 4,
         "weight": 30,
-        "height": 3
+        "height": 3,
+        "types": [
+            13,
+            17
+        ]
     },
     "887": {
         "name": "dragapult",
@@ -16922,7 +17568,11 @@
         },
         "gender": 4,
         "weight": 500,
-        "height": 30
+        "height": 30,
+        "types": [
+            16,
+            8
+        ]
     },
     "899": {
         "name": "wyrdeer",
@@ -17017,7 +17667,11 @@
         },
         "gender": 4,
         "weight": 951,
-        "height": 18
+        "height": 18,
+        "types": [
+            1,
+            14
+        ]
     },
     "900": {
         "name": "kleavor",
@@ -17107,7 +17761,11 @@
         },
         "gender": 4,
         "weight": 890,
-        "height": 18
+        "height": 18,
+        "types": [
+            7,
+            6
+        ]
     },
     "902": {
         "name": "basculegion-male",
@@ -17190,7 +17848,11 @@
         },
         "gender": 4,
         "weight": 1100,
-        "height": 30
+        "height": 30,
+        "types": [
+            11,
+            8
+        ]
     },
     "903": {
         "name": "sneasler",
@@ -17285,7 +17947,11 @@
         },
         "gender": 4,
         "weight": 430,
-        "height": 13
+        "height": 13,
+        "types": [
+            2,
+            4
+        ]
     },
     "904": {
         "name": "overqwil",
@@ -17379,7 +18045,11 @@
         },
         "gender": 4,
         "weight": 605,
-        "height": 25
+        "height": 25,
+        "types": [
+            17,
+            4
+        ]
     },
     "908": {
         "name": "meowscarada",
@@ -17473,7 +18143,11 @@
         },
         "gender": 1,
         "weight": 312,
-        "height": 15
+        "height": 15,
+        "types": [
+            12,
+            17
+        ]
     },
     "911": {
         "name": "skeledirge",
@@ -17558,7 +18232,11 @@
         },
         "gender": 1,
         "weight": 3265,
-        "height": 16
+        "height": 16,
+        "types": [
+            10,
+            8
+        ]
     },
     "914": {
         "name": "quaquaval",
@@ -17646,7 +18324,11 @@
         },
         "gender": 1,
         "weight": 619,
-        "height": 18
+        "height": 18,
+        "types": [
+            11,
+            2
+        ]
     },
     "925": {
         "name": "maushold-family-of-four",
@@ -17730,7 +18412,10 @@
         },
         "gender": -1,
         "weight": 28,
-        "height": 3
+        "height": 3,
+        "types": [
+            1
+        ]
     },
     "934": {
         "name": "garganacl",
@@ -17818,7 +18503,10 @@
         },
         "gender": 4,
         "weight": 2400,
-        "height": 23
+        "height": 23,
+        "types": [
+            6
+        ]
     },
     "936": {
         "name": "armarouge",
@@ -17902,7 +18590,11 @@
         },
         "gender": 4,
         "weight": 850,
-        "height": 15
+        "height": 15,
+        "types": [
+            10,
+            14
+        ]
     },
     "937": {
         "name": "ceruledge",
@@ -17986,7 +18678,11 @@
         },
         "gender": 4,
         "weight": 620,
-        "height": 16
+        "height": 16,
+        "types": [
+            10,
+            8
+        ]
     },
     "939": {
         "name": "bellibolt",
@@ -18059,7 +18755,10 @@
         },
         "gender": 4,
         "weight": 1130,
-        "height": 12
+        "height": 12,
+        "types": [
+            13
+        ]
     },
     "952": {
         "name": "scovillain",
@@ -18141,7 +18840,11 @@
         },
         "gender": 4,
         "weight": 150,
-        "height": 9
+        "height": 9,
+        "types": [
+            12,
+            10
+        ]
     },
     "956": {
         "name": "espathra",
@@ -18232,7 +18935,10 @@
         },
         "gender": 4,
         "weight": 900,
-        "height": 19
+        "height": 19,
+        "types": [
+            14
+        ]
     },
     "959": {
         "name": "tinkaton",
@@ -18313,7 +19019,11 @@
         },
         "gender": 8,
         "weight": 1128,
-        "height": 7
+        "height": 7,
+        "types": [
+            18,
+            9
+        ]
     },
     "964": {
         "name": "palafin-zero",
@@ -18395,7 +19105,10 @@
         },
         "gender": 4,
         "weight": 602,
-        "height": 13
+        "height": 13,
+        "types": [
+            11
+        ]
     },
     "968": {
         "name": "orthworm",
@@ -18464,7 +19177,10 @@
         },
         "gender": 4,
         "weight": 3100,
-        "height": 25
+        "height": 25,
+        "types": [
+            9
+        ]
     },
     "970": {
         "name": "glimmora",
@@ -18539,7 +19255,11 @@
         },
         "gender": 4,
         "weight": 450,
-        "height": 15
+        "height": 15,
+        "types": [
+            6,
+            4
+        ]
     },
     "972": {
         "name": "houndstone",
@@ -18619,7 +19339,10 @@
         },
         "gender": 4,
         "weight": 150,
-        "height": 20
+        "height": 20,
+        "types": [
+            8
+        ]
     },
     "979": {
         "name": "annihilape",
@@ -18728,7 +19451,11 @@
         },
         "gender": 4,
         "weight": 560,
-        "height": 12
+        "height": 12,
+        "types": [
+            2,
+            8
+        ]
     },
     "981": {
         "name": "farigiraf",
@@ -18832,7 +19559,11 @@
         },
         "gender": 4,
         "weight": 1600,
-        "height": 32
+        "height": 32,
+        "types": [
+            1,
+            14
+        ]
     },
     "983": {
         "name": "kingambit",
@@ -18918,7 +19649,11 @@
         },
         "gender": 4,
         "weight": 1200,
-        "height": 20
+        "height": 20,
+        "types": [
+            17,
+            9
+        ]
     },
     "1000": {
         "name": "gholdengo",
@@ -18984,7 +19719,11 @@
         },
         "gender": -1,
         "weight": 300,
-        "height": 12
+        "height": 12,
+        "types": [
+            9,
+            8
+        ]
     },
     "1013": {
         "name": "sinistcha",
@@ -19048,7 +19787,11 @@
         },
         "gender": -1,
         "weight": 22,
-        "height": 2
+        "height": 2,
+        "types": [
+            12,
+            8
+        ]
     },
     "1018": {
         "name": "archaludon",
@@ -19133,7 +19876,11 @@
         },
         "gender": 4,
         "weight": 600,
-        "height": 20
+        "height": 20,
+        "types": [
+            9,
+            16
+        ]
     },
     "1019": {
         "name": "hydrapple",
@@ -19218,7 +19965,11 @@
         },
         "gender": 4,
         "weight": 930,
-        "height": 18
+        "height": 18,
+        "types": [
+            12,
+            16
+        ]
     },
     "10033": {
         "name": "venusaur-mega",
@@ -19299,7 +20050,11 @@
         },
         "gender": null,
         "weight": 1555,
-        "height": 24
+        "height": 24,
+        "types": [
+            12,
+            4
+        ]
     },
     "10034": {
         "name": "charizard-mega-x",
@@ -19395,7 +20150,11 @@
         },
         "gender": null,
         "weight": 1105,
-        "height": 17
+        "height": 17,
+        "types": [
+            10,
+            16
+        ]
     },
     "10035": {
         "name": "charizard-mega-y",
@@ -19491,7 +20250,11 @@
         },
         "gender": null,
         "weight": 1005,
-        "height": 17
+        "height": 17,
+        "types": [
+            10,
+            3
+        ]
     },
     "10036": {
         "name": "blastoise-mega",
@@ -19588,7 +20351,10 @@
         },
         "gender": null,
         "weight": 1011,
-        "height": 16
+        "height": 16,
+        "types": [
+            11
+        ]
     },
     "10090": {
         "name": "beedrill-mega",
@@ -19665,7 +20431,11 @@
         },
         "gender": null,
         "weight": 405,
-        "height": 14
+        "height": 14,
+        "types": [
+            7,
+            4
+        ]
     },
     "10073": {
         "name": "pidgeot-mega",
@@ -19720,7 +20490,11 @@
         },
         "gender": null,
         "weight": 505,
-        "height": 22
+        "height": 22,
+        "types": [
+            1,
+            3
+        ]
     },
     "10304": {
         "name": "raichu-mega-x",
@@ -19810,7 +20584,10 @@
         },
         "gender": null,
         "weight": 380,
-        "height": 12
+        "height": 12,
+        "types": [
+            13
+        ]
     },
     "10305": {
         "name": "raichu-mega-y",
@@ -19900,7 +20677,10 @@
         },
         "gender": null,
         "weight": 260,
-        "height": 10
+        "height": 10,
+        "types": [
+            13
+        ]
     },
     "10278": {
         "name": "clefable-mega",
@@ -20015,7 +20795,11 @@
         },
         "gender": null,
         "weight": 423,
-        "height": 17
+        "height": 17,
+        "types": [
+            18,
+            3
+        ]
     },
     "10037": {
         "name": "alakazam-mega",
@@ -20099,7 +20883,10 @@
         },
         "gender": null,
         "weight": 480,
-        "height": 12
+        "height": 12,
+        "types": [
+            14
+        ]
     },
     "10279": {
         "name": "victreebel-mega",
@@ -20182,7 +20969,11 @@
         },
         "gender": null,
         "weight": 1255,
-        "height": 45
+        "height": 45,
+        "types": [
+            12,
+            4
+        ]
     },
     "10071": {
         "name": "slowbro-mega",
@@ -20284,7 +21075,11 @@
         },
         "gender": null,
         "weight": 1200,
-        "height": 20
+        "height": 20,
+        "types": [
+            11,
+            14
+        ]
     },
     "10038": {
         "name": "gengar-mega",
@@ -20384,7 +21179,11 @@
         },
         "gender": null,
         "weight": 405,
-        "height": 14
+        "height": 14,
+        "types": [
+            8,
+            4
+        ]
     },
     "10039": {
         "name": "kangaskhan-mega",
@@ -20475,7 +21274,10 @@
         },
         "gender": null,
         "weight": 1000,
-        "height": 22
+        "height": 22,
+        "types": [
+            1
+        ]
     },
     "10280": {
         "name": "starmie-mega",
@@ -20561,7 +21363,11 @@
         },
         "gender": null,
         "weight": 800,
-        "height": 23
+        "height": 23,
+        "types": [
+            11,
+            14
+        ]
     },
     "10040": {
         "name": "pinsir-mega",
@@ -20638,7 +21444,11 @@
         },
         "gender": null,
         "weight": 590,
-        "height": 17
+        "height": 17,
+        "types": [
+            7,
+            3
+        ]
     },
     "10041": {
         "name": "gyarados-mega",
@@ -20729,7 +21539,11 @@
         },
         "gender": null,
         "weight": 3050,
-        "height": 65
+        "height": 65,
+        "types": [
+            11,
+            17
+        ]
     },
     "10042": {
         "name": "aerodactyl-mega",
@@ -20811,7 +21625,11 @@
         },
         "gender": null,
         "weight": 790,
-        "height": 21
+        "height": 21,
+        "types": [
+            6,
+            3
+        ]
     },
     "10281": {
         "name": "dragonite-mega",
@@ -20918,7 +21736,11 @@
         },
         "gender": null,
         "weight": 2900,
-        "height": 22
+        "height": 22,
+        "types": [
+            16,
+            3
+        ]
     },
     "10282": {
         "name": "meganium-mega",
@@ -21003,7 +21825,11 @@
         },
         "gender": null,
         "weight": 2010,
-        "height": 24
+        "height": 24,
+        "types": [
+            12,
+            18
+        ]
     },
     "10283": {
         "name": "feraligatr-mega",
@@ -21109,7 +21935,11 @@
         },
         "gender": null,
         "weight": 1088,
-        "height": 23
+        "height": 23,
+        "types": [
+            11,
+            16
+        ]
     },
     "10045": {
         "name": "ampharos-mega",
@@ -21200,7 +22030,11 @@
         },
         "gender": null,
         "weight": 615,
-        "height": 14
+        "height": 14,
+        "types": [
+            13,
+            16
+        ]
     },
     "10072": {
         "name": "steelix-mega",
@@ -21290,7 +22124,11 @@
         },
         "gender": null,
         "weight": 7400,
-        "height": 105
+        "height": 105,
+        "types": [
+            9,
+            5
+        ]
     },
     "10046": {
         "name": "scizor-mega",
@@ -21378,7 +22216,11 @@
         },
         "gender": null,
         "weight": 1250,
-        "height": 20
+        "height": 20,
+        "types": [
+            7,
+            9
+        ]
     },
     "10047": {
         "name": "heracross-mega",
@@ -21468,7 +22310,11 @@
         },
         "gender": null,
         "weight": 625,
-        "height": 17
+        "height": 17,
+        "types": [
+            7,
+            2
+        ]
     },
     "10284": {
         "name": "skarmory-mega",
@@ -21543,7 +22389,11 @@
         },
         "gender": null,
         "weight": 404,
-        "height": 17
+        "height": 17,
+        "types": [
+            9,
+            3
+        ]
     },
     "10048": {
         "name": "houndoom-mega",
@@ -21634,7 +22484,11 @@
         },
         "gender": null,
         "weight": 495,
-        "height": 19
+        "height": 19,
+        "types": [
+            17,
+            10
+        ]
     },
     "10049": {
         "name": "tyranitar-mega",
@@ -21750,7 +22604,11 @@
         },
         "gender": null,
         "weight": 2550,
-        "height": 25
+        "height": 25,
+        "types": [
+            6,
+            17
+        ]
     },
     "10065": {
         "name": "sceptile-mega",
@@ -21851,7 +22709,11 @@
         },
         "gender": null,
         "weight": 552,
-        "height": 19
+        "height": 19,
+        "types": [
+            12,
+            16
+        ]
     },
     "10050": {
         "name": "blaziken-mega",
@@ -21953,7 +22815,11 @@
         },
         "gender": null,
         "weight": 520,
-        "height": 19
+        "height": 19,
+        "types": [
+            10,
+            2
+        ]
     },
     "10064": {
         "name": "swampert-mega",
@@ -22054,7 +22920,11 @@
         },
         "gender": null,
         "weight": 1020,
-        "height": 19
+        "height": 19,
+        "types": [
+            11,
+            5
+        ]
     },
     "10051": {
         "name": "gardevoir-mega",
@@ -22158,7 +23028,11 @@
         },
         "gender": null,
         "weight": 484,
-        "height": 16
+        "height": 16,
+        "types": [
+            14,
+            18
+        ]
     },
     "10066": {
         "name": "sableye-mega",
@@ -22270,7 +23144,11 @@
         },
         "gender": null,
         "weight": 1610,
-        "height": 5
+        "height": 5,
+        "types": [
+            17,
+            8
+        ]
     },
     "10052": {
         "name": "mawile-mega",
@@ -22362,7 +23240,11 @@
         },
         "gender": null,
         "weight": 235,
-        "height": 10
+        "height": 10,
+        "types": [
+            9,
+            18
+        ]
     },
     "10053": {
         "name": "aggron-mega",
@@ -22469,7 +23351,10 @@
         },
         "gender": null,
         "weight": 3950,
-        "height": 22
+        "height": 22,
+        "types": [
+            9
+        ]
     },
     "10054": {
         "name": "medicham-mega",
@@ -22570,7 +23455,11 @@
         },
         "gender": null,
         "weight": 315,
-        "height": 13
+        "height": 13,
+        "types": [
+            2,
+            14
+        ]
     },
     "10055": {
         "name": "manectric-mega",
@@ -22643,7 +23532,10 @@
         },
         "gender": null,
         "weight": 440,
-        "height": 18
+        "height": 18,
+        "types": [
+            13
+        ]
     },
     "10070": {
         "name": "sharpedo-mega",
@@ -22724,7 +23616,11 @@
         },
         "gender": null,
         "weight": 1303,
-        "height": 25
+        "height": 25,
+        "types": [
+            11,
+            17
+        ]
     },
     "10087": {
         "name": "camerupt-mega",
@@ -22815,7 +23711,11 @@
         },
         "gender": null,
         "weight": 3205,
-        "height": 25
+        "height": 25,
+        "types": [
+            10,
+            5
+        ]
     },
     "10067": {
         "name": "altaria-mega",
@@ -22904,7 +23804,11 @@
         },
         "gender": null,
         "weight": 206,
-        "height": 15
+        "height": 15,
+        "types": [
+            16,
+            18
+        ]
     },
     "10056": {
         "name": "banette-mega",
@@ -22994,7 +23898,10 @@
         },
         "gender": null,
         "weight": 130,
-        "height": 12
+        "height": 12,
+        "types": [
+            8
+        ]
     },
     "10306": {
         "name": "chimecho-mega",
@@ -23083,7 +23990,11 @@
         },
         "gender": null,
         "weight": 80,
-        "height": 12
+        "height": 12,
+        "types": [
+            14,
+            9
+        ]
     },
     "10057": {
         "name": "absol-mega",
@@ -23178,7 +24089,10 @@
         },
         "gender": null,
         "weight": 490,
-        "height": 12
+        "height": 12,
+        "types": [
+            17
+        ]
     },
     "10307": {
         "name": "absol-mega-z",
@@ -23195,7 +24109,11 @@
         },
         "gender": null,
         "weight": 490,
-        "height": 12
+        "height": 12,
+        "types": [
+            17,
+            8
+        ]
     },
     "10074": {
         "name": "glalie-mega",
@@ -23273,7 +24191,10 @@
         },
         "gender": null,
         "weight": 3502,
-        "height": 21
+        "height": 21,
+        "types": [
+            15
+        ]
     },
     "10076": {
         "name": "metagross-mega",
@@ -23365,7 +24286,11 @@
         },
         "gender": null,
         "weight": 9429,
-        "height": 25
+        "height": 25,
+        "types": [
+            9,
+            14
+        ]
     },
     "10308": {
         "name": "staraptor-mega",
@@ -23432,7 +24357,11 @@
         },
         "gender": null,
         "weight": 500,
-        "height": 19
+        "height": 19,
+        "types": [
+            2,
+            3
+        ]
     },
     "10088": {
         "name": "lopunny-mega",
@@ -23532,7 +24461,11 @@
         },
         "gender": null,
         "weight": 283,
-        "height": 13
+        "height": 13,
+        "types": [
+            1,
+            2
+        ]
     },
     "10058": {
         "name": "garchomp-mega",
@@ -23614,7 +24547,11 @@
         },
         "gender": null,
         "weight": 950,
-        "height": 19
+        "height": 19,
+        "types": [
+            16,
+            5
+        ]
     },
     "10309": {
         "name": "garchomp-mega-z",
@@ -23631,7 +24568,10 @@
         },
         "gender": null,
         "weight": 990,
-        "height": 19
+        "height": 19,
+        "types": [
+            16
+        ]
     },
     "10059": {
         "name": "lucario-mega",
@@ -23738,7 +24678,11 @@
         },
         "gender": null,
         "weight": 575,
-        "height": 13
+        "height": 13,
+        "types": [
+            2,
+            9
+        ]
     },
     "10310": {
         "name": "lucario-mega-z",
@@ -23755,7 +24699,11 @@
         },
         "gender": null,
         "weight": 494,
-        "height": 13
+        "height": 13,
+        "types": [
+            2,
+            9
+        ]
     },
     "10060": {
         "name": "abomasnow-mega",
@@ -23844,7 +24792,11 @@
         },
         "gender": null,
         "weight": 1850,
-        "height": 27
+        "height": 27,
+        "types": [
+            12,
+            15
+        ]
     },
     "10068": {
         "name": "gallade-mega",
@@ -23973,7 +24925,11 @@
         },
         "gender": null,
         "weight": 564,
-        "height": 16
+        "height": 16,
+        "types": [
+            14,
+            2
+        ]
     },
     "10285": {
         "name": "froslass-mega",
@@ -24065,7 +25021,11 @@
         },
         "gender": null,
         "weight": 296,
-        "height": 26
+        "height": 26,
+        "types": [
+            15,
+            8
+        ]
     },
     "10286": {
         "name": "emboar-mega",
@@ -24168,7 +25128,11 @@
         },
         "gender": null,
         "weight": 1803,
-        "height": 18
+        "height": 18,
+        "types": [
+            10,
+            2
+        ]
     },
     "10287": {
         "name": "excadrill-mega",
@@ -24245,7 +25209,11 @@
         },
         "gender": null,
         "weight": 600,
-        "height": 9
+        "height": 9,
+        "types": [
+            5,
+            9
+        ]
     },
     "10069": {
         "name": "audino-mega",
@@ -24338,7 +25306,11 @@
         },
         "gender": null,
         "weight": 320,
-        "height": 15
+        "height": 15,
+        "types": [
+            1,
+            18
+        ]
     },
     "10288": {
         "name": "scolipede-mega",
@@ -24415,7 +25387,11 @@
         },
         "gender": null,
         "weight": 2305,
-        "height": 32
+        "height": 32,
+        "types": [
+            7,
+            4
+        ]
     },
     "10289": {
         "name": "scrafty-mega",
@@ -24521,7 +25497,11 @@
         },
         "gender": null,
         "weight": 310,
-        "height": 11
+        "height": 11,
+        "types": [
+            17,
+            2
+        ]
     },
     "10290": {
         "name": "eelektross-mega",
@@ -24620,7 +25600,10 @@
         },
         "gender": null,
         "weight": 1800,
-        "height": 30
+        "height": 30,
+        "types": [
+            13
+        ]
     },
     "10291": {
         "name": "chandelure-mega",
@@ -24698,7 +25681,11 @@
         },
         "gender": null,
         "weight": 696,
-        "height": 25
+        "height": 25,
+        "types": [
+            8,
+            10
+        ]
     },
     "10313": {
         "name": "golurk-mega",
@@ -24800,7 +25787,11 @@
         },
         "gender": null,
         "weight": 3300,
-        "height": 40
+        "height": 40,
+        "types": [
+            5,
+            8
+        ]
     },
     "10292": {
         "name": "chesnaught-mega",
@@ -24911,7 +25902,11 @@
         },
         "gender": null,
         "weight": 900,
-        "height": 16
+        "height": 16,
+        "types": [
+            12,
+            2
+        ]
     },
     "10293": {
         "name": "delphox-mega",
@@ -25007,7 +26002,11 @@
         },
         "gender": null,
         "weight": 390,
-        "height": 15
+        "height": 15,
+        "types": [
+            10,
+            14
+        ]
     },
     "10294": {
         "name": "greninja-mega",
@@ -25095,7 +26094,11 @@
         },
         "gender": null,
         "weight": 400,
-        "height": 15
+        "height": 15,
+        "types": [
+            11,
+            17
+        ]
     },
     "10295": {
         "name": "pyroar-mega",
@@ -25168,7 +26171,11 @@
         },
         "gender": null,
         "weight": 933,
-        "height": 15
+        "height": 15,
+        "types": [
+            10,
+            1
+        ]
     },
     "10296": {
         "name": "floette-mega",
@@ -25233,7 +26240,10 @@
         },
         "gender": null,
         "weight": 1008,
-        "height": 2
+        "height": 2,
+        "types": [
+            18
+        ]
     },
     "10314": {
         "name": "meowstic-male-mega",
@@ -25316,7 +26326,10 @@
         },
         "gender": null,
         "weight": 101,
-        "height": 8
+        "height": 8,
+        "types": [
+            14
+        ]
     },
     "10326": {
         "name": "meowstic-female-mega",
@@ -25396,7 +26409,10 @@
         },
         "gender": null,
         "weight": 101,
-        "height": 8
+        "height": 8,
+        "types": [
+            14
+        ]
     },
     "10297": {
         "name": "malamar-mega",
@@ -25488,7 +26504,11 @@
         },
         "gender": null,
         "weight": 698,
-        "height": 29
+        "height": 29,
+        "types": [
+            17,
+            14
+        ]
     },
     "10298": {
         "name": "barbaracle-mega",
@@ -25583,7 +26603,11 @@
         },
         "gender": null,
         "weight": 1000,
-        "height": 22
+        "height": 22,
+        "types": [
+            6,
+            2
+        ]
     },
     "10299": {
         "name": "dragalge-mega",
@@ -25659,7 +26683,11 @@
         },
         "gender": null,
         "weight": 1003,
-        "height": 21
+        "height": 21,
+        "types": [
+            4,
+            16
+        ]
     },
     "10300": {
         "name": "hawlucha-mega",
@@ -25757,7 +26785,11 @@
         },
         "gender": null,
         "weight": 250,
-        "height": 10
+        "height": 10,
+        "types": [
+            2,
+            3
+        ]
     },
     "10315": {
         "name": "crabominable-mega",
@@ -25844,7 +26876,11 @@
         },
         "gender": null,
         "weight": 2528,
-        "height": 26
+        "height": 26,
+        "types": [
+            2,
+            15
+        ]
     },
     "10302": {
         "name": "drampa-mega",
@@ -25934,7 +26970,11 @@
         },
         "gender": null,
         "weight": 2405,
-        "height": 30
+        "height": 30,
+        "types": [
+            1,
+            16
+        ]
     },
     "10303": {
         "name": "falinks-mega",
@@ -26009,7 +27049,10 @@
         },
         "gender": null,
         "weight": 990,
-        "height": 16
+        "height": 16,
+        "types": [
+            2
+        ]
     },
     "10320": {
         "name": "scovillain-mega",
@@ -26081,7 +27124,11 @@
         },
         "gender": null,
         "weight": 220,
-        "height": 12
+        "height": 12,
+        "types": [
+            12,
+            10
+        ]
     },
     "10321": {
         "name": "glimmora-mega",
@@ -26151,6 +27198,10 @@
         },
         "gender": null,
         "weight": 770,
-        "height": 28
+        "height": 28,
+        "types": [
+            6,
+            4
+        ]
     }
 }

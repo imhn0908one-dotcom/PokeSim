@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List
-from dataclasses import dataclass
-import json
 
 
 class stats(Enum):
@@ -75,13 +73,12 @@ class VolatileInstance:
 # =======================================================
 # 特殊状態異常の子クラス
 # =======================================================
-#@dataclass
+# @dataclass
 class SubstituteEffect(VolatileInstance):
     """身代わり用。hp要素をふくむ。"""
 
     Volatile_stat: VolatileCondition = VolatileCondition.SUBSTITUTE
     hp: int = 0
-
 
 
 # =======================================================
@@ -94,8 +91,8 @@ class PokemonInstance:
     id: int = field(metadata={"description": "pokemon ID"})
     name: str = field(metadata={"description": "pokemon name"})
     level: int = field(default=50, metadata={"description": "pokemon level"})
-    types: List[str] = field(
-        default_factory=list, metadata={"description": "length 1~4"}
+    types: List[int] = field(
+        default_factory=list[int], metadata={"description": "length 1~4"}
     )
 
     base_stats: Dict[stats, int] = field(
@@ -133,6 +130,7 @@ class PokemonInstance:
         },
     )
     gender_Id: int = 0
+    ability_Id: int = 0
     nature_Id: int = 0
     item_Id: int = 0
 
@@ -142,7 +140,7 @@ class PokemonInstance:
     # Conditions
     condition: Condition = Condition.NONE
 
-    def nature_change_rate(stat_name:str, ID: int) -> int:
+    def nature_change_rate(stat_name: str, ID: int) -> int:
         natures_path = "JSON/stat_change.json"
         with open(natures_path, "r") as j:
             natures_rate_file = json.load(j)
@@ -152,7 +150,6 @@ class PokemonInstance:
             return 0.9
         else:
             return 1
-
 
     def calculate_real_stat(self, stat_name: str) -> int:
         """目的ステータス名を引数に実数値を返す
@@ -167,7 +164,10 @@ class PokemonInstance:
             return self.base_stats[stats.HP] + self.evs[stats.HP] + 75
         else:
             change_rate = self.nature_change_rate(stat_name, self.nature_Id)
-            return  int((self.base_stats[stats.stat_name] + self.evs[stats.stat_name] + 20)* change_rate)
+            return int(
+                (self.base_stats[stats.stat_name] + self.evs[stats.stat_name] + 20)
+                * change_rate
+            )
 
     def reset_ranks(self) -> None:
         """交代時や戦闘終了時にランクをすべて0に戻す"""
