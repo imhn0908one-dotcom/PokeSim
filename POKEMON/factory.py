@@ -61,4 +61,5 @@ def make_pokemoninstance(id: int) -> Optional[PokemonInstance]:
         level=50,
         types=[pokedata["type1"], pokedata["type2"]],
         base_stats={},
+        jpname=pokedata["jpname"],
     )

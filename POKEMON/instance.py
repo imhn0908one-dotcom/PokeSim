@@ -1,17 +1,17 @@
+import json
+import stat
+import types
 from dataclasses import dataclass, field
-from enum import Enum
+from email.mime import base
+from enum import Enum, IntEnum
+from os import name
+from tkinter import BOTH
 from typing import Dict, List
 
+from enums import Stats
+from numpy import real
 
-class stats(Enum):
-    """基本ステータスの種類"""
-
-    HP = "HP"
-    Atk = "Attack"
-    Def = "Defense"
-    SpA = "Special Attack"
-    SpD = "Special Defense"
-    Spe = "Speed"
+from POKEMON import enums
 
 
 class Condition(Enum):
@@ -81,66 +81,92 @@ class SubstituteEffect(VolatileInstance):
     hp: int = 0
 
 
+# ======================================================
+# ベーシックデータのデータクラス（マスターデータ）
+# ======================================================
+@dataclass
+class MasterPokemonData:
+    id: int = field(metadata={"description": "pokemon ID"})
+    name: str = field(metadata={"description": "pokemon name"})
+    jpname: str = field(metadata={"description": "Japanese pokemon name"})
+
+    selective_gender: enums.Genders = field(metadata={"description": "pokemon gender"})
+    weight: int = field(metadata={"description": "pokemon weight"})
+    height: int = field(metadata={"description": "pokemon height"})
+
+    base_stats: Dict[Stats, int] = field(
+        metadata={"description": "種族値"},
+    )
+    abilities: List[int] = field(
+        metadata={"description": "selective abilities id"}, default_factory=list
+    )
+    types: enums.Typeslist = field(
+        metadata={"description": "pokemon types"}, default_factory=list
+    )
+    learnt_moves: List[int] = field(
+        metadata={"description": "selective moves id"}, default_factory=list
+    )
+
+
 # =======================================================
-# ポケモンインスタンスのデータクラス
+# 構築後のポケモンクラス（インスタンスごとに違うもの）
+# =======================================================
+class BuiltPokemon:
+    id: int = field(metadata={"description": "pokemon ID"})
+
+    evs: Dict[Stats, int] = field(
+        metadata={"description": "努力値"},
+        default_factory=lambda: {
+            Stats.HP: 0,
+            Stats.Atk: 0,
+            Stats.Def: 0,
+            Stats.SpD: 0,
+            Stats.SpA: 0,
+            Stats.Spe: 0,
+        },
+    )
+    movelist: List[int] = field(
+        metadata={"description": "selected moves id"}, default_factory=list
+    )
+    gender: enums.Genders = field(metadata={"description": "pokemon gender"})
+    nature: enums.Natures = field(metadata={"description": "pokemon nature"})
+    itemid: int = field(metadata={"description": "selected item id"})
+    abilityid: int = field(metadata={"description": "selected ability id"})
+
+
+# =======================================================
+# 戦闘用ポケモンクラス (BattlePokemon)
 # =======================================================
 
 
 @dataclass(slots=True)
-class PokemonInstance:
-    id: int = field(metadata={"description": "pokemon ID"})
-    name: str = field(metadata={"description": "pokemon name"})
-    level: int = field(default=50, metadata={"description": "pokemon level"})
-    types: List[int] = field(
-        default_factory=list[int], metadata={"description": "length 1~4"}
-    )
-
-    base_stats: Dict[stats, int] = field(
-        metadata={"description": "種族値"},
+class BattlePokemon:
+    basic_data: MasterPokemonData
+    built_data: BuiltPokemon
+    real_stats: Dict[Stats, int] = field(
+        metadata={"description": "実数値"},
         default_factory=lambda: {
-            stats.HP: 0,
-            stats.Atk: 0,
-            stats.Def: 0,
-            stats.Spe: 0,
-            stats.SpA: 0,
-            stats.SpD: 0,
+            Stats.HP: 0,
+            Stats.Atk: 0,
+            Stats.Def: 0,
+            Stats.SpD: 0,
+            Stats.SpA: 0,
+            Stats.Spe: 0,
         },
     )
-    evs: Dict[stats, int] = field(
-        metadata={"description": "努力値"},
-        default_factory=lambda: {
-            stats.HP: 0,
-            stats.Atk: 0,
-            stats.Def: 0,
-            stats.Spe: 0,
-            stats.SpA: 0,
-            stats.SpD: 0,
-        },
-    )
-    rank: Dict[stats | str, int] = field(
+    rank: Dict[Stats, int] = field(
         metadata={"description": "ランク"},
         default_factory=lambda: {
-            stats.Atk: 0,
-            stats.Def: 0,
-            stats.Spe: 0,
-            stats.SpA: 0,
-            stats.SpD: 0,
-            "Accuracy_rate": 0,
-            "Evasion_rate": 0,
+            Stats.HP: 0,
+            Stats.Atk: 0,
+            Stats.Def: 0,
+            Stats.SpD: 0,
+            Stats.SpA: 0,
+            Stats.Spe: 0,
         },
     )
-    gender_Id: int = 0
-    ability_Id: int = 0
-    nature_Id: int = 0
-    item_Id: int = 0
 
-    # moves
-    learnt_move_ids: List[int] = field(default_factory=list)
-    selected_move_ids: List[int] = field(default_factory=lambda: [0, 0, 0, 0])
-    # Conditions
-    condition: Condition = Condition.NONE
-
-    def nature_change_rate(stat_name: str, ID: int) -> int:
+    def nature_change_rate(self, stat_name: str, ID: int) -> float:
         natures_path = "JSON/stat_change.json"
         with open(natures_path, "r") as j:
             natures_rate_file = json.load(j)
@@ -153,7 +179,7 @@ class PokemonInstance:
 
     def calculate_real_stat(self, stat_name: str) -> int:
         """目的ステータス名を引数に実数値を返す
-            ランク変化も考慮
+
         Args:
             stat_name (str): 目的ステータス名
 
@@ -161,11 +187,11 @@ class PokemonInstance:
             int: 実数値
         """
         if stat_name == "HP":
-            return self.base_stats[stats.HP] + self.evs[stats.HP] + 75
+            return self.base_stat[Stats.HP] + self.evs[Stats.HP] + 75
         else:
-            change_rate = self.nature_change_rate(stat_name, self.nature_Id)
+            change_rate = self.nature_change_rate(stat_name, self.built_data.nature)
             return int(
-                (self.base_stats[stats.stat_name] + self.evs[stats.stat_name] + 20)
+                (self.base_stat[Stats[stat_name]] + self.evs[Stats[stat_name]] + 20)
                 * change_rate
             )
 
@@ -177,11 +203,23 @@ class PokemonInstance:
     def set_move(self, slot_index: int, move_id: int) -> None:
         """技スロット（0〜3）に技をセットする"""
         if 0 <= slot_index < 4:
-            if move_id in self.learnt_move_ids:
-                self.selected_move_ids[slot_index] = move_id
+            if move_id in self.basic_data.learnt_moves:
+                self.built_data.movelist[slot_index] = move_id
 
     def to_dict(self) -> dict:
         """JSON化や保存用にデータクラスを辞書化する"""
         import dataclasses
 
         return dataclasses.asdict(self)
+
+    @property
+    def base_stat(self) -> Dict[Stats, int]:
+        return self.basic_data.base_stats
+
+    @property
+    def evs(self) -> Dict[Stats, int]:
+        return self.built_data.evs
+
+    @property
+    def nature(self) -> enums.Natures:
+        return self.built_data.nature
