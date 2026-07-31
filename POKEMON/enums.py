@@ -77,3 +77,92 @@ class Natures(IntEnum):
     Quiet = 23
     Sassy = 24
     Serious = 25
+
+
+class MoveAttribute(IntEnum):
+    """Move attributes and flags (PokeAPI specification)"""
+
+    __slots__ = ("description",)
+    CONTACT = (1, "Makes contact with the target")
+    CHARGE = (2, "Requires a turn to charge before attacking")
+    RECHARGE = (3, "Requires a turn to recharge after attacking")
+    PROTECT = (4, "Can be blocked by Protect and similar moves")
+    REFLECTABLE = (5, "Can be bounced back by Magic Coat or Magic Bounce")
+    SNATCH = (6, "Can be stolen by Snatch")
+    MIRROR = (7, "Can be copied by Mirror Move")
+    PUNCH = (8, "Punching move, boosted by Iron Fist")
+    SOUND = (
+        9,
+        "Sound-based move, bypasses Substitute and blocked by Soundproof",
+    )
+    GRAVITY = (10, "Cannot be used during Gravity")
+    DEFROST = (11, "Thaws the user upon execution if frozen")
+    DISTANCE = (12, "Can target non-adjacent opponents in Triple Battles")
+    HEAL = (13, "Healing move, blocked by Heal Block")
+    AUTHENTIC = (14, "Bypasses Substitute")
+    POWDER = (
+        15,
+        "Powder move, ineffective against Grass-types, Overcoat, or Safety Goggles",
+    )
+    BITE = (16, "Biting move, boosted by Strong Jaw")
+    PULSE = (17, "Pulse move, boosted by Mega Launcher")
+    BALLISTICS = (18, "Bullet or bomb move, blocked by Bulletproof")
+    MENTAL = (19, "Mental move, affected by Mental Herb or Oblivious")
+    NON_SKY_BATTLE = (20, "Cannot be used in Sky Battles")
+    DANCE = (21, "Dance move, triggers Dancer")
+
+    def __new__(cls, value: int, description: str):
+        obj = int.__new__(cls, value)
+        obj._value_ = value
+        obj.description = description
+        return obj
+
+
+class MoveTarget(IntEnum):
+    """技の対象範囲（PokeAPI / データ定義準拠）"""
+
+    # ★ これを入れることで 'description' 属性の追加エラーを防ぎます
+    __slots__ = ("description",)
+
+    SPECIFIC_MOVE = (
+        1,
+        (
+            "One specific move. How this move is chosen depends upon on the"
+            " move being used."
+        ),
+    )
+    SELECTED_POKEMON_ME_FIRST = (
+        2,
+        (
+            "One other Pokémon on the field, selected by the trainer. Stolen"
+            " moves reuse the same target."
+        ),
+    )
+    ALLY = (3, "The user’s ally (if any).")
+    USERS_FIELD = (
+        4,
+        "The user’s side of the field. Affects the user and its ally (if any).",
+    )
+    USER_OR_ALLY = (5, "Either the user or its ally, selected by the trainer.")
+    OPPONENTS_FIELD = (
+        6,
+        "The opposing side of the field. Affects opposing Pokémon.",
+    )
+    USER = (7, "The user.")
+    RANDOM_OPPONENT = (8, "One opposing Pokémon, selected at random.")
+    ALL_OTHER_POKEMON = (9, "Every other Pokémon on the field.")
+    SELECTED_POKEMON = (
+        10,
+        "One other Pokémon on the field, selected by the trainer.",
+    )
+    ALL_OPPONENTS = (11, "All opposing Pokémon.")
+    ENTIRE_FIELD = (12, "The entire field. Affects all Pokémon.")
+    USER_AND_ALLIES = (13, "The user and its allies.")
+    ALL_POKEMON = (14, "Every Pokémon on the field.")
+    ALL_ALLIES = (15, "All of the user’s allies.")
+
+    def __new__(cls, value: int, description: str):
+        obj = int.__new__(cls, value)
+        obj._value_ = value
+        obj.description = description
+        return obj

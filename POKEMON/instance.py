@@ -111,7 +111,12 @@ class MasterPokemonData:
 # =======================================================
 # 構築後のポケモンクラス（インスタンスごとに違うもの）
 # =======================================================
+@dataclass(slots=True)
 class BuiltPokemon:
+    gender: enums.Genders = field(metadata={"description": "pokemon gender"})
+    nature: enums.Natures = field(metadata={"description": "pokemon nature"})
+    itemid: int = field(metadata={"description": "selected item id"})
+    abilityid: int = field(metadata={"description": "selected ability id"})
     id: int = field(metadata={"description": "pokemon ID"})
 
     evs: Dict[Stats, int] = field(
@@ -128,10 +133,6 @@ class BuiltPokemon:
     movelist: List[int] = field(
         metadata={"description": "selected moves id"}, default_factory=list
     )
-    gender: enums.Genders = field(metadata={"description": "pokemon gender"})
-    nature: enums.Natures = field(metadata={"description": "pokemon nature"})
-    itemid: int = field(metadata={"description": "selected item id"})
-    abilityid: int = field(metadata={"description": "selected ability id"})
 
 
 # =======================================================

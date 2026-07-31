@@ -1,6 +1,6 @@
 # MEMO
 
-このドキュメントは、ポケモンバトルシステム開発で使う主要なデータ構造・変数・DBテーブルの意味をまとめたメモです。
+このドキュメントは、ポケモンバトルシステム開発で使う主要なデータ構造・変数・データ管理方針をまとめたメモです。
 
 ## 0. 今後の優先順位
 
@@ -12,95 +12,27 @@
 3. ダメージ計算メソッドを用いたバトルシステム開発
 4. パーティ管理、バトル拡張、AI 最適化
 
-`battle/` フォルダ内の既存インスタンスメソッドは、現在の優先度に合わせて不要なら削除して構いません。
+`BATTLE/` フォルダ内の既存インスタンスメソッドは、現在の優先度に合わせて不要なら削除して構いません。
 
 
-## 1. DBの主要テーブルと用途
+## 1. データ管理方針（最新）
 
-### pokemon
-- ポケモンの基本情報と種族値を保持する。
-- 主要カラム例:
-  - `id`: ポケモンID（主キー）
-  - `name`: 名前
-  - `hp`: HP種族値（DB列名）
-  - `attack`: こうげき種族値（DB列名）
-  - `defense`: ぼうぎょ種族値（DB列名）
-  - `special_attack`: とくこう種族値（DB列名）
-  - `special_defense`: とくぼうさ種族値（DB列名）
-  - `speed`: すばやさ種族値（DB列名）
-- `POKEMON` ドメイン層では、非 `battle/` コード上で `HP`, `Atk`, `Def`, `SpA`, `SpD`, `Spe` を標準ステータス名として扱う。
+### JSON（マスターデータ）
+- `JSON/` 配下のファイルをマスターデータの正本として扱う。
+- 主な対象:
+  - `pokemon.json`
+  - `move.json`
+  - `ability.json`
+  - `stat_change.json`
+- ポケモン選択肢・基本情報・計算に必要な定義値は、原則このマスターを参照する。
 
-### pokemon_move
-- ポケモンが覚える技の対応関係を保持する中間テーブル。
-- 主要カラム例:
-  - `pokemon_id`: ポケモンID
-  - `move_id`: 技ID
-
-### move_basicdata
-- 技の基本情報を保持する。
-- 主要カラム例:
-  - `id`: 技ID（主キー）
-  - `name`: 技名
-  - `type_id`: タイプID
-  - `power`: 威力
-  - `accuracy`: 命中率
-  - `pp`: PP
-  - `priority`: 優先度
-  - `damage_class_id`: ダメージクラスID
-  - `target_id`: 対象ID
-
-### move_meta
-- 技の追加効果や状態異常に関するメタ情報を保持する。
-- 主要カラム例:
-  - `id`: 技ID（主キー）
-  - `min_hits`: 最小ヒット数
-  - `max_hits`: 最大ヒット数
-  - `min_turns`: 最小ターン数
-  - `max_turns`: 最大ターン数
-  - `drain`: 吸収量
-  - `healing`: 回復量
-  - `crit_rate`: クリティカル率
-  - `ailment_id`: 状態異常ID
-  - `ailment_chance`: 状態異常確率
-  - `flinch_chance`: ひるみ確率
-  - `stat_chance`: 能力変化確率
-
-### move_stat_change
-- 技による能力変化の内容を保持する。
-- 主要カラム例:
-  - `id`: 技ID（主キー）
-  - `stat_id`: 能力値ID
-  - `change`: 能力変化量
-
-### nature_data
-- 性格補正データを保持する。
-- 主要カラム例:
-  - `id`: 性格ID（主キー）
-  - `name`: 性格名
-  - `increased_stat_id`: 上昇する能力値ID
-  - `decreased_stat_id`: 下降する能力値ID
-
-### pokemon_ability
-- ポケモンが持つ特性の対応関係を保持する。
-- 主要カラム例:
-  - `pokemon_id`: ポケモンID
-  - `ability_id`: 特性ID
-  - `is_hidden`: 隠れ特性かどうか
-
-### ability_basicdata
-- 特性の基本情報を保持する。
-- 主要カラム例:
-  - `id`: 特性ID（主キー）
-  - `name`: 特性名
-
-### gender_rate
-- `pokemonspecies` から取得したメスになる確率を 8 分率で表現する。
-- 主要カラム例:
-  - `pokemon_id`: ポケモンID
-  - `gender_rate`: 0〜8 の値で性別比を表す。
-    - `0`: オスのみ
-    - `8`: メスのみ
-    - `-1`: 性別不明 / undefined
+### SQLite（実行ログ）
+- `pokemon_champions.db` は実行時のログ保存先として扱う。
+- 主な用途:
+  - ダメージ計算や検証時の記録
+  - 開発中の実験結果の蓄積
+  - 後続分析のための履歴保存
+- 重要: SQLite はマスターデータの正本としては扱わない。
 
 ## 2. 主要な変数・概念
 
@@ -169,10 +101,10 @@
 
 ## 4. 開発時に見ると良いポイント
 
-- `battle_manager.py` では技の基本データを `move_basicdata` から取得する。
-- `move_meta` と `move_stat_change` は、将来的な追加効果・状態異常・能力変化実装に使う。
-- `instance_making.py` では、ポケモンの種族値・性格補正・PP・実数値を計算する。
-- `party_manager_logic.py` では、TOML と DB をつなぐ処理が中心となる。
+- `BATTLE/` は計算フローと状態遷移の中心。UI依存を持ち込まず、純粋ロジックとして保つ。
+- `POKEMON/` はデータ読み込みとインスタンス生成の中心。マスターデータ参照を集約する。
+- `GUI/` は入力と表示に専念し、ロジック実装は `BATTLE/`・`POKEMON/` に寄せる。
+- データアクセス実装時は、JSON（マスター）と SQLite（ログ）の責務を混同しない。
 
 ## 5. 補足
 

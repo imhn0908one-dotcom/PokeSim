@@ -10,17 +10,18 @@ This project is a Python-based implementation of Pokémon battle systems, design
 
 This project is a basis of implementing Pokémon battle logic in stages. The immediate focus is to build a standalone damage calculator that chooses attacker and defender Pokémon, configures moves, environment, and EVs, and computes minimum and maximum damage. After that, the plan is to build a modern GUI and then expand into a battle system using the same calculation engine.
 
-## ✅ 完成済みの内容
+## ✅ 現在の実装状況
 
 現在のリポジトリには、以下の内容が実装されています。
 
-- ポケモンのパーティを TOML 形式で作成・編集できる仕組み
-- パーティ編集のための CUI インターフェース
+- GUI の土台（PySide6）
+  - 攻撃側/防御側のポケモン選択パネル
+  - フィールド状態設定パネル
+  - 結果表示パネル
 - バトルロジック用の基本クラス群
-  - `Single_Battle_Manager`
-  - `Field_State` / `Side_State`
-  - `Pokemon_Instance`
-- 技・性格・特性・努力値を扱うためのデータ構造とロジック
+  - `BattleManager`
+  - `BattleField` / `SideField`
+- ポケモン・技・性格・特性を扱うためのデータアクセス層（`POKEMON/`）
 
 ## 🔭 これからの展望
 
@@ -37,7 +38,7 @@ This project is a basis of implementing Pokémon battle logic in stages. The imm
 - F4: パーティ管理とバトル拡張
 - F5: AI / 機械学習による最適化
 
-現在の `battle/` フォルダにある既存のインスタンスメソッドは、ダメージ計算機と新規バトル実装に合わせて整理・削除して構いません。
+現在の `BATTLE/` フォルダにある既存のインスタンスメソッドは、ダメージ計算機と新規バトル実装に合わせて整理・削除して構いません。
 
 ## 🧠 設計思想
 
@@ -45,10 +46,19 @@ This project is a basis of implementing Pokémon battle logic in stages. The imm
 - データ駆動型の構成で、パーティ・技・性格・特性を柔軟に扱えるようにする
 - 高速なシミュレーションを前提とした、保守しやすい構造を意識する
 
+## 🗃️ データ管理方針（SQLite / JSON）
+
+- JSON（`JSON/`）:
+  - ポケモン・技・特性などの**マスターデータ**を保持する正本データ
+  - アプリケーションはこのマスターデータを参照して選択肢や基本情報を構成する
+- SQLite（`pokemon_champions.db`）:
+  - バトル計算・検証時の**実行ログ**を保持する
+  - マスターデータの正本としては扱わない
+
 
 ## 🧰 必要な環境
 
-- Python 3.12 以上
+- Python 3.13 以上
 - uv（Astral 製の Python パッケージ管理ツール）
 
 ## 🚀 セットアップ手順（uv 前提）
@@ -84,10 +94,10 @@ uv sync
 
 ### 4. 実行する
 
-現在の実装は、主要なロジックや CUI 画面を直接実行する構成です。必要に応じて、対象スクリプトを `uv run python ...` で実行してください。
+現在の実装は GUI エントリーポイントから起動します。必要に応じて、対象スクリプトを `uv run python ...` で実行してください。
 
 ```bash
-uv run python battle/party_manager_cui.py
+uv run python main.py
 ```
 
 ## Recomend Extension
@@ -97,22 +107,18 @@ uv run python battle/party_manager_cui.py
 
 ## 📁 プロジェクト構成
 
-- `battle/` : 戦闘ロジック、フィールド状態、パーティ管理関連
-- `buildDB/` : ポケモン・技・タイプ・特性データの構築スクリプト
-- `party/` : パーティの TOML ファイル
+- `BATTLE/` : 戦闘ロジック（マネージャー、ダメージ計算）
+- `FIELD/` : フィールド/サイド状態のデータ構造
+- `GUI/` : PySide6 ベースの UI
+- `POKEMON/` : ポケモン関連のドメイン・データアクセス
+- `JSON/` : マスターデータ（正本）
+- `buildDB/` : データ構築・取得スクリプト
+- `log/` : 実行ログ・構築ログ
+- `pokemon_champions.db` : SQLite 実行ログ
 
 ## 🗂️ 開発メモ
 - MEMO.mdを確認すると開発に必要なことがまとめられている。
-### データベースで扱う主要テーブル
-
-- `pokemon` : ポケモンの基本情報と種族値
-- `pokemon_move` : ポケモンが覚える技の対応関係
-- `move_basicdata` : 技の基本情報
-- `move_meta` : 技の追加効果・状態異常関連情報
-- `move_stat_change` : 技による能力変化情報
-- `nature_data` : 性格補正データ
-- `pokemon_ability` : 特性の対応関係
-- `ability_basicdata` : 特性の基本情報
+- データ方針は「JSON=マスターデータ」「SQLite=実行ログ」。
 
 ## 📄 ライセンス
 

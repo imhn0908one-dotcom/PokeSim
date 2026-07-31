@@ -7,5 +7,10 @@
         "numpy",
         "pokedex",
         "venusaur"
-    ]
+    ],
+    "search.exclude": {
+        "**/*.json": true
+    },
+    "github.copilot.chat.gemini3LowReasoningEffort.enabled": true,
+    "github.copilot.chat.inlineChat.reasoningEffort": "medium"
 }
