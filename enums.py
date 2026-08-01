@@ -1,7 +1,8 @@
 from enum import IntEnum
-from typing import Literal, TypeAlias
+from typing import TypeAlias
 
 
+# ここに定義されるEnumは、PokeAPIの仕様に基づいています。
 class TypeID(IntEnum):
     NONE = 0
     NORMAL = 1

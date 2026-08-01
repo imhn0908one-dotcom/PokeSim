@@ -8,10 +8,10 @@ from os import name
 from tkinter import BOTH
 from typing import Dict, List
 
-from enums import Stats
 from numpy import real
 
-from POKEMON import enums
+import enums
+from enums import Stats
 
 
 class Condition(Enum):

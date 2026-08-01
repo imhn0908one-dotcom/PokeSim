@@ -8,6 +8,7 @@
 * マスターデータ: JSON
 * ログ保存: sqlite3
 * 静的解析: Pylance (Strict)
+* コードスタイル: Ruff (PEP8準拠)
 
 ---
 
