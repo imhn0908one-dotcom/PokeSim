@@ -43,7 +43,7 @@ query getMovesByIds($ids: [Int!]) {
     move_target_id
     moveeffect {
       moveeffecteffecttexts(where: {language_id: {_eq: 9}}) {
-        short_effect
+        effect
       }
     }
   }
@@ -93,7 +93,7 @@ def fetch_and_flatten_moves_json(move_ids: list[int], save_file_path: str) -> No
         # エフェクト説明文
         effect_node = raw.get("moveeffect") or {}
         effect_texts = effect_node.get("moveeffecteffecttexts") or []
-        effect_str = effect_texts[0].get("short_effect", "") if effect_texts else ""
+        effect_desc = effect_texts[0].get("effect", "") if effect_texts else ""
 
         # --- すべてのデータを第1階層に並べたペッタンコの辞書を作る ---
         flat_move = {
@@ -125,7 +125,7 @@ def fetch_and_flatten_moves_json(move_ids: list[int], save_file_path: str) -> No
             # ターゲットとエフェクト
             "effect_chance": raw.get("move_effect_chance"),
             "effect_id": raw.get("move_effect_id"),
-            "effect": effect_str,
+            "effect_docs": effect_desc,
         }
 
         flattened_moves.append(flat_move)
@@ -144,7 +144,9 @@ def fetch_and_flatten_moves_json(move_ids: list[int], save_file_path: str) -> No
 # ==============================
 if __name__ == "__main__":
     # ほしい技のIDリスト（1: はたく, 2: からてチョップ）
-    target_ids = [1, 2]
+    idsfile = "JSON/moveindex.json"
+    with open(idsfile, "r", encoding="utf-8") as f:
+        target_ids = json.load(f)
 
     # 実行してJSONファイルを作るだけ！
     fetch_and_flatten_moves_json(target_ids, "JSON/flattened_moves.json")
