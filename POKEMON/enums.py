@@ -252,3 +252,20 @@ class MoveMetaAilment(IntEnum):
         obj._value_ = value
         obj.description = description
         return obj
+
+
+class MoveDamageClass(IntEnum):
+    """技の分類(物理、特殊、変化)（PokeAPI / データ定義準拠）"""
+
+    __slots__ = ("description",)
+
+    STATUS = (1, "Status move (no direct damage)")
+    PHYSICAL = (2, "Physical move (uses Attack and Defense)")
+    SPECIAL = (3, "Special move (uses Special Attack and Special Defense)")
+
+    def __new__(cls, value: int, description: str):
+
+        obj = int.__new__(cls, value)
+        obj._value_ = value
+        obj.description = description
+        return obj
