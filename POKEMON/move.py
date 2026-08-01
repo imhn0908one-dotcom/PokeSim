@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from multiprocessing import current_process
 from typing import Optional
 
 from POKEMON import enums
@@ -42,3 +43,9 @@ class MasterMove:
     effect_chance: Optional[int] = None
     effect_id: int = 0
     effect: str = ""
+
+
+@dataclass(slots=True, frozen=True)
+class BattleMove:
+    MasterMove: MasterMove
+    current_pp: int

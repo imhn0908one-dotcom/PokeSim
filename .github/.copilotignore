@@ -1,0 +1,15 @@
+# Json Images folder
+JSON/
+IMAGES/
+
+# Cache and temporary files
+.git/
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.cache/
+dist/
+build/
+*.log

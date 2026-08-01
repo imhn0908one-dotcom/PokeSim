@@ -5,9 +5,7 @@ import stat
 import types
 from contextlib import contextmanager
 from dataclasses import dataclass
-from types import Dict
-
-from POKEMON.instance import PokemonInstance
+from typing import Dict
 
 
 class Damagecalculator:
@@ -60,16 +58,14 @@ class Damagecalculator:
             return dict(row)
         else:
             return None
-        
-    def real_stat_calculator(
-            self,
-            instance: PokemonInstance
-    ):
+
+    def real_stat_calculator(self, instance: PokemonInstance):
         for key, value in instance.basestats.items():
             if key == "HP":
                 return value + instance.evs[key] + 75
             else:
                 return (value + instance.evs[key] + 20) * instance.rank[key]
+
     """
         最大HP
             種族値+能力ポイント+75
@@ -78,17 +74,14 @@ class Damagecalculator:
 """
 
     def damage_calculator(
-        self,
-        attacker: PokemonInstance,
-        defender: PokemonInstance,
-        move_id: int
+        self, attacker: PokemonInstance, defender: PokemonInstance, move_id: int
     ):
         move_data = self.move_basic_data(move_id)
         # ダメージ = (((レベル×2/5+2)×威力×A/D)/50+2)×範囲補正×おやこあい補正×天気補正×急所補正×乱数補正×タイプ一致補正×相性補正×やけど補正×M
 
         # 持ち物取得
         # 持ち物、による威力補正　 これの実装により”””damage = math.floor(22*move_data["power"])”””の変更が必要
-        
+
         damage = math.floor(22 * move_data["power"])
         damage = math.floor(damage * attacker.basestats["Atk"])
         damage = math.floor(damage / defender.basestats["Def"])
@@ -97,9 +90,7 @@ class Damagecalculator:
 
 
 @dataclass
-class DamageResult:
-    hp_change: dict[str, list[int]]
+class DamageCalculationResult:
+    damage: int
     # how_many_times_to_kill: dict
     kill_chance: dict[str, int]
-    status_change_attacker: dict[str, int]
-    status_change_defender: dict[str, int]
