@@ -34,10 +34,10 @@ from BATTLE import battle_manager
 from GUI.field_panel import FieldPanel
 from GUI.pokemon_panel import PokemonPanel
 from GUI.result_panel import ResultPanel
+from POKEMON.manager import learnt_move_names_to_dict
 
 # pannel import
-from POKEMON.instance import PokemonInstance
-from POKEMON.manager import learnt_move_names_to_dict
+from POKEMON.pokemon_object import PokemonInstance
 
 
 class MainWindow(QMainWindow):

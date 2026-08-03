@@ -1,29 +1,10 @@
 import json
-import stat
-import types
 from dataclasses import dataclass, field
-from email.mime import base
 from enum import Enum, IntEnum
-from os import name
-from tkinter import BOTH
 from typing import Dict, List
-
-from numpy import real
 
 import enums
 from enums import Stats
-
-
-class Condition(Enum):
-    """状態異常の種類"""
-
-    NONE = "なし"
-    SLEEP = "ねむり"
-    POISON = "どく"
-    BAD_POISON = "もうどく"
-    PARALYSIS = "まひ"
-    BURN = "やけど"
-    FROZEN = "こおり"
 
 
 class VolatileCondition(Enum):
@@ -90,7 +71,9 @@ class MasterPokemonData:
     name: str = field(metadata={"description": "pokemon name"})
     jpname: str = field(metadata={"description": "Japanese pokemon name"})
 
-    selective_gender: enums.Genders = field(metadata={"description": "pokemon gender"})
+    selectable_genders: enums.Genders = field(
+        metadata={"description": "pokemon gender"}
+    )
     weight: int = field(metadata={"description": "pokemon weight"})
     height: int = field(metadata={"description": "pokemon height"})
 
@@ -123,11 +106,11 @@ class BuiltPokemon:
         metadata={"description": "努力値"},
         default_factory=lambda: {
             Stats.HP: 0,
-            Stats.Atk: 0,
-            Stats.Def: 0,
-            Stats.SpD: 0,
-            Stats.SpA: 0,
-            Stats.Spe: 0,
+            Stats.ATTACK: 0,
+            Stats.DEFENSE: 0,
+            Stats.SPECIAL_ATTACK: 0,
+            Stats.SPECIAL_DEFENSE: 0,
+            Stats.SPEED: 0,
         },
     )
     movelist: List[int] = field(
@@ -148,22 +131,22 @@ class BattlePokemon:
         metadata={"description": "実数値"},
         default_factory=lambda: {
             Stats.HP: 0,
-            Stats.Atk: 0,
-            Stats.Def: 0,
-            Stats.SpD: 0,
-            Stats.SpA: 0,
-            Stats.Spe: 0,
+            Stats.ATTACK: 0,
+            Stats.DEFENSE: 0,
+            Stats.SPECIAL_ATTACK: 0,
+            Stats.SPECIAL_DEFENSE: 0,
+            Stats.SPEED: 0,
         },
     )
     rank: Dict[Stats, int] = field(
         metadata={"description": "ランク"},
         default_factory=lambda: {
             Stats.HP: 0,
-            Stats.Atk: 0,
-            Stats.Def: 0,
-            Stats.SpD: 0,
-            Stats.SpA: 0,
-            Stats.Spe: 0,
+            Stats.ATTACK: 0,
+            Stats.DEFENSE: 0,
+            Stats.SPECIAL_ATTACK: 0,
+            Stats.SPECIAL_DEFENSE: 0,
+            Stats.SPEED: 0,
         },
     )
 

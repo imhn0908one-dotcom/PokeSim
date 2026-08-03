@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from multiprocessing import current_process
 from typing import Optional
 
-import enums
+import POKEMON.enums as enums
 
 
 @dataclass(slots=True, frozen=True)

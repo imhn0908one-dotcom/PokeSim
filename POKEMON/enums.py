@@ -1,4 +1,4 @@
-from enum import IntEnum
+from enum import Enum, IntEnum
 from typing import TypeAlias
 
 
@@ -45,11 +45,14 @@ class Stats(IntEnum):
     """基本ステータスの種類"""
 
     HP = 1
-    Atk = 2
-    Def = 3
-    SpA = 4
-    SpD = 5
-    Spe = 6
+    ATTACK = 2
+    DEFENSE = 3
+    SPECIAL_ATTACK = 4
+    SPECIAL_DEFENSE = 5
+    SPEED = 6
+
+
+Statslist: TypeAlias = dict[Stats, int]  # Statsをキー、intを値とする辞書型のエイリアス
 
 
 class Natures(IntEnum):
@@ -83,7 +86,7 @@ class Natures(IntEnum):
 class MoveAttribute(IntEnum):
     """Move attributes and flags (PokeAPI specification)"""
 
-    __slots__ = ("description",)
+    description: str  # Description of the attribute
     CONTACT = (1, "Makes contact with the target")
     CHARGE = (2, "Requires a turn to charge before attacking")
     RECHARGE = (3, "Requires a turn to recharge after attacking")
@@ -122,8 +125,7 @@ class MoveAttribute(IntEnum):
 class MoveTarget(IntEnum):
     """技の対象範囲（PokeAPI / データ定義準拠）"""
 
-    # ★ これを入れることで 'description' 属性の追加エラーを防ぎます
-    __slots__ = ("description",)
+    description: str
 
     SPECIFIC_MOVE = (
         1,
@@ -172,8 +174,7 @@ class MoveTarget(IntEnum):
 class MoveMetaCategory(IntEnum):
     """技のメタカテゴリ（PokeAPI / データ定義準拠）"""
 
-    __slots__ = ("description",)
-
+    description: str
     DAMAGE = (0, "Inflicts damage")
     AILMENT = (1, "No damage; inflicts status ailment")
     NET_GOOD_STATS = (
@@ -202,8 +203,7 @@ class MoveMetaCategory(IntEnum):
 class MoveMetaAilment(IntEnum):
     """技が付与する状態異常・特殊状態（PokeAPI / データ定義準拠）"""
 
-    __slots__ = ("description",)
-
+    description: str
     UNKNOWN = (-1, "Unknown or unclassified status effect")
     NONE = (0, "No status ailment")
     PARALYSIS = (1, "Paralysis (reduces Speed and may prevent action)")
@@ -258,8 +258,7 @@ class MoveMetaAilment(IntEnum):
 class MoveDamageClass(IntEnum):
     """技の分類(物理、特殊、変化)（PokeAPI / データ定義準拠）"""
 
-    __slots__ = ("description",)
-
+    description: str
     STATUS = (1, "Status move (no direct damage)")
     PHYSICAL = (2, "Physical move (uses Attack and Defense)")
     SPECIAL = (3, "Special move (uses Special Attack and Special Defense)")
@@ -270,3 +269,15 @@ class MoveDamageClass(IntEnum):
         obj._value_ = value
         obj.description = description
         return obj
+
+
+class Condition(Enum):
+    """状態異常の種類"""
+
+    NONE = "なし"
+    SLEEP = "ねむり"
+    POISON = "どく"
+    BAD_POISON = "もうどく"
+    PARALYSIS = "まひ"
+    BURN = "やけど"
+    FROZEN = "こおり"
