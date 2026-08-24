@@ -1,4 +1,3 @@
-import json
 import os
 import sqlite3
 import sys
@@ -14,6 +13,14 @@ except ImportError:
         if repo_root not in sys.path:
             sys.path.insert(0, repo_root)
         from POKEMON.factory import DB_PATH
+
+try:
+    from REPOSITORY.pokemon_repository import PokemonRepository
+except ImportError:
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    if repo_root not in sys.path:
+        sys.path.insert(0, repo_root)
+    from REPOSITORY.pokemon_repository import PokemonRepository
 
 
 def _fetch_move_name_map(
@@ -84,14 +91,8 @@ def get_nature_name_map() -> Dict[int, str]:
 def get_selectable_pokemon_map() -> Dict[int, str]:
     """Return a mapping of Pokemon IDs to Pokemon names for selection lists.
 
-    This function reads the `pokemon` table from the database and produces a dict
-    where each key is the Pokemon ID and each value is the Pokemon name.
-
-    The returned dict is suitable for GUI dropdowns, selection menus, or any
-    selection logic where the caller needs to show the name and keep the ID as
-    the stable identifier.
+    この結果は GUI の選択肢生成に利用されるため、JSON マスターデータの
+    取得ロジックを Repository に集約して、読み込みとキャッシュの責務を
+    分離している。
     """
-    filename = "JSON/pokemon.json"
-    with open(filename, "r", encoding="utf-8") as f:
-        all_pokemon = json.load(f)
-    return {int(key): value["name"] for key, value in all_pokemon.items()}
+    return PokemonRepository.get_selectable_pokemon_map()

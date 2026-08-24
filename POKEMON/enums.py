@@ -28,8 +28,12 @@ class TypeID(IntEnum):
 # 「TypeID 単体」または「数字(int)」
 TypeArg: TypeAlias = TypeID | int
 
+
 # 「TypeID または 数字(int)」が入った可変リスト
-Typeslist: TypeAlias = list[TypeArg]
+class Typeslist(list[TypeArg]):
+    def __str__(self) -> str:
+        return ", ".join(TypeID(type_id).name for type_id in self)
+
 
 TYPE_CHART: list[list[float]] = [[]]
 

@@ -1,6 +1,5 @@
 from dataclasses import fields
 
-from pokebase import item
 from PySide6.QtCore import (
     QSize,
     Qt,

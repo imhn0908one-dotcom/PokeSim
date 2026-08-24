@@ -3,8 +3,12 @@ from dataclasses import dataclass, field
 from enum import Enum, IntEnum
 from typing import Dict, List
 
-import enums
-from enums import Stats
+try:
+    from POKEMON import enums
+    from POKEMON.enums import Stats
+except ModuleNotFoundError:
+    import enums
+    from enums import Stats
 
 
 class VolatileCondition(Enum):
@@ -76,16 +80,14 @@ class MasterPokemonData:
     )
     weight: int = field(metadata={"description": "pokemon weight"})
     height: int = field(metadata={"description": "pokemon height"})
-
+    types: enums.Typeslist = field(metadata={"description": "pokemon types"})
     base_stats: Dict[Stats, int] = field(
         metadata={"description": "種族値"},
     )
     abilities: List[int] = field(
         metadata={"description": "selective abilities id"}, default_factory=list
     )
-    types: enums.Typeslist = field(
-        metadata={"description": "pokemon types"}, default_factory=list
-    )
+
     learnt_moves: List[int] = field(
         metadata={"description": "selective moves id"}, default_factory=list
     )

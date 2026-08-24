@@ -5,6 +5,7 @@ import sys
 from datetime import datetime
 from typing import Dict, List, Tuple
 
+import PySide6
 from PySide6.QtCore import (
     QSize,
     Qt,
@@ -35,9 +36,6 @@ from GUI.field_panel import FieldPanel
 from GUI.pokemon_panel import PokemonPanel
 from GUI.result_panel import ResultPanel
 from POKEMON.manager import learnt_move_names_to_dict
-
-# pannel import
-from POKEMON.pokemon_object import PokemonInstance
 
 
 class MainWindow(QMainWindow):
