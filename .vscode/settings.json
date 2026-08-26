@@ -12,5 +12,11 @@
         "**/*.json": true
     },
     "github.copilot.chat.gemini3LowReasoningEffort.enabled": true,
-    "github.copilot.chat.inlineChat.reasoningEffort": "medium"
+    "github.copilot.chat.inlineChat.reasoningEffort": "medium",
+  "terminal.integrated.env.osx": {
+    "PYTHONPATH": "${workspaceFolder}"
+  },
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}"
+  ]
 }

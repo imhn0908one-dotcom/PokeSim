@@ -4,25 +4,34 @@ from typing import TypeAlias
 
 # ここに定義されるEnumは、PokeAPIの仕様に基づいています。
 class TypeID(IntEnum):
-    NONE = 0
-    NORMAL = 1
-    FIRE = 2
-    WATER = 3
-    GRASS = 4
-    ELECTRIC = 5
-    ICE = 6
-    FIGHTING = 7
-    POISON = 8
-    GROUND = 9
-    FLYING = 10
-    PSYCHIC = 11
-    BUG = 12
-    ROCK = 13
-    GHOST = 14
-    DRAGON = 15
-    DARK = 16
-    STEEL = 17
-    FAIRY = 18
+    """ポケモンのタイプID（PokeAPI準拠 / 日本語説明付き）"""
+
+    description: str
+    NONE = (0, "なし")
+    NORMAL = (1, "ノーマル")
+    FIRE = (2, "ほのお")
+    WATER = (3, "みず")
+    GRASS = (4, "くさ")
+    ELECTRIC = (5, "でんき")
+    ICE = (6, "こおり")
+    FIGHTING = (7, "かくとう")
+    POISON = (8, "どく")
+    GROUND = (9, "じめん")
+    FLYING = (10, "ひこう")
+    PSYCHIC = (11, "エスパー")
+    BUG = (12, "むし")
+    ROCK = (13, "いわ")
+    GHOST = (14, "ゴースト")
+    DRAGON = (15, "ドラゴン")
+    DARK = (16, "あく")
+    STEEL = (17, "はがね")
+    FAIRY = (18, "フェアリー")
+
+    def __new__(cls, value: int, description: str):
+        obj = int.__new__(cls, value)
+        obj._value_ = value
+        obj.description = description
+        return obj
 
 
 # 「TypeID 単体」または「数字(int)」

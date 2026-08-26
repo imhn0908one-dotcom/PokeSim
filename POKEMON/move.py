@@ -47,5 +47,7 @@ class MasterMove:
 
 @dataclass(slots=True, frozen=True)
 class BattleMove:
+    """バトル中に使用する技の状態（マスターデータと現在PP）。"""
+
     MasterMove: MasterMove
     current_pp: int

@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Sequence
 
 from PySide6.QtCore import QSize, Qt, Signal
 from PySide6.QtGui import QIcon, QMouseEvent, QPixmap
 from PySide6.QtWidgets import (
+    QComboBox,
     QFrame,
     QHBoxLayout,
     QLabel,
@@ -14,6 +17,8 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+
+from POKEMON import enums, move
 
 
 @dataclass
@@ -27,8 +32,61 @@ class SelectOption:
     title: str
     subtitle: str
     description: dict[str, int] | None
-    icon_path: str
+    icon_path: str | None
     used_rate: float | None
+
+
+@dataclass
+class MoveSelectOption(SelectOption):
+    """MasterMove を保持し、SelectPanel / UI 用に最適化した選択肢データ"""
+
+    move: move.MasterMove | None = None
+
+    @classmethod
+    def from_master(
+        cls, move: move.MasterMove, icon_path: str = "", used_rate: float | None = None
+    ) -> MoveSelectOption:
+        """MasterMove から UI 表示用の MoveSelectOption を生成する"""
+
+        # サブタイトル例: 「ほのお / 物理 (威力: 90 / 命中: 100)」
+        power_str = f"威力:{move.power}" if move.power is not None else "威力:-"
+        acc_str = f"命中:{move.accuracy}" if move.accuracy is not None else "命中:-"
+        subtitle = (
+            f"{move.type_id.name} / {move.damage_class_id.description} "
+            f"({power_str} {acc_str})"
+        )
+
+        return cls(
+            id=move.id,
+            title=move.jpname,
+            subtitle=subtitle,
+            description=None,
+            icon_path=icon_path,
+            used_rate=used_rate,
+            move=move,
+        )
+
+    def get_tags(self) -> set[Enum]:
+        """enums.py で定義された Enum 群をフィルター用のタグとして取り出す"""
+        if self.move is None:
+            return set()
+
+        tags = {
+            self.move.type_id,
+            self.move.damage_class_id,
+            self.move.target_id,
+            self.move.category_id,
+            self.move.ailment_id,
+        }
+        if self.move.stat_changes_stat is not None:
+            tags.update(self.move.stat_changes_stat.keys())
+
+        enum_types = tuple(
+            value
+            for value in vars(enums).values()
+            if isinstance(value, type) and issubclass(value, Enum)
+        )
+        return {tag for tag in tags if isinstance(tag, enum_types)}
 
 
 class SelectOptionWidget(QFrame):
@@ -50,15 +108,17 @@ class SelectOptionWidget(QFrame):
         layout.setSpacing(8)
 
         icon_label = QLabel(self)
-        pixmap = QPixmap(select_option.icon_path)
-        if not pixmap.isNull():
-            icon_label.setPixmap(
-                pixmap.scaled(
-                    QSize(32, 32),
-                    Qt.AspectRatioMode.KeepAspectRatio,
-                    Qt.TransformationMode.SmoothTransformation,
+        icon_label.setFixedSize(32, 32)
+        if select_option.icon_path:
+            pixmap = QPixmap(select_option.icon_path)
+            if not pixmap.isNull():
+                icon_label.setPixmap(
+                    pixmap.scaled(
+                        QSize(32, 32),
+                        Qt.AspectRatioMode.KeepAspectRatio,
+                        Qt.TransformationMode.SmoothTransformation,
+                    )
                 )
-            )
         layout.addWidget(icon_label)
 
         text_layout = QVBoxLayout()
@@ -109,12 +169,15 @@ class SelectPanel(QFrame):
     selection_changed = Signal(object)
     option_selected = Signal(SelectOption)
 
-    def __init__(self, options: list[SelectOption] | None = None):
+    def __init__(self, options: Sequence[SelectOption] | None = None):
         super().__init__()
-        self._options: list[SelectOption] = []
+        self._options: Sequence[SelectOption] = []
         self._widgets: dict[int, SelectOptionWidget] = {}
         self._selected_option: SelectOption | None = None
         self._selected_widget: SelectOptionWidget | None = None
+        self._filter_widget: FilterWidget | None = None
+        self._active_filters: dict[type[Enum], set[Enum]] = {}
+        self._search_text = ""
         self._header_selection_text = "{}"
         self._expanded = False
 
@@ -143,7 +206,8 @@ class SelectPanel(QFrame):
         self._control_layout.setContentsMargins(0, 0, 0, 0)
         self._control_layout.setSpacing(6)
         self._search_bar = QLineEdit(self)
-        self._search_bar.setPlaceholderText("検索（後で実装）")
+        self._search_bar.setPlaceholderText("検索")
+        self._search_bar.textChanged.connect(self._filter_options_by_text)
         self._filter_button = QPushButton("絞り込み", self)
         self._control_layout.addWidget(self._search_bar)
         self._control_layout.addWidget(self._filter_button)
@@ -167,7 +231,7 @@ class SelectPanel(QFrame):
         if options is not None:
             self.set_options(options)
 
-    def set_options(self, options: list[SelectOption]) -> None:
+    def set_options(self, options: Sequence[SelectOption]) -> None:
         """選択肢一覧を差し替える。"""
         self.clear_selection()
         self._options = list(options)
@@ -181,6 +245,8 @@ class SelectPanel(QFrame):
             widget.clicked.connect(self.on_option_clicked)
             self._widgets[option.id] = widget
             self._content_layout.addWidget(widget)
+
+        self._apply_filters()
 
     def on_option_clicked(self, select_option: SelectOption) -> None:
         """ユーザーのクリックを受け取り、単一選択状態を更新する。"""
@@ -254,6 +320,8 @@ class SelectPanel(QFrame):
         self._search_bar.setVisible(visible)
         self._filter_button.setVisible(visible)
         self._header_button.setVisible(not visible)
+        if visible:
+            self._apply_filters()
 
     def toggle_expand(self) -> None:
         """展開状態を切り替える。"""
@@ -272,6 +340,96 @@ class SelectPanel(QFrame):
         """フィルターボタンを返す。"""
         return self._filter_button
 
+    def attach_filter_widget(self, filter_widget: FilterWidget) -> None:
+        """Enumフィルターウィジェットを接続する。
+
+        Args:
+            filter_widget: 連動させるフィルターウィジェット。
+        """
+        self._filter_widget = filter_widget
+        self._filter_widget.filter_changed.connect(self._on_filter_changed)
+        self._active_filters = self._filter_widget.get_active_filters()
+        self._apply_filters()
+
+    def _filter_options_by_text(self, search_text: str) -> None:
+        """検索語に一致しない選択肢ウィジェットを非表示にする。
+
+        Args:
+            search_text: 検索バーに入力された文字列。
+        """
+        self._search_text = search_text
+        self._apply_filters()
+
+    def _on_filter_changed(self, filters: dict[type[Enum], set[Enum]]) -> None:
+        """Enumフィルターの変更を受け取り、表示状態を更新する。
+
+        Args:
+            filters: フィルター対象のEnumごとの選択値。
+        """
+        self._active_filters = filters
+        self._apply_filters()
+
+    def _apply_filters(self) -> None:
+        """検索文字列とEnumフィルターをまとめて反映する。"""
+        normalized_query = self._search_text.strip().casefold()
+        for widget in self._widgets.values():
+            option = widget.select_option
+            is_visible = self._matches_search_query(option, normalized_query)
+            if is_visible:
+                is_visible = self._matches_enum_filters(option)
+            widget.setVisible(is_visible)
+
+    def _matches_search_query(
+        self, option: SelectOption, normalized_query: str
+    ) -> bool:
+        """検索語と選択肢の一致可否を返す。
+
+        Args:
+            option: 一致判定対象の選択肢。
+            normalized_query: 前処理済み検索語（前後空白除去 + casefold）。
+
+        Returns:
+            検索語に一致すれば True。
+        """
+        if normalized_query == "":
+            return True
+
+        searchable_fields: list[str] = [option.title, option.subtitle]
+        if option.description is not None:
+            searchable_fields.extend(option.description.keys())
+        if option.used_rate is not None:
+            searchable_fields.append(str(option.used_rate))
+
+        normalized_fields = " ".join(searchable_fields).casefold()
+        return normalized_query in normalized_fields
+
+    def _matches_enum_filters(self, option: SelectOption) -> bool:
+        """Enumフィルターに一致するかを判定する。
+
+        Args:
+            option: 判定対象の選択肢。
+
+        Returns:
+            全フィルター条件に一致する場合は True。
+        """
+        if self._filter_widget is None:
+            return True
+
+        get_tags = getattr(option, "get_tags", None)
+        if not callable(get_tags):
+            return True
+
+        option_tags = get_tags()
+        if not isinstance(option_tags, set):
+            return True
+
+        for enum_cls, selected_tags in self._active_filters.items():
+            if not selected_tags:
+                continue
+            if not any(isinstance(tag, enum_cls) and tag in selected_tags for tag in option_tags):
+                return False
+        return True
+
     def _update_header_text(self) -> None:
         """ヘッダーテキストを現在の設定値から再構築する。"""
         if self._selected_option is None:
@@ -283,5 +441,69 @@ class SelectPanel(QFrame):
             f"{self._selected_option.title} / {self._selected_option.subtitle}"
         )
 
-        icon = QIcon(self._selected_option.icon_path)
+        icon_path = self._selected_option.icon_path
+        icon = QIcon(icon_path) if icon_path else QIcon()
         self._header_button.setIcon(icon)
+
+
+class FilterWidget(QWidget):
+    """Enumカテゴリごとにドロップダウンを並べるフィルターウィジェット。"""
+
+    filter_changed = Signal(object)
+
+    def __init__(
+        self,
+        target_enums: Sequence[tuple[str, type[Enum]]],
+        parent: QWidget | None = None,
+    ):
+        """
+        Args:
+            target_enums: (表示名, Enumクラス) のリスト
+                例: [("タイプ", TypeID), ("分類", MoveDamageClass)]
+        """
+        super().__init__(parent)
+        self._combos: dict[type[Enum], QComboBox] = {}
+
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(8)
+
+        for label_text, enum_cls in target_enums:
+            layout.addWidget(QLabel(f"{label_text}:", self))
+
+            combo = QComboBox(self)
+            combo.addItem("すべて", userData=None)
+
+            # Enumの要素をドロップダウンに追加
+            for member in enum_cls:
+                # NONE 項目や未定義のスキップ（必要に応じて調整）
+                if getattr(member, "name", "") == "NONE":
+                    continue
+
+                display_name = getattr(member, "description", member.name)
+                combo.addItem(display_name, userData=member)
+
+            combo.currentIndexChanged.connect(self._on_filter_changed)
+            self._combos[enum_cls] = combo
+            layout.addWidget(combo)
+
+    def _on_filter_changed(self) -> None:
+        """現在の全コンボボックスの選択状態を集約してシグナルを送る。"""
+        filters: dict[type[Enum], set[Enum]] = {}
+
+        for enum_cls, combo in self._combos.items():
+            selected_enum = combo.currentData()
+            if selected_enum is not None:
+                filters[enum_cls] = {selected_enum}
+            else:
+                filters[enum_cls] = set()
+
+        self.filter_changed.emit(filters)
+
+    def get_active_filters(self) -> dict[type[Enum], set[Enum]]:
+        """現在のフィルター選択状態を取得する。"""
+        filters: dict[type[Enum], set[Enum]] = {}
+        for enum_cls, combo in self._combos.items():
+            selected_enum = combo.currentData()
+            filters[enum_cls] = {selected_enum} if selected_enum is not None else set()
+        return filters

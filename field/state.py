@@ -1,5 +1,4 @@
-from dataclasses import dataclass, field
-from random import choice, choices
+from dataclasses import dataclass, field, fields
 
 
 @dataclass
