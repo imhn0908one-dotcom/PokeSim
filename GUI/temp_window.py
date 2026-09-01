@@ -3,7 +3,27 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from PySide6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget
+from PySide6.QtCore import QSize, Qt, Signal
+from PySide6.QtGui import QIcon, QMouseEvent, QPixmap
+from PySide6.QtWidgets import (
+    QApplication,
+    QComboBox,
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QListWidget,
+    QListWidgetItem,
+    QMainWindow,
+    QPushButton,
+    QScrollArea,
+    QVBoxLayout,
+    QWidget,
+)
+
+# noqa: E402 - import を実行する前にプロジェクトルートを追加する必要がある
+from MOVE import move_object
+from POKEMON import enums
 
 # これで読み込めるようになります
 # 修正前
@@ -16,9 +36,6 @@ project_root = Path(__file__).resolve().parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-# noqa: E402 - import を実行する前にプロジェクトルートを追加する必要がある
-from POKEMON import enums, move
-
 
 def _build_sample_options() -> list[MoveSelectOption]:
     """テスト表示用の技データを組み立てる。
@@ -26,8 +43,8 @@ def _build_sample_options() -> list[MoveSelectOption]:
     Returns:
         enum フィルターの挙動を確認できるサンプル選択肢一覧。
     """
-    sample_moves: list[move.MasterMove] = [
-        move.MasterMove(
+    sample_moves: list[move_object.MasterMove] = [
+        move_object.MasterMove(
             id=1,
             name="ember",
             jpname="ほのおのうず",
@@ -45,7 +62,7 @@ def _build_sample_options() -> list[MoveSelectOption]:
             drain=0,
             flinch_chance=0,
         ),
-        move.MasterMove(
+        move_object.MasterMove(
             id=2,
             name="thunderbolt",
             jpname="10まんボルト",
@@ -63,7 +80,7 @@ def _build_sample_options() -> list[MoveSelectOption]:
             drain=0,
             flinch_chance=0,
         ),
-        move.MasterMove(
+        move_object.MasterMove(
             id=3,
             name="swords-dance",
             jpname="つるぎのまい",
@@ -103,8 +120,6 @@ class TempWindow(QMainWindow):
         self.filter_widget = FilterWidget([
             ("タイプ", enums.TypeID),
             ("分類", enums.MoveDamageClass),
-            ("対象", enums.MoveTarget),
-            ("ステータス", enums.Stats),
         ])
         layout.addWidget(self.filter_widget)
 

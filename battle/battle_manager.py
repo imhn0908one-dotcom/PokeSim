@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from PySide6.QtCore import QObject
 
-from FIELD.state import BattleField, SideField
+from FIELD.field import BattleField, SideField
 from POKEMON.pokemon_object import PokemonInstance
 
 

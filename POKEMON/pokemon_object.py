@@ -4,16 +4,16 @@ from enum import Enum, IntEnum
 from typing import Dict, List
 
 from enums import Stats
-from requests import get
 
 from POKEMON import enums
-from REPOSITORY.pokemon_repository import PokemonRepository
+from REPOSITORY.pokemon_repository import NatureRepository, PokemonRepository
 
 
 class VolatileCondition(Enum):
     """状態変化の種類、バトンタッチによって移動するか"""
 
     CONFUSION = ("こんらん", True)
+    MAGNET_RISE = ("でんじふゆう", True)
     FLINCH = ("ひるみ", True)
     CURSE = ("のろい", True)
     CANT_ESCAPE = ("にげられない", True)
@@ -33,6 +33,10 @@ class VolatileCondition(Enum):
     STOCKPILE = ("たくわえる", True)
 
     TRANSFORM = ("へんしん", False)
+    ENCORE = ("アンコール", False)
+    TAUNT = ("ちょうはつ", False)
+    DISABLE = ("かなしばり", False)
+    SLOW_START = ("スロースタート", False)
     TORMENT = ("いちゃもん", False)
     IMPRISON = ("ふういん", False)
     ATTRACT = ("めろめろ", False)
@@ -57,7 +61,7 @@ class VolatileInstance:
 # =======================================================
 # 特殊状態異常の子クラス
 # =======================================================
-# @dataclass
+@dataclass
 class SubstituteEffect(VolatileInstance):
     """身代わり用。hp要素をふくむ。"""
 
@@ -110,17 +114,10 @@ class MasterPokemonData:
         return enums.Genders.BOTH
 
     @classmethod
-    def from_dict(cls, data: dict, id: int) -> "MasterPokemonData":
-        def convert_enum(enum_type, value):
-            if isinstance(value, enum_type):
-                return value
-            try:
-                return enum_type(value)
-            except (TypeError, ValueError):
-                return enum_type[value]
+    def _from_dict(cls, data: dict, id: int) -> "MasterPokemonData":
 
         base_stats = {
-            convert_enum(Stats, stat): int(value)
+            enums.convert_enum(Stats, stat): int(value)
             for stat, value in data.get("base_stats", {}).items()
         }
         raw_types = data.get("types", [])
@@ -128,7 +125,7 @@ class MasterPokemonData:
             raw_types
             if isinstance(raw_types, enums.Typeslist)
             else enums.Typeslist([
-                convert_enum(enums.TypeID, type_id) for type_id in raw_types
+                enums.convert_enum(enums.TypeID, type_id) for type_id in raw_types
             ])
         )
 
@@ -147,11 +144,17 @@ class MasterPokemonData:
 
     @classmethod
     def create_from_id(cls, pokemon_id: int) -> "MasterPokemonData":
-        """指定したIDのポケモンのマスターデータを返す。"""
+        """指定したIDのポケモンのマスターデータを返す。
+
+        Args:
+            pokemon_id: 取得したいポケモンのID。
+        Returns:
+                指定したIDのポケモンのマスターデータ。
+        """
         pokemon_data_dict = PokemonRepository._get_pokemon_by_id(pokemon_id)
         if pokemon_data_dict is None:
             raise ValueError(f"pokemon_id={pokemon_id} のデータが見つかりません。")
-        return cls.from_dict(pokemon_data_dict, id=pokemon_id)
+        return cls._from_dict(pokemon_data_dict, id=pokemon_id)
 
     @classmethod
     def get_all_pokemon(cls) -> dict[int, "MasterPokemonData"]:
@@ -164,7 +167,7 @@ class MasterPokemonData:
         for pokemon_id in PokemonRepository.get_pokemon_ids():
             pokemon_data_dict = PokemonRepository._get_pokemon_by_id(pokemon_id)
             if pokemon_data_dict is not None:
-                pokemon_data = cls.from_dict(pokemon_data_dict, id=pokemon_id)
+                pokemon_data = cls._from_dict(pokemon_data_dict, id=pokemon_id)
                 result[pokemon_id] = pokemon_data
         return result
 
@@ -172,16 +175,12 @@ class MasterPokemonData:
         return f"{self.name} (ID: {self.id}) object"
 
 
-print(
-    MasterPokemonData.create_from_id(3)
-)  # Example usage to create a MasterPokemonData instance for Pokémon ID 3
-
-
 # =======================================================
 # 構築後のポケモンクラス（インスタンスごとに違うもの）
 # =======================================================
 @dataclass(slots=True)
 class BuiltPokemon:
+    MasterData: MasterPokemonData
     gender: enums.Genders = field(metadata={"description": "pokemon gender"})
     nature: enums.Natures = field(metadata={"description": "pokemon nature"})
     itemid: int = field(metadata={"description": "selected item id"})
@@ -202,6 +201,43 @@ class BuiltPokemon:
     movelist: List[int] = field(
         metadata={"description": "selected moves id"}, default_factory=list
     )
+    terastal_type: enums.TypeID | None = field(
+        metadata={"description": "テラスタイプ"},
+        default=None,
+    )
+
+    def check_gender(self) -> bool:
+        """Check if the selected gender is valid for this Pokémon.
+
+        Returns:
+            bool: True if the gender is valid, False otherwise.
+        """
+        return self.gender == self.MasterData.selectable_genders
+
+    def check_ability(self) -> bool:
+        """Check if the selected ability is valid for this Pokémon.
+
+        Returns:
+            bool: True if the ability is valid, False otherwise.
+        """
+        return self.abilityid in self.MasterData.abilities
+
+    def check_evs(self, maxsum: int) -> bool:
+        """Check if the total EVs do not exceed the maximum allowed sum.
+
+        Returns:
+            bool: True if the total EVs are within the limit, False otherwise.
+        """
+        total_evs = sum(self.evs.values())
+        return total_evs <= maxsum
+
+    def check_moves(self) -> bool:
+        """Check if the selected moves are valid for this Pokémon.
+
+        Returns:
+            bool: True if all moves are valid, False otherwise.
+        """
+        return all(move in self.MasterData.learnt_moves for move in self.movelist)
 
 
 # =======================================================
@@ -226,13 +262,33 @@ class Team:
         each nested ``BuiltPokemon`` instance into dictionaries.  The returned
         value can therefore be used when saving team data or preparing it for
         JSON serialization without modifying the original team object.
-
+        japanese: このチームとそのポケモンをシリアライズ可能な辞書に変換します。
         Returns:
             dict: A dictionary containing the team's name and Pokémon data.
         """
         import dataclasses
 
         return dataclasses.asdict(self)
+
+    def check_team(self) -> bool:
+        """Check if the team is valid.
+
+        Returns:
+            bool: True if the team is valid, False otherwise.
+        """
+        pokeid_set = set()
+        item_set = set()
+        for pokemon in self.pokemons:
+            if pokemon.id in pokeid_set:
+                return False  # Duplicate Pokémon ID found
+            pokeid_set.add(pokemon.id)
+            item_set.add(pokemon.itemid)
+        if len(self.pokemons) != 6:
+            return False
+        if len(item_set) != len(self.pokemons):
+            return False
+
+        return True
 
 
 # =======================================================
@@ -242,7 +298,7 @@ class Team:
 
 @dataclass(slots=True)
 class BattlePokemon:
-    basic_data: MasterPokemonData
+    master_data: MasterPokemonData
     built_data: BuiltPokemon
     real_stats: Dict[Stats, int] = field(
         metadata={"description": "実数値"},
@@ -266,28 +322,14 @@ class BattlePokemon:
             Stats.SPEED: 0,
         },
     )
-
-    def nature_change_rate(self, stat_name: str, ID: int) -> float:
-        """Return the nature-based multiplier for the specified stat.
-
-        Args:
-            stat_name: Name of the stat to check.
-            ID: Numeric ID of the Pokémon's nature.
-
-        Returns:
-            1.1 if the nature raises the stat, 0.9 if it lowers it,
-            otherwise 1.0.
-        """
-
-        natures_path = "JSON/stat_change.json"
-        with open(natures_path, "r") as j:
-            natures_rate_file = json.load(j)
-        if ID in natures_rate_file["natures"][stat_name]["rate_up"]:
-            return 1.1
-        elif ID in natures_rate_file["natures"][stat_name]["rate_dw"]:
-            return 0.9
-        else:
-            return 1
+    terastal: bool = field(
+        metadata={"description": "テラスタル状態"},
+        default=False,
+    )
+    mega: bool = field(
+        metadata={"description": "メガシンカ状態"},
+        default=False,
+    )
 
     def calculate_real_stat(self, stat_name: str) -> int:
         """目的ステータス名を引数に実数値を返す
@@ -301,7 +343,9 @@ class BattlePokemon:
         if stat_name == "HP":
             return self.base_stat[Stats.HP] + self.evs[Stats.HP] + 75
         else:
-            change_rate = self.nature_change_rate(stat_name, self.built_data.nature)
+            change_rate = NatureRepository.nature_change_rate(
+                stat_name, self.built_data.nature
+            )
             return int(
                 (self.base_stat[Stats[stat_name]] + self.evs[Stats[stat_name]] + 20)
                 * change_rate
@@ -315,7 +359,7 @@ class BattlePokemon:
     def set_move(self, slot_index: int, move_id: int) -> None:
         """技スロット（0〜3）に技をセットする"""
         if 0 <= slot_index < 4:
-            if move_id in self.basic_data.learnt_moves:
+            if move_id in self.master_data.learnt_moves:
                 self.built_data.movelist[slot_index] = move_id
 
     def to_dict(self) -> dict:
@@ -326,7 +370,7 @@ class BattlePokemon:
 
     @property
     def base_stat(self) -> Dict[Stats, int]:
-        return self.basic_data.base_stats
+        return self.master_data.base_stats
 
     @property
     def evs(self) -> Dict[Stats, int]:
@@ -335,6 +379,30 @@ class BattlePokemon:
     @property
     def nature(self) -> enums.Natures:
         return self.built_data.nature
+
+    @classmethod
+    def create_from_built(cls, built_pokemon: BuiltPokemon) -> "BattlePokemon":
+        """BuiltPokemon インスタンスから BattlePokemon インスタンスを生成する。
+
+        Args:
+            built_pokemon: BuiltPokemon インスタンス。
+
+        Returns:
+            BattlePokemon インスタンス。
+        """
+        return cls(
+            master_data=built_pokemon.MasterData,
+            built_data=built_pokemon,
+            real_stats={stat: 0 for stat in Stats},  # 初期化時は実数値を0に設定
+            rank={stat: 0 for stat in Stats},  # 初期化時はランクを0に設定
+            terastal=False,
+            mega=False,
+        )
+
+    def update_real_stats(self) -> None:
+        """Update the real_stats attribute based on the current base stats, EVs, and nature."""
+        for stat in Stats:
+            self.real_stats[stat] = self.calculate_real_stat(stat.name)
 
 
 # =======================================================

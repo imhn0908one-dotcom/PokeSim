@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from FIELD.state import BattleField
+from FIELD.field import BattleField
 
 
 class FieldState(QObject):

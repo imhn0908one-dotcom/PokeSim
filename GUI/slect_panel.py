@@ -12,13 +12,16 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QLineEdit,
+    QListWidget,
+    QListWidgetItem,
     QPushButton,
     QScrollArea,
     QVBoxLayout,
     QWidget,
 )
 
-from POKEMON import enums, move
+from MOVE import move_object
+from POKEMON import enums
 
 
 @dataclass
@@ -40,11 +43,14 @@ class SelectOption:
 class MoveSelectOption(SelectOption):
     """MasterMove を保持し、SelectPanel / UI 用に最適化した選択肢データ"""
 
-    move: move.MasterMove | None = None
+    move: move_object.MasterMove | None = None
 
     @classmethod
     def from_master(
-        cls, move: move.MasterMove, icon_path: str = "", used_rate: float | None = None
+        cls,
+        move: move_object.MasterMove,
+        icon_path: str = "",
+        used_rate: float | None = None,
     ) -> MoveSelectOption:
         """MasterMove から UI 表示用の MoveSelectOption を生成する"""
 
@@ -99,10 +105,21 @@ class SelectOptionWidget(QFrame):
         self.select_option = select_option
         self._is_selected = False
         self.setObjectName("select_option_label")
-        self.setMinimumSize(200, 50)
-        self.setMaximumSize(200, 50)
+        self.setMaximumSize(100, 25)
         self._apply_selection_style()
-
+        self.setStyleSheet(
+            """
+            QFrame#select_option_label {
+                border: 2px solid #ccc;
+                border-radius: 6px;
+                background-color: #f9f9f9;
+            }
+            QFrame#select_option_label:hover {
+                border: 2px solid #3b82f6;
+                background-color: #dbeafe;
+            }
+            """
+        )
         layout = QHBoxLayout(self)
         layout.setContentsMargins(8, 4, 8, 4)
         layout.setSpacing(8)
@@ -122,8 +139,8 @@ class SelectOptionWidget(QFrame):
         layout.addWidget(icon_label)
 
         text_layout = QVBoxLayout()
-        self.title_label = QLabel(select_option.title, self)
-        self.subtitle_label = QLabel(select_option.subtitle, self)
+        self.title_label = QLabel(text=select_option.title)
+        self.subtitle_label = QLabel(text=select_option.subtitle)
         self.title_label.setWordWrap(True)
         self.subtitle_label.setWordWrap(True)
         text_layout.addWidget(self.title_label)
@@ -133,7 +150,7 @@ class SelectOptionWidget(QFrame):
             description = " / ".join(
                 f"{key}: {value}" for key, value in select_option.description.items()
             )
-            self.description_label = QLabel(description, self)
+            self.description_label = QLabel(text=description)
             self.description_label.setWordWrap(True)
             text_layout.addWidget(self.description_label)
 
@@ -159,27 +176,104 @@ class SelectOptionWidget(QFrame):
         )
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
+        """if mouse click, emit clicked signal with the select_option object."""
         self.clicked.emit(self.select_option)
         super().mousePressEvent(event)
 
 
+class PopupList(QListWidget):
+    """ポップアップ表示用のリストウィジェット。"""
+
+    item_selected = Signal(SelectOption)
+
+    def __init__(self, parent: QWidget | None = None):
+        super().__init__(parent)
+        self.setWindowFlags(Qt.WindowType.Popup)
+        self.setSelectionMode(QListWidget.SelectionMode.SingleSelection)
+        self.itemClicked.connect(self._on_item_clicked)
+
+    def set_options(self, options: Sequence[SelectOption]) -> None:
+        """選択肢を QListWidgetItem としてセットする。"""
+        self.clear()
+        for option in options:
+            # 表示テキスト（タイトル ＋ サブタイトル）
+            display_text = f"{option.title}  ({option.subtitle})"
+            item = QListWidgetItem(display_text)
+
+            # 裏データとして SelectOption オブジェクトを保持
+            item.setData(Qt.ItemDataRole.UserRole, option)
+            self.addItem(item)
+
+    def _on_item_clicked(self, item: QListWidgetItem) -> None:
+        """アイテム選択時にオブジェクトを伝播し、ポップアップを閉じる。"""
+        option = item.data(Qt.ItemDataRole.UserRole)
+        if isinstance(option, SelectOption):
+            self.item_selected.emit(option)
+            self.hide()
+
+
+class FilterWidget(QWidget):
+    """Enumカテゴリごとにドロップダウンを並べるフィルターウィジェット。"""
+
+    filter_changed = Signal(dict)
+
+    def __init__(
+        self,
+        target_enums: Sequence[tuple[str, type[Enum]]],
+        parent: QWidget | None = None,
+    ):
+        super().__init__(parent)
+        self._combos: dict[type[Enum], QComboBox] = {}
+
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(8)
+
+        for label_text, enum_cls in target_enums:
+            layout.addWidget(QLabel(f"{label_text}:", self))
+
+            combo = QComboBox(self)
+            combo.addItem("すべて", userData=None)
+
+            for member in enum_cls:
+                if getattr(member, "name", "") == "NONE":
+                    continue
+                display_name = getattr(member, "description", member.name)
+                combo.addItem(display_name, userData=member)
+
+            combo.currentIndexChanged.connect(self._on_filter_changed)
+            self._combos[enum_cls] = combo
+            layout.addWidget(combo)
+
+    def _on_filter_changed(self) -> None:
+        filters: dict[type[Enum], set[Enum]] = {}
+        for enum_cls, combo in self._combos.items():
+            selected_enum = combo.currentData()
+            filters[enum_cls] = {selected_enum} if selected_enum is not None else set()
+        self.filter_changed.emit(filters)
+
+    def get_active_filters(self) -> dict[type[Enum], set[Enum]]:
+        filters: dict[type[Enum], set[Enum]] = {}
+        for enum_cls, combo in self._combos.items():
+            selected_enum = combo.currentData()
+            filters[enum_cls] = {selected_enum} if selected_enum is not None else set()
+        return filters
+
+
 class SelectPanel(QFrame):
-    """1件だけ選択できる選択肢一覧パネル。"""
+    """FilterWidget と PopupList を統合管理する親パネル。"""
 
     selection_changed = Signal(object)
     option_selected = Signal(SelectOption)
 
     def __init__(self, options: Sequence[SelectOption] | None = None):
         super().__init__()
-        self._options: Sequence[SelectOption] = []
-        self._widgets: dict[int, SelectOptionWidget] = {}
+        self._options: list[SelectOption] = []
         self._selected_option: SelectOption | None = None
-        self._selected_widget: SelectOptionWidget | None = None
         self._filter_widget: FilterWidget | None = None
         self._active_filters: dict[type[Enum], set[Enum]] = {}
         self._search_text = ""
-        self._header_selection_text = "{}"
-        self._expanded = False
+        self._header_selection_text = "選択肢"
 
         self.setObjectName("select_panel")
         self.setStyleSheet(
@@ -196,225 +290,108 @@ class SelectPanel(QFrame):
         self._layout.setContentsMargins(8, 8, 8, 8)
         self._layout.setSpacing(6)
 
+        # 検索バー
+        self._search_bar = QLineEdit(self)
+        self._search_bar.setPlaceholderText("検索...")
+        self._search_bar.setClearButtonEnabled(True)
+        self._search_bar.textChanged.connect(self._filter_options_by_text)
+        self._layout.addWidget(self._search_bar)
+
+        # メイン選択ボタン（クリックでポップアップ表示）
         self._header_button = QPushButton(self)
         self._header_button.setIconSize(QSize(24, 24))
-        self._header_button.clicked.connect(self.toggle_expand)
-        self._header_button.hide()
+        self._header_button.setStyleSheet("text-align: left; padding: 6px;")
+        self._header_button.clicked.connect(self.show_popup)
         self._layout.addWidget(self._header_button)
 
-        self._control_layout = QHBoxLayout()
-        self._control_layout.setContentsMargins(0, 0, 0, 0)
-        self._control_layout.setSpacing(6)
-        self._search_bar = QLineEdit(self)
-        self._search_bar.setPlaceholderText("検索")
-        self._search_bar.textChanged.connect(self._filter_options_by_text)
-        self._filter_button = QPushButton("絞り込み", self)
-        self._control_layout.addWidget(self._search_bar)
-        self._control_layout.addWidget(self._filter_button)
-        self._layout.addLayout(self._control_layout)
+        # ポップアップリストの生成
+        self._popup_list = PopupList(self)
+        self._popup_list.item_selected.connect(self.on_option_selected)
 
-        self._scroll_area = QScrollArea(self)
-        self._scroll_area.setWidgetResizable(True)
-        self._scroll_area.setFrameShape(QFrame.Shape.NoFrame)
-        self._scroll_area.setHorizontalScrollBarPolicy(
-            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
-        )
-
-        self._content_widget = QWidget(self)
-        self._content_layout = QVBoxLayout(self._content_widget)
-        self._content_layout.setContentsMargins(0, 0, 0, 0)
-        self._content_layout.setSpacing(6)
-        self._scroll_area.setWidget(self._content_widget)
-        self._layout.addWidget(self._scroll_area)
         self._update_header_text()
 
         if options is not None:
             self.set_options(options)
 
-    def set_options(self, options: Sequence[SelectOption]) -> None:
-        """選択肢一覧を差し替える。"""
-        self.clear_selection()
-        self._options = list(options)
-        self._widgets.clear()
+    def attach_filter_widget(self, filter_widget: FilterWidget) -> None:
+        """FilterWidget を SelectPanel のレイアウト上部へ挿入・接続する。"""
+        self._filter_widget = filter_widget
+        self._filter_widget.filter_changed.connect(self._on_filter_changed)
+        self._active_filters = self._filter_widget.get_active_filters()
 
-        for widget in self._content_widget.findChildren(SelectOptionWidget):
-            widget.deleteLater()
-
-        for option in self._options:
-            widget = SelectOptionWidget(option)
-            widget.clicked.connect(self.on_option_clicked)
-            self._widgets[option.id] = widget
-            self._content_layout.addWidget(widget)
-
+        # レイアウトの一番上（検索バーの上）に追加
+        self._layout.insertWidget(0, self._filter_widget)
         self._apply_filters()
 
-    def on_option_clicked(self, select_option: SelectOption) -> None:
-        """ユーザーのクリックを受け取り、単一選択状態を更新する。"""
-        if (
-            self._selected_option is not None
-            and self._selected_option.id == select_option.id
-        ):
-            self.clear_selection()
-            return
+    def set_options(self, options: Sequence[SelectOption]) -> None:
+        """選択肢一覧を更新し PopupList にセットする。"""
+        self.clear_selection()
+        self._options = list(options)
+        self._popup_list.set_options(self._options)
+        self._apply_filters()
 
-        if self._selected_widget is not None:
-            self._selected_widget.set_selected(False)
+    def show_popup(self) -> None:
+        """ヘッダーボタンの直下に PopupList を展開する。"""
+        pos = self._header_button.mapToGlobal(self._header_button.rect().bottomLeft())
+        self._popup_list.move(pos)
+        self._popup_list.setFixedWidth(max(self._header_button.width(), 280))
+        self._popup_list.setFixedHeight(250)
+        self._apply_filters()
+        self._popup_list.show()
 
+    def on_option_selected(self, select_option: SelectOption) -> None:
+        """PopupList で選択されたアイテムを受け取る。"""
         self._selected_option = select_option
-        self._selected_widget = self._widgets.get(select_option.id)
-        if self._selected_widget is not None:
-            self._selected_widget.set_selected(True)
         self._update_header_text()
-        self.set_scroll_area_visible(False)
-
         self.selection_changed.emit(select_option)
         self.option_selected.emit(select_option)
 
-    def selected_option(self) -> SelectOption | None:
-        """現在選択中の選択肢を返す。"""
-        return self._selected_option
-
-    def selected_id(self) -> int | None:
-        """現在選択中の選択肢IDを返す。"""
-        if self._selected_option is None:
-            return None
-        return self._selected_option.id
-
-    def select_by_id(self, option_id: int) -> bool:
-        """IDを指定して選択肢を選択する。"""
-        widget = self._widgets.get(option_id)
-        if widget is None:
-            return False
-
-        if self._selected_option is not None and self._selected_option.id == option_id:
-            return True
-
-        if self._selected_widget is not None:
-            self._selected_widget.set_selected(False)
-
-        self._selected_option = widget.select_option
-        self._selected_widget = widget
-        self._selected_widget.set_selected(True)
-        self._update_header_text()
-        self.set_scroll_area_visible(False)
-
-        self.selection_changed.emit(self._selected_option)
-        self.option_selected.emit(self._selected_option)
-        return True
-
     def clear_selection(self) -> None:
-        """選択を解除する。"""
         had_selection = self._selected_option is not None
-        if self._selected_widget is not None:
-            self._selected_widget.set_selected(False)
         self._selected_option = None
-        self._selected_widget = None
         self._update_header_text()
         if had_selection:
             self.selection_changed.emit(None)
 
-    def set_scroll_area_visible(self, visible: bool) -> None:
-        """スクロール領域の表示状態を切り替える。"""
-        self._expanded = visible
-        self._scroll_area.setVisible(visible)
-        self._search_bar.setVisible(visible)
-        self._filter_button.setVisible(visible)
-        self._header_button.setVisible(not visible)
-        if visible:
-            self._apply_filters()
-
-    def toggle_expand(self) -> None:
-        """展開状態を切り替える。"""
-        self.set_scroll_area_visible(not self._expanded)
-
-    def set_header_selection_text(self, text: str) -> None:
-        """ヘッダーに表示する選択対象テキストを更新する。"""
-        self._header_selection_text = text
-        self._update_header_text()
-
-    def search_bar_widget(self) -> QLineEdit:
-        """検索バーを返す。"""
-        return self._search_bar
-
-    def filter_button_widget(self) -> QPushButton:
-        """フィルターボタンを返す。"""
-        return self._filter_button
-
-    def attach_filter_widget(self, filter_widget: FilterWidget) -> None:
-        """Enumフィルターウィジェットを接続する。
-
-        Args:
-            filter_widget: 連動させるフィルターウィジェット。
-        """
-        self._filter_widget = filter_widget
-        self._filter_widget.filter_changed.connect(self._on_filter_changed)
-        self._active_filters = self._filter_widget.get_active_filters()
-        self._apply_filters()
-
     def _filter_options_by_text(self, search_text: str) -> None:
-        """検索語に一致しない選択肢ウィジェットを非表示にする。
-
-        Args:
-            search_text: 検索バーに入力された文字列。
-        """
         self._search_text = search_text
         self._apply_filters()
 
     def _on_filter_changed(self, filters: dict[type[Enum], set[Enum]]) -> None:
-        """Enumフィルターの変更を受け取り、表示状態を更新する。
-
-        Args:
-            filters: フィルター対象のEnumごとの選択値。
-        """
         self._active_filters = filters
         self._apply_filters()
 
     def _apply_filters(self) -> None:
-        """検索文字列とEnumフィルターをまとめて反映する。"""
+        """QListWidgetItem の UserRole からデータを取り出し setHidden で絞り込む。"""
         normalized_query = self._search_text.strip().casefold()
-        for widget in self._widgets.values():
-            option = widget.select_option
-            is_visible = self._matches_search_query(option, normalized_query)
-            if is_visible:
-                is_visible = self._matches_enum_filters(option)
-            widget.setVisible(is_visible)
+
+        for i in range(self._popup_list.count()):
+            item = self._popup_list.item(i)
+            option: SelectOption | None = item.data(Qt.ItemDataRole.UserRole)
+            if option is None:
+                continue
+
+            is_visible = self._matches_search_query(
+                option, normalized_query
+            ) and self._matches_enum_filters(option)
+            item.setHidden(not is_visible)
 
     def _matches_search_query(
         self, option: SelectOption, normalized_query: str
     ) -> bool:
-        """検索語と選択肢の一致可否を返す。
-
-        Args:
-            option: 一致判定対象の選択肢。
-            normalized_query: 前処理済み検索語（前後空白除去 + casefold）。
-
-        Returns:
-            検索語に一致すれば True。
-        """
         if normalized_query == "":
             return True
-
         searchable_fields: list[str] = [option.title, option.subtitle]
         if option.description is not None:
             searchable_fields.extend(option.description.keys())
         if option.used_rate is not None:
             searchable_fields.append(str(option.used_rate))
 
-        normalized_fields = " ".join(searchable_fields).casefold()
-        return normalized_query in normalized_fields
+        return normalized_query in " ".join(searchable_fields).casefold()
 
     def _matches_enum_filters(self, option: SelectOption) -> bool:
-        """Enumフィルターに一致するかを判定する。
-
-        Args:
-            option: 判定対象の選択肢。
-
-        Returns:
-            全フィルター条件に一致する場合は True。
-        """
         if self._filter_widget is None:
             return True
-
         get_tags = getattr(option, "get_tags", None)
         if not callable(get_tags):
             return True
@@ -426,12 +403,14 @@ class SelectPanel(QFrame):
         for enum_cls, selected_tags in self._active_filters.items():
             if not selected_tags:
                 continue
-            if not any(isinstance(tag, enum_cls) and tag in selected_tags for tag in option_tags):
+            if not any(
+                isinstance(tag, enum_cls) and tag in selected_tags
+                for tag in option_tags
+            ):
                 return False
         return True
 
     def _update_header_text(self) -> None:
-        """ヘッダーテキストを現在の設定値から再構築する。"""
         if self._selected_option is None:
             self._header_button.setText(f"{self._header_selection_text}を選択")
             self._header_button.setIcon(QIcon())
@@ -440,70 +419,5 @@ class SelectPanel(QFrame):
         self._header_button.setText(
             f"{self._selected_option.title} / {self._selected_option.subtitle}"
         )
-
         icon_path = self._selected_option.icon_path
-        icon = QIcon(icon_path) if icon_path else QIcon()
-        self._header_button.setIcon(icon)
-
-
-class FilterWidget(QWidget):
-    """Enumカテゴリごとにドロップダウンを並べるフィルターウィジェット。"""
-
-    filter_changed = Signal(object)
-
-    def __init__(
-        self,
-        target_enums: Sequence[tuple[str, type[Enum]]],
-        parent: QWidget | None = None,
-    ):
-        """
-        Args:
-            target_enums: (表示名, Enumクラス) のリスト
-                例: [("タイプ", TypeID), ("分類", MoveDamageClass)]
-        """
-        super().__init__(parent)
-        self._combos: dict[type[Enum], QComboBox] = {}
-
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(8)
-
-        for label_text, enum_cls in target_enums:
-            layout.addWidget(QLabel(f"{label_text}:", self))
-
-            combo = QComboBox(self)
-            combo.addItem("すべて", userData=None)
-
-            # Enumの要素をドロップダウンに追加
-            for member in enum_cls:
-                # NONE 項目や未定義のスキップ（必要に応じて調整）
-                if getattr(member, "name", "") == "NONE":
-                    continue
-
-                display_name = getattr(member, "description", member.name)
-                combo.addItem(display_name, userData=member)
-
-            combo.currentIndexChanged.connect(self._on_filter_changed)
-            self._combos[enum_cls] = combo
-            layout.addWidget(combo)
-
-    def _on_filter_changed(self) -> None:
-        """現在の全コンボボックスの選択状態を集約してシグナルを送る。"""
-        filters: dict[type[Enum], set[Enum]] = {}
-
-        for enum_cls, combo in self._combos.items():
-            selected_enum = combo.currentData()
-            if selected_enum is not None:
-                filters[enum_cls] = {selected_enum}
-            else:
-                filters[enum_cls] = set()
-
-        self.filter_changed.emit(filters)
-
-    def get_active_filters(self) -> dict[type[Enum], set[Enum]]:
-        """現在のフィルター選択状態を取得する。"""
-        filters: dict[type[Enum], set[Enum]] = {}
-        for enum_cls, combo in self._combos.items():
-            selected_enum = combo.currentData()
-            filters[enum_cls] = {selected_enum} if selected_enum is not None else set()
-        return filters
+        self._header_button.setIcon(QIcon(icon_path) if icon_path else QIcon())

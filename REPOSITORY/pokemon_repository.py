@@ -2,10 +2,32 @@ from __future__ import annotations
 
 import json
 from functools import lru_cache
+from optparse import Option
+from os import name
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional, TypedDict
 
 from POKEMON import enums
+
+
+class pokemon_data(TypedDict):
+    """JSON/pokemon_data.json の各ポケモンのデータ形式。"""
+
+    name: str
+    jpname: str
+    types: list[int]
+    abilities: list[dict[str, Any]]
+    moveids: list[int]
+    stats: dict[str, int]
+    gender: int
+    weight: int
+    height: int
+    mega_exsist: bool
+    pass
+
+
+"""JSON/pokemon_data.json の内容を保持する辞書。キーはポケモンID、値は pokemon_data 型の辞書。"""
+json_pokemon_data_dict = dict[str, pokemon_data]
 
 
 class PokemonRepository:
@@ -81,3 +103,33 @@ class PokemonRepository:
     def get_pokemon_ids(cls) -> list[int]:
         """マスターデータのポケモンIDの一覧を返す。"""
         return cls.load_index_data()
+
+
+class NatureRepository:
+    @classmethod
+    @lru_cache(maxsize=1)
+    def _load_nature_data(cls) -> dict[str, Any]:
+        """自然のデータを1度だけ読み込み、メモリ上にキャッシュする。"""
+        natures_path = Path(__file__).resolve().parents[1] / "JSON" / "stat_change.json"
+        with open(natures_path, "r") as j:
+            return json.load(j)
+
+    @classmethod
+    def nature_change_rate(cls, stat_name: str, nature_ID: int) -> float:
+        """Return the nature-based multiplier for the specified stat.
+
+        Args:
+            stat_name: Name of the stat to check.
+            nature_ID: Numeric ID of the Pokémon's nature.
+
+        Returns:
+            1.1 if the nature raises the stat, 0.9 if it lowers it,
+            otherwise 1.0.
+        """
+        natures_rate_file = cls._load_nature_data()
+        if nature_ID in natures_rate_file["natures"][stat_name]["rate_up"]:
+            return 1.1
+        elif nature_ID in natures_rate_file["natures"][stat_name]["rate_dw"]:
+            return 0.9
+        else:
+            return 1.0

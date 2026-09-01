@@ -18,5 +18,9 @@
   },
   "python.analysis.extraPaths": [
     "${workspaceFolder}"
-  ]
+  ],
+  "window.autoDetectColorScheme": false,
+  "workbench.preferredDarkColorTheme": "Green_Dark",
+  "chat.defaultModel": "gpt-4o-mini",
+  "python-envs.defaultEnvManager": "ms-python.python:venv"
 }
