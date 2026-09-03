@@ -38,6 +38,7 @@ class MoveAttribute(DescribedEnum):
     MENTAL = (19, "Mental move, affected by Mental Herb or Oblivious", "MENTAL")
     NON_SKY_BATTLE = (20, "Cannot be used in Sky Battles", "NON_SKY_BATTLE")
     DANCE = (21, "Dance move, triggers Dancer", "DANCE")
+    RECOIL = (22, "Causes recoil damage to the user", "RECOIL")
 
 
 class MoveTarget(DescribedEnum):

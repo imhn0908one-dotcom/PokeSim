@@ -133,3 +133,27 @@ class NatureRepository:
             return 0.9
         else:
             return 1.0
+
+
+class AbilityRepository:
+    @classmethod
+    @lru_cache(maxsize=1)
+    def _load_ability_data(cls) -> dict[str, Any]:
+        """アビリティのデータを1度だけ読み込み、メモリ上にキャッシュする。"""
+        abilities_path = (
+            Path(__file__).resolve().parents[1] / "JSON" / "ability_data.json"
+        )
+        with open(abilities_path, "r") as j:
+            return json.load(j)
+
+    @classmethod
+    def get_ability_by_id(cls, ability_id: int) -> dict[str, Any] | None:
+        """指定したIDのアビリティデータを返す。"""
+        ability_data = cls._load_ability_data()
+        key = str(ability_id)
+        value = ability_data.get(key)
+        if value is None:
+            return None
+        if not isinstance(value, dict):
+            raise TypeError(f"ability_id={ability_id} のデータ形式が不正です。")
+        return value

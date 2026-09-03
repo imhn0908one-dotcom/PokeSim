@@ -3,10 +3,13 @@ from dataclasses import dataclass, field
 from enum import Enum, IntEnum
 from typing import Dict, List
 
-from enums import Stats
-
-from POKEMON import enums
-from REPOSITORY.pokemon_repository import NatureRepository, PokemonRepository
+from ABILITY import ability_object
+from ENUMS import basic_enums, field_enums, move_enums, pokemon_enums
+from REPOSITORY.pokemon_repository import (
+    AbilityRepository,
+    NatureRepository,
+    PokemonRepository,
+)
 
 
 class VolatileCondition(Enum):
@@ -78,13 +81,13 @@ class MasterPokemonData:
     name: str = field(metadata={"description": "pokemon name"})
     jpname: str = field(metadata={"description": "Japanese pokemon name"})
 
-    selectable_genders: enums.Genders = field(
+    selectable_genders: pokemon_enums.Genders = field(
         metadata={"description": "pokemon gender"}
     )
     weight: int = field(metadata={"description": "pokemon weight"})
     height: int = field(metadata={"description": "pokemon height"})
-    types: enums.Typeslist = field(metadata={"description": "pokemon types"})
-    base_stats: Dict[Stats, int] = field(
+    types: basic_enums.Typeslist = field(metadata={"description": "pokemon types"})
+    base_stats: Dict[pokemon_enums.Stats, int] = field(
         metadata={"description": "種族値"},
     )
     abilities: List[int] = field(
@@ -96,7 +99,7 @@ class MasterPokemonData:
     )
 
     @staticmethod
-    def get_selectable_genders(gender_rate: int | None) -> enums.Genders:
+    def get_selectable_genders(gender_rate: int | None) -> pokemon_enums.Genders:
         """マスターデータの gender 値から選択可能な性別種別を返す。
 
         Args:
@@ -106,26 +109,27 @@ class MasterPokemonData:
             選択可能な性別種別。
         """
         if gender_rate == -1:
-            return enums.Genders.GENDERLESS
+            return pokemon_enums.Genders.GENDERLESS
         if gender_rate == 0:
-            return enums.Genders.MALE
+            return pokemon_enums.Genders.MALE
         if gender_rate == 8:
-            return enums.Genders.FEMALE
-        return enums.Genders.BOTH
+            return pokemon_enums.Genders.FEMALE
+        return pokemon_enums.Genders.BOTH
 
     @classmethod
     def _from_dict(cls, data: dict, id: int) -> "MasterPokemonData":
 
         base_stats = {
-            enums.convert_enum(Stats, stat): int(value)
+            basic_enums.convert_enum(pokemon_enums.Stats, stat): int(value)
             for stat, value in data.get("base_stats", {}).items()
         }
         raw_types = data.get("types", [])
         types = (
             raw_types
-            if isinstance(raw_types, enums.Typeslist)
-            else enums.Typeslist([
-                enums.convert_enum(enums.TypeID, type_id) for type_id in raw_types
+            if isinstance(raw_types, basic_enums.Typeslist)
+            else basic_enums.Typeslist([
+                basic_enums.convert_enum(basic_enums.TypeID, type_id)
+                for type_id in raw_types
             ])
         )
 
@@ -181,27 +185,28 @@ class MasterPokemonData:
 @dataclass(slots=True)
 class BuiltPokemon:
     MasterData: MasterPokemonData
-    gender: enums.Genders = field(metadata={"description": "pokemon gender"})
-    nature: enums.Natures = field(metadata={"description": "pokemon nature"})
+
+    gender: pokemon_enums.Genders = field(metadata={"description": "pokemon gender"})
+    nature: pokemon_enums.Natures = field(metadata={"description": "pokemon nature"})
     itemid: int = field(metadata={"description": "selected item id"})
     abilityid: int = field(metadata={"description": "selected ability id"})
     id: int = field(metadata={"description": "pokemon ID"})
-
-    evs: Dict[Stats, int] = field(
+    level: int = field(metadata={"description": "pokemon level"}, default=50)
+    evs: Dict[pokemon_enums.Stats, int] = field(
         metadata={"description": "努力値"},
         default_factory=lambda: {
-            Stats.HP: 0,
-            Stats.ATTACK: 0,
-            Stats.DEFENSE: 0,
-            Stats.SPECIAL_ATTACK: 0,
-            Stats.SPECIAL_DEFENSE: 0,
-            Stats.SPEED: 0,
+            pokemon_enums.Stats.HP: 0,
+            pokemon_enums.Stats.ATTACK: 0,
+            pokemon_enums.Stats.DEFENSE: 0,
+            pokemon_enums.Stats.SPECIAL_ATTACK: 0,
+            pokemon_enums.Stats.SPECIAL_DEFENSE: 0,
+            pokemon_enums.Stats.SPEED: 0,
         },
     )
     movelist: List[int] = field(
         metadata={"description": "selected moves id"}, default_factory=list
     )
-    terastal_type: enums.TypeID | None = field(
+    terastal_type: basic_enums.TypeID | None = field(
         metadata={"description": "テラスタイプ"},
         default=None,
     )
@@ -300,26 +305,27 @@ class Team:
 class BattlePokemon:
     master_data: MasterPokemonData
     built_data: BuiltPokemon
-    real_stats: Dict[Stats, int] = field(
+    ability: ability_object.Ability
+    real_stats: Dict[pokemon_enums.Stats, int] = field(
         metadata={"description": "実数値"},
         default_factory=lambda: {
-            Stats.HP: 0,
-            Stats.ATTACK: 0,
-            Stats.DEFENSE: 0,
-            Stats.SPECIAL_ATTACK: 0,
-            Stats.SPECIAL_DEFENSE: 0,
-            Stats.SPEED: 0,
+            pokemon_enums.Stats.HP: 0,
+            pokemon_enums.Stats.ATTACK: 0,
+            pokemon_enums.Stats.DEFENSE: 0,
+            pokemon_enums.Stats.SPECIAL_ATTACK: 0,
+            pokemon_enums.Stats.SPECIAL_DEFENSE: 0,
+            pokemon_enums.Stats.SPEED: 0,
         },
     )
-    rank: Dict[Stats, int] = field(
+    rank: Dict[pokemon_enums.Stats, int] = field(
         metadata={"description": "ランク"},
         default_factory=lambda: {
-            Stats.HP: 0,
-            Stats.ATTACK: 0,
-            Stats.DEFENSE: 0,
-            Stats.SPECIAL_ATTACK: 0,
-            Stats.SPECIAL_DEFENSE: 0,
-            Stats.SPEED: 0,
+            pokemon_enums.Stats.HP: 0,
+            pokemon_enums.Stats.ATTACK: 0,
+            pokemon_enums.Stats.DEFENSE: 0,
+            pokemon_enums.Stats.SPECIAL_ATTACK: 0,
+            pokemon_enums.Stats.SPECIAL_DEFENSE: 0,
+            pokemon_enums.Stats.SPEED: 0,
         },
     )
     terastal: bool = field(
@@ -341,13 +347,21 @@ class BattlePokemon:
             int: 実数値
         """
         if stat_name == "HP":
-            return self.base_stat[Stats.HP] + self.evs[Stats.HP] + 75
+            return (
+                self.base_stat[pokemon_enums.Stats.HP]
+                + self.evs[pokemon_enums.Stats.HP]
+                + 75
+            )
         else:
             change_rate = NatureRepository.nature_change_rate(
                 stat_name, self.built_data.nature
             )
             return int(
-                (self.base_stat[Stats[stat_name]] + self.evs[Stats[stat_name]] + 20)
+                (
+                    self.base_stat[pokemon_enums.Stats[stat_name]]
+                    + self.evs[pokemon_enums.Stats[stat_name]]
+                    + 20
+                )
                 * change_rate
             )
 
@@ -369,15 +383,15 @@ class BattlePokemon:
         return dataclasses.asdict(self)
 
     @property
-    def base_stat(self) -> Dict[Stats, int]:
+    def base_stat(self) -> Dict[pokemon_enums.Stats, int]:
         return self.master_data.base_stats
 
     @property
-    def evs(self) -> Dict[Stats, int]:
+    def evs(self) -> Dict[pokemon_enums.Stats, int]:
         return self.built_data.evs
 
     @property
-    def nature(self) -> enums.Natures:
+    def nature(self) -> pokemon_enums.Natures:
         return self.built_data.nature
 
     @classmethod
@@ -390,18 +404,30 @@ class BattlePokemon:
         Returns:
             BattlePokemon インスタンス。
         """
+        ability_data = AbilityRepository.get_ability_by_id(built_pokemon.abilityid)
+        if ability_data is None:
+            raise ValueError(
+                f"Ability data not found for ID {built_pokemon.abilityid}"
+            )
+
         return cls(
             master_data=built_pokemon.MasterData,
             built_data=built_pokemon,
-            real_stats={stat: 0 for stat in Stats},  # 初期化時は実数値を0に設定
-            rank={stat: 0 for stat in Stats},  # 初期化時はランクを0に設定
+            ability=ability_object.Ability.from_dict(
+                str(built_pokemon.abilityid),
+                ability_data,
+            ),
+            real_stats={
+                stat: 0 for stat in pokemon_enums.Stats
+            },  # 初期化時は実数値を0に設定
+            rank={stat: 0 for stat in pokemon_enums.Stats},  # 初期化時はランクを0に設定
             terastal=False,
             mega=False,
         )
 
     def update_real_stats(self) -> None:
         """Update the real_stats attribute based on the current base stats, EVs, and nature."""
-        for stat in Stats:
+        for stat in pokemon_enums.Stats:
             self.real_stats[stat] = self.calculate_real_stat(stat.name)
 
 

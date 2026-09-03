@@ -10,6 +10,7 @@ class TimedState:
     Args:
         state (field_enums.FieldStateEnum): 状態の種類（フィールド効果や天候など）。
         remaining_turns (int): 残りターン数。0の場合は状態が存在しないことを示す。
+        一つの状態のみを持つ。
     このクラスは、持続ターン数を持つ状態（フィールド効果や天候など）を管理するためのデータクラスです。
     """
 
@@ -98,6 +99,12 @@ class WeatherState(TimedState):
     """天候の状態を管理するデータクラス。"""
 
     state: field_enums.Weather = field_enums.Weather.NONE
+
+
+class RoomState(TimedState):
+    """バトルルームの状態を管理するデータクラス。"""
+
+    state: field_enums.Room = field_enums.Room.NONE
 
 
 @dataclass

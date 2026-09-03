@@ -3,7 +3,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, TypedDict
 
-from POKEMON import enums
+from ENUMS import basic_enums, move_enums, pokemon_enums
 
 
 class Move_data(TypedDict):
@@ -30,7 +30,7 @@ class Move_data(TypedDict):
     max_hits: int | None
     min_turns: int | None
     max_turns: int | None
-    stat_changes_stat: dict[enums.Stats, int] | None
+    stat_changes_stat: dict[pokemon_enums.Stats, int] | None
     stat_chance: int
     effect_chance: int | None
     effect_id: int

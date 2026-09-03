@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from multiprocessing import current_process
 from typing import Optional
 
-import POKEMON.enums as enums
+from ENUMS import basic_enums, field_enums, move_enums, pokemon_enums
 from REPOSITORY.move_repository import MoveRepository
 
 
@@ -15,16 +15,17 @@ class MasterMove:
     id: int
     name: str
     jpname: str
-    type_id: enums.TypeID
-    damage_class_id: enums.MoveDamageClass
+    type_id: basic_enums.TypeID
+    damage_class_id: move_enums.MoveDamageClass
     pp: int  # e.g., 15
     power: Optional[int]  # e.g., None
     accuracy: Optional[int]  # e.g., 100
 
     # --- メタ情報 & 状態異常 ---
-    target_id: enums.MoveTarget
-    category_id: enums.MoveMetaCategory
-    ailment_id: enums.MoveMetaAilment
+    target_id: move_enums.MoveTarget
+    category_id: move_enums.MoveMetaCategory
+    ailment_id: move_enums.MoveMetaAilment
+    attribute_ids: list[int]
     ailment_chance: int
     crit_rate: int
     healing: int
@@ -38,7 +39,7 @@ class MasterMove:
     max_turns: Optional[int] = None
 
     # --- 能力変化 ---
-    stat_changes_stat: Optional[dict[enums.Stats, int]] = None
+    stat_changes_stat: Optional[dict[pokemon_enums.Stats, int]] = None
     stat_chance: int = 0
 
     # --- エフェクト関連 ---
@@ -58,7 +59,7 @@ class MasterMove:
         stat_changes_stat = None
         if "stat_changes_stat" in data and data["stat_changes_stat"] is not None:
             stat_changes_stat = {
-                enums.convert_enum(enums.Stats, stat): int(value)
+                basic_enums.convert_enum(pokemon_enums.Stats, stat): int(value)
                 for stat, value in data["stat_changes_stat"].items()
             }
 
@@ -66,18 +67,24 @@ class MasterMove:
             id=int(data["id"]),
             name=data["name"],
             jpname=data["jpname"],
-            type_id=enums.convert_enum(enums.TypeID, data["type_id"]),
-            damage_class_id=enums.convert_enum(
-                enums.MoveDamageClass, data["damage_class_id"]
+            type_id=basic_enums.convert_enum(basic_enums.TypeID, data["type_id"]),
+            damage_class_id=basic_enums.convert_enum(
+                move_enums.MoveDamageClass, data["damage_class_id"]
             ),
             pp=int(data["pp"]),
             power=int(data["power"]) if data.get("power") is not None else None,
             accuracy=int(data["accuracy"])
             if data.get("accuracy") is not None
             else None,
-            target_id=enums.convert_enum(enums.MoveTarget, data["target_id"]),
-            category_id=enums.convert_enum(enums.MoveMetaCategory, data["category_id"]),
-            ailment_id=enums.convert_enum(enums.MoveMetaAilment, data["ailment_id"]),
+            target_id=basic_enums.convert_enum(
+                move_enums.MoveTarget, data["target_id"]
+            ),
+            category_id=basic_enums.convert_enum(
+                move_enums.MoveMetaCategory, data["category_id"]
+            ),
+            ailment_id=basic_enums.convert_enum(
+                move_enums.MoveMetaAilment, data["ailment_id"]
+            ),
             ailment_chance=int(data.get("ailment_chance", 0)),
             crit_rate=int(data.get("crit_rate", 0)),
             healing=int(data.get("healing", 0)),

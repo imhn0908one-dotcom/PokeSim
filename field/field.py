@@ -1,5 +1,13 @@
 from dataclasses import dataclass, field, fields
 
+from ENUMS.field_enums import OtherEffect
+from FIELD.field_object import (
+    OtherEffectsContainer,
+    RoomState,
+    TerrainState,
+    WeatherState,
+)
+
 
 @dataclass
 class SideField:
@@ -63,5 +71,31 @@ class SideField:
     """
 
 
+@dataclass
 class BattleField:
-    pass
+    """戦場状態を管理するデータクラス。
+
+    このクラスは、戦場全体の状態を保持し、ダメージ計算に影響するフィールド効果を管理します。
+    """
+
+    terrain: TerrainState
+    weather: WeatherState
+    room: RoomState
+    other: OtherEffectsContainer
+
+    def turn_step(self):
+        """ターンを進め、各状態の残りターン数を減少させる。
+
+        Returns:
+            dict: 各状態の終了状況を示す辞書。
+                例: {'terrain': True, 'weather': False, 'room': True}
+        """
+        return {
+            "terrain": self.terrain.step_turn(),
+            "weather": self.weather.step_turn(),
+            "room": self.room.step_turn(),
+            "other": {
+                effect: (turns - 1 == 0)
+                for effect, turns in self.other.active_effects.items()
+            },
+        }

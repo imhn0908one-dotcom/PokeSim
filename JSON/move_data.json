@@ -15901,7 +15901,7 @@
     "type_id": 17,
     "damage_class_id": 3,
     "pp": 10,
-    "power": 85,
+    "power": 90,
     "accuracy": 95,
     "attribute_ids": [
       4,
@@ -17578,7 +17578,7 @@
     "type_id": 7,
     "damage_class_id": 2,
     "pp": 10,
-    "power": 90,
+    "power": 100,
     "accuracy": 100,
     "attribute_ids": [
       1,
@@ -17638,7 +17638,7 @@
     "type_id": 8,
     "damage_class_id": 2,
     "pp": 10,
-    "power": 80,
+    "power": 90,
     "accuracy": 100,
     "attribute_ids": [
       4,
@@ -18285,7 +18285,7 @@
     "type_id": 12,
     "damage_class_id": 2,
     "pp": 15,
-    "power": 70,
+    "power": 85,
     "accuracy": 100,
     "attribute_ids": [
       1,
@@ -18350,7 +18350,7 @@
     "type_id": 3,
     "damage_class_id": 2,
     "pp": 15,
-    "power": 100,
+    "power": 120,
     "accuracy": 100,
     "attribute_ids": [
       4,
@@ -19038,7 +19038,7 @@
     "type_id": 12,
     "damage_class_id": 2,
     "pp": 10,
-    "power": 80,
+    "power": 90,
     "accuracy": 100,
     "attribute_ids": [
       4,
