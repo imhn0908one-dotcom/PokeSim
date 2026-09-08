@@ -67,6 +67,9 @@ class MasterMove:
             id=int(data["id"]),
             name=data["name"],
             jpname=data["jpname"],
+            attribute_ids=[
+                attribute_id for attribute_id in data.get("attribute_ids", [])
+            ],
             type_id=basic_enums.convert_enum(basic_enums.TypeID, data["type_id"]),
             damage_class_id=basic_enums.convert_enum(
                 move_enums.MoveDamageClass, data["damage_class_id"]
