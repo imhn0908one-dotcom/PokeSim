@@ -1,51 +1,58 @@
 from dataclasses import fields
+from typing import Any
 
-from pokebase import item
-from PySide6.QtCore import (
-    QSize,
-    Qt,
-    QTimer,
-)
-from PySide6.QtGui import (
-    QAction,
-    QFont,
-    QIcon,
-    QKeySequence,
-    QPainter,
-    QPixmap,
-)
+from PySide6.QtCore import QObject, Signal
 from PySide6.QtWidgets import (
-    QApplication,
     QCheckBox,
     QComboBox,
-    QDial,
-    QDoubleSpinBox,
     QFrame,
-    QHBoxLayout,
-    QLabel,
-    QMainWindow,
-    QPushButton,
-    QSlider,
     QSpinBox,
-    QStyle,
-    QStyleOption,
     QVBoxLayout,
-    QWidget,
 )
 
-from BATTLE.battle_manager import BattleManager
+from FIELD.field import BattleField
+
+
+class FieldState(QObject):
+    changed = Signal()
+
+    def __init__(self):
+        super().__init__()
+        self.field = BattleField()
+
+    def set_value(
+        self,
+        name: str,
+        value,
+    ) -> None:
+        setattr(self.field, name, value)
+        self.changed.emit()
+
+    def update_field(self, values: dict[str, Any]) -> None:
+        for name, value in values.items():
+            setattr(self.field, name, value)
+        self.changed.emit()
 
 
 class FieldPanel(QFrame):
-    def __init__(self, battle_manager: BattleManager):
+    """Display and edit the current battle field properties.
+
+    The panel creates an appropriate Qt widget for each field attribute and
+    updates the field state's field whenever a value changes.
+
+    Args:
+        field_state: The field state whose field is being edited.
+    """
+
+    def __init__(self, field_state: FieldState):
         super().__init__()
-        self.battle_manager = battle_manager
+        self.field_state = field_state
         self.setWindowTitle("Field Panel")
         self.setObjectName("field_pannel")
         self.widgets = {}
         main_layout = QVBoxLayout()
 
-        current_field = self.battle_manager.field
+        current_field = self.field_state.field
         field_class = current_field.__class__
 
         for field_info in fields(field_class):
@@ -95,10 +102,9 @@ class FieldPanel(QFrame):
             return widget
 
     def emit_updated_battle_field(self):
-        # 💡 インポートしていない BattleField に依存せず、直接属性を上書き！
-        current_field = self.battle_manager.field
+        values = {}
 
-        for field_info in fields(current_field.__class__):
+        for field_info in fields(self.field_state.field.__class__):
             widget = self.widgets[field_info.name]
 
             if isinstance(widget, QComboBox):
@@ -108,5 +114,57 @@ class FieldPanel(QFrame):
             elif isinstance(widget, QCheckBox):
                 val = widget.isChecked()
 
-            # 既存のインスタンスの変数を更新！
-            setattr(current_field, field_info.name, val)
+            values[field_info.name] = val
+
+        self.field_state.update_field(values)
+
+    def set_value(self, name: str, value: str | bool | int) -> None:
+        """フィールド項目を1件更新する。
+
+        UIウィジェットと内部状態を同時に更新し、値の整合性を保つために
+        項目名・型・選択肢の妥当性を明示的に検証する。
+
+        Args:
+            name: 更新対象のフィールド名。
+            value: 設定する値。
+
+        Raises:
+            KeyError: 指定フィールド名に対応するウィジェットが存在しない場合。
+            TypeError: ウィジェット種別に対して値の型が不正な場合。
+            ValueError: コンボボックスの選択肢に値が存在しない場合。
+        """
+        if name not in self.widgets:
+            raise KeyError(f"Unknown field name: {name}")
+
+        widget = self.widgets[name]
+
+        if isinstance(widget, QComboBox):
+            if not isinstance(value, str):
+                raise TypeError(f"Field '{name}' requires str value.")
+            if widget.findText(value) < 0:
+                raise ValueError(f"Field '{name}' does not allow value: {value}")
+            widget.blockSignals(True)
+            widget.setCurrentText(value)
+            widget.blockSignals(False)
+            self.field_state.set_value(name, value)
+            return
+
+        if isinstance(widget, QSpinBox):
+            if not isinstance(value, int) or isinstance(value, bool):
+                raise TypeError(f"Field '{name}' requires int value.")
+            widget.blockSignals(True)
+            widget.setValue(value)
+            widget.blockSignals(False)
+            self.field_state.set_value(name, value)
+            return
+
+        if isinstance(widget, QCheckBox):
+            if not isinstance(value, bool):
+                raise TypeError(f"Field '{name}' requires bool value.")
+            widget.blockSignals(True)
+            widget.setChecked(value)
+            widget.blockSignals(False)
+            self.field_state.set_value(name, value)
+            return
+
+        raise TypeError(f"Unsupported widget type for field '{name}'.")

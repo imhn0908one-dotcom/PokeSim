@@ -1,65 +1,40 @@
-import functools
-import json
-import sys
-import time
-from contextlib import contextmanager
-from functools import lru_cache
-from typing import Optional
+import enums
+import pokemon_object as pokemon
 
-from POKEMON.instance import PokemonInstance, stats
-
-DB_PATH = "pokemon_champions.db"
-STAT_KEYS = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"]
-DB_STAT_COLUMNS = [
-    "hp",
-    "attack",
-    "defense",
-    "special_attack",
-    "special_defense",
-    "speed",
-]
-
-
-# 計測用デコレータの定義
-def timer(func):
-
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        start = time.perf_counter()
-        result = func(*args, **kwargs)  # 本体の関数を実行
-        end = time.perf_counter()
-        print(f"⏱️ [{func.__name__}] 実行時間: {end - start:.6f} 秒")
-        return result
-
-    return wrapper
-
-
-# 💡 jsonファイル全体を1回だけ読み込んで保持する関数を作る
-@lru_cache(maxsize=1)
-def load_all_pokemon_data() -> dict:
-    with open("JSON/pokemon.json", "r", encoding="utf-8") as f:
-        return json.load(f)
+import REPOSITORY.pokemon_repository as repository
 
 
 def fetch_pokedata_by_id(id: int) -> dict | None:
-    all_pokemon = load_all_pokemon_data()
-    if str(id) in all_pokemon:
-        return all_pokemon[str(id)]
-    else:
-        return None
+    """IDからマスターデータを取得する。
+
+    Args:
+        id: ポケモンID。
+
+    Returns:
+        該当するポケモンの辞書データ。見つからない場合はNone。
+    """
+    return repository.PokemonRepository.get_pokemon_by_id(id)
 
 
-def make_pokemoninstance(id: int) -> Optional[PokemonInstance]:
-    pokedata = fetch_pokedata_by_id(id)
-    if pokedata is None:
-        return None
+def get_celectable_genders(gender_rate: int) -> enums.Genders:
+    """マスターの gender 値から選択可能性別を返す。
 
-    return PokemonInstance(
-        id=id,
-        name=pokedata["name"],
-        ability_Id=0,
-        level=50,
-        types=[pokedata["type1"], pokedata["type2"]],
-        base_stats={},
-        jpname=pokedata["jpname"],
-    )
+    Args:
+        gender_rate: JSONマスターの gender 値。
+
+    Returns:
+        選択可能な性別種別。
+    """
+    return repository.PokemonRepository.get_selectable_genders(gender_rate)
+
+
+def make_master_pokemon_instance(id: int) -> pokemon.MasterPokemonData | None:
+    """IDをもとにMasterPokemonDataを生成する。
+
+    Args:
+        id: ポケモンID。
+
+    Returns:
+        生成したマスターデータ。IDが見つからない場合はNone。
+    """
+    return repository.PokemonRepository.make_master_pokemon_instance(id)

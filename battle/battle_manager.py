@@ -1,7 +1,9 @@
 from dataclasses import dataclass
-from POKEMON.instance import PokemonInstance
-from FIELD.state import BattleField, SideField
+
 from PySide6.QtCore import QObject
+
+from FIELD.field import BattleField, SideField
+from POKEMON.pokemon_object import PokemonInstance
 
 
 # BATTLE/battle_manager.py

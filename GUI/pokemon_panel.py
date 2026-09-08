@@ -29,9 +29,9 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from FIELD.state import BattleField
+from FIELD.field import BattleField
 from GUI import field_panel, panel_logic
-from POKEMON import factory, instance, manager
+from POKEMON import factory, manager, pokemon_object
 
 from .field_panel import FieldPanel
 

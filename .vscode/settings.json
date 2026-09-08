@@ -12,5 +12,15 @@
         "**/*.json": true
     },
     "github.copilot.chat.gemini3LowReasoningEffort.enabled": true,
-    "github.copilot.chat.inlineChat.reasoningEffort": "medium"
+    "github.copilot.chat.inlineChat.reasoningEffort": "medium",
+  "terminal.integrated.env.osx": {
+    "PYTHONPATH": "${workspaceFolder}"
+  },
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}"
+  ],
+  "window.autoDetectColorScheme": false,
+  "workbench.preferredDarkColorTheme": "Green_Dark",
+  "chat.defaultModel": "gpt-4o-mini",
+  "python-envs.defaultEnvManager": "ms-python.python:venv"
 }
