@@ -40,7 +40,7 @@ def register_damage(name: str):
 def calc_technician(ctx: CalculateContext) -> float:
     if ctx.move.power is None:
         return 1.0
-    return 6144 / 4096 if ctx.move_power <= 60 else 4096 / 4096
+    return 6144 / 4096 if ctx.move.power <= 60 else 4096 / 4096
 
 
 @register_power("rivalry")

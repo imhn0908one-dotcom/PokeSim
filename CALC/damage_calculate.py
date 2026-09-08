@@ -1,15 +1,34 @@
 import math
+import stat
+from dataclasses import dataclass
+from email.mime import base
+
+from numpy import power
 
 from CALC.calculate_context import CalculateContext
 from CALC.calculate_manager import CalculateResult
 from ENUMS import basic_enums, move_enums, pokemon_enums
 
 
+@dataclass
+class CalculationState:
+    """計算の状態を管理するクラス。"""
+
+    base_power: int
+    move_stats_type: pokemon_enums.Stats
+    effective_attack_stat: int
+    effective_deffense_stat: int
+    power_modifier: float
+    damage_modifier: float
+
+
 class DamageCalculater:
     """ダメージ計算を行うクラス。"""
 
-    @classmethod
-    def damage_calculate(cls, context: CalculateContext) -> CalculateResult:
+    def __init__(self) -> None:
+        self.power_calculator = PowerCalculator()
+
+    def damage_calculate(self, context: CalculateContext) -> CalculateResult:
         """ダメージ計算を行うメソッド。
 
         Args:
@@ -18,6 +37,14 @@ class DamageCalculater:
         Returns:
             CalculateResult: 計算結果を格納したオブジェクト。
         """
+        state = CalculationState(
+            base_power=self.power_calculator.calc_move_base_power(context),
+            move_stats_type=self._move_calc_stat_type(context),
+            effective_attack_stat=self.calc_modified_attack_stat(context),
+            effective_deffense_stat=0,  # TODO: 防御側のステータス補正の計算を実装する
+            power_modifier=self.power_calculator._power_modifier_calculate(context),
+            damage_modifier=1.0,  # TODO: ダメージ補正の計算を実装する
+        )
         if context.move.power is None:
             return CalculateResult(
                 damage_range=(0, 0),
@@ -26,9 +53,6 @@ class DamageCalculater:
                 critical_damage_list=[],
                 meta_data={},
             )
-
-        modified_attack_stat = cls.calc_modified_attack_stat(context)
-        atl = context.attacker.built_data.level
         return CalculateResult(
             damage_range=(0, 0),
             damage_list=[],
@@ -111,8 +135,101 @@ class PowerCalculator:
         if context.move.power is None:
             return 0
         power_modifier = cls._power_modifier_calculate(context)
-        finaly_power = rounding_half_down(context.move.power * power_modifier / 4096)
+        finaly_power = rounding_half_down(
+            cls.calc_move_base_power(context) * power_modifier / 4096
+        )
         return finaly_power
+
+    @classmethod
+    def calc_move_base_power(cls, context: CalculateContext) -> int:
+        """特定の技の威力を計算するメソッド。"""
+        if context.move.power is None:
+            return 0
+        if context.move.id == 360:
+            return cls._calc_gyro_ball_power(context)
+        if context.move.id == 486:
+            return cls._calc_electro_ball_power(context)
+        if context.move.id in (323, 284):
+            return cls._calc_hp_depended_power(context)
+        if context.move.id in (179, 175):
+            return cls._calc_hp_reversal_power(context)
+        if context.move.id in (447, 67):
+            return cls._calc_weight_depended_power(context)
+        return context.move.power
+
+    @classmethod
+    def _calc_gyro_ball_power(cls, context: CalculateContext) -> int:
+        """ジャイロボールの威力を計算するメソッド。"""
+        attacker_speed = context.attacker.real_stats[pokemon_enums.Stats.SPEED]
+        defender_speed = context.defender.real_stats[pokemon_enums.Stats.SPEED]
+        if attacker_speed <= 0:
+            return 150
+        return min(150, 25 * defender_speed // attacker_speed + 1)
+
+    @classmethod
+    def _calc_electro_ball_power(cls, context: CalculateContext) -> int:
+        """エレキボールの威力を計算するメソッド。"""
+        attacker_speed = context.attacker.real_stats[pokemon_enums.Stats.SPEED]
+        defender_speed = context.defender.real_stats[pokemon_enums.Stats.SPEED]
+        if defender_speed <= 0:
+            return 150
+        speed_ratio = attacker_speed // defender_speed
+        return min(150, 30 * speed_ratio + 10 * abs(speed_ratio - 2) + 20)
+
+    @classmethod
+    def _calc_hp_depended_power(cls, context: CalculateContext) -> int:
+        """しおふき・ふんかの威力を計算するメソッド。"""
+        defender = context.defender
+        current_hp = getattr(defender, "current_hp", None)
+        max_hp = defender.real_stats[pokemon_enums.Stats.HP]
+        if current_hp is None:
+            current_hp = getattr(
+                getattr(defender, "built_data", None), "current_hp", max_hp
+            )
+        if max_hp <= 0:
+            return 1
+        return max(1, int(150 * current_hp / max_hp))
+
+    @classmethod
+    def _calc_hp_reversal_power(cls, context: CalculateContext) -> int:
+        """きしかいせい・じたばたの威力を計算するメソッド。"""
+        defender = context.defender
+        max_hp = defender.real_stats[pokemon_enums.Stats.HP]
+        current_hp = getattr(defender, "current_hp", None)
+        if current_hp is None:
+            current_hp = getattr(
+                getattr(defender, "built_data", None), "current_hp", max_hp
+            )
+        if max_hp <= 0:
+            return 20
+        hp_ratio = current_hp / max_hp
+        if hp_ratio < 1 / 48:
+            return 200
+        if hp_ratio < 1 / 12:
+            return 150
+        if hp_ratio < 9 / 48:
+            return 100
+        if hp_ratio < 16 / 48:
+            return 80
+        if hp_ratio < 31 / 48:
+            return 40
+        return 20
+
+    @classmethod
+    def _calc_weight_depended_power(cls, context: CalculateContext) -> int:
+        """くさむすび・けたぐりの威力を計算するメソッド。"""
+        weight = context.defender.master_data.weight
+        if weight < 10:
+            return 20
+        if weight < 25:
+            return 40
+        if weight < 50:
+            return 60
+        if weight < 100:
+            return 80
+        if weight < 200:
+            return 100
+        return 120
 
 
 def rounding_half_down(value: float) -> int:

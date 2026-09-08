@@ -394,6 +394,19 @@ class BattlePokemon:
     def nature(self) -> pokemon_enums.Natures:
         return self.built_data.nature
 
+    @property
+    def rank_calced_real_stats(self) -> Dict[pokemon_enums.Stats, int]:
+        """ランク補正後の実数値を返す"""
+        rank_calced_stats = {}
+        for stat in pokemon_enums.Stats:
+            rank_value = self.rank[stat]
+            if rank_value >= 0:
+                rank_multiplier = (2 + rank_value) / 2
+            else:
+                rank_multiplier = 2 / (2 - rank_value)
+            rank_calced_stats[stat] = int(self.real_stats[stat] * rank_multiplier)
+        return rank_calced_stats
+
     @classmethod
     def create_from_built(cls, built_pokemon: BuiltPokemon) -> "BattlePokemon":
         """BuiltPokemon インスタンスから BattlePokemon インスタンスを生成する。
@@ -406,9 +419,7 @@ class BattlePokemon:
         """
         ability_data = AbilityRepository.get_ability_by_id(built_pokemon.abilityid)
         if ability_data is None:
-            raise ValueError(
-                f"Ability data not found for ID {built_pokemon.abilityid}"
-            )
+            raise ValueError(f"Ability data not found for ID {built_pokemon.abilityid}")
 
         return cls(
             master_data=built_pokemon.MasterData,
