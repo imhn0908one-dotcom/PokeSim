@@ -41,9 +41,9 @@ class DamageCalculater:
             base_power=self.power_calculator.calc_move_base_power(context),
             move_stats_type=self._move_calc_stat_type(context),
             effective_attack_stat=self.calc_modified_attack_stat(context),
-            effective_deffense_stat=0,  # TODO: 防御側のステータス補正の計算を実装する
-            power_modifier=self.power_calculator._power_modifier_calculate(context),
-            damage_modifier=1.0,  # TODO: ダメージ補正の計算を実装する
+            effective_deffense_stat=self.calc_modified_difend_stat(context),
+            power_modifier=self.power_calculator._power_modifier_calculate(context), #calc_flow.md(l36)
+            damage_modifier=1.0,  # TODO: ダメージ補正の計算を実装する #calc_flow.md (l120)
         )
         if context.move.power is None:
             return CalculateResult(
@@ -75,6 +75,25 @@ class DamageCalculater:
         attack_stat = context.attacker.real_stats[move_calc_stat_type]
         # ここに攻撃側のステータス補正の計算ロジックを実装する
         return attack_stat
+
+    @classmethod
+    def calc_modified_difend_stat(cls, context: CalculateContext) -> int:
+        """防御側のステータスを補正するメソッド。
+
+        Args:
+            context (calculateContext): 計算のコンテキスト。
+        
+        Returns:
+            int: 補正後の防御側のステータス。
+        """
+        move_cald_state_type = cls._move_calc_stat_type(context)
+        if move_cald_state_type == pokemon_enums.Stats.ATTACK:
+            difend_stat = context.defender.real_stats[pokemon_enums.Stats.DEFENSE]
+        else:
+            difend_stat = context.defender.real_stats[pokemon_enums.Stats.SPECIAL_DEFENSE]
+        return difend_stat
+
+
 
     @classmethod
     def _move_calc_stat_type(cls, context: CalculateContext) -> pokemon_enums.Stats:
@@ -230,6 +249,8 @@ class PowerCalculator:
         if weight < 200:
             return 100
         return 120
+
+    
 
 
 def rounding_half_down(value: float) -> int:
