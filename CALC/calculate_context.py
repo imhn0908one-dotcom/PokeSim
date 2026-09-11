@@ -27,13 +27,19 @@ class CalculateContext:
         return self.move.type_id
 
     @property
+    def move_damage_class(self) -> int:
+        """技のダメージクラスを取得するプロパティ。"""
+
+        return self.move.damage_class_id
+
+    @property
     def attacker_speed(self) -> int:
         """攻撃側のポケモンの素早さを取得するプロパティ。"""
 
-        return self.attacker.rank_calced_real_stats[pokemon_enums.Stats.SPEED]
+        return self.attacker.rank_calced_real_stats("SPEED")
 
     @property
     def defender_speed(self) -> int:
         """防御側のポケモンの素早さを取得するプロパティ。"""
 
-        return self.defender.rank_calced_real_stats[pokemon_enums.Stats.SPEED]
+        return self.defender.rank_calced_real_stats("SPEED")

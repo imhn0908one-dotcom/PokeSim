@@ -118,37 +118,28 @@ def _gender_much(context: CalculateContext) -> bool | None:
 # ---------------------------------------------------------
 
 
+@dataclass
 class Ability:
-    def __init__(
-        self,
-        ability_id: int,
-        name: str,
-        jpname: str,
-        short_effect: str,
-        effect: str,
-        power_modifier: Optional[Callable[[CalculateContext], float]] = None,
-        damage_modifier: Optional[Callable[[CalculateContext], float]] = None,
-    ):
-        self.id = ability_id
-        self.name = name
-        self.jpname = jpname
-        self.short_effect = short_effect
-        self.effect = effect
-        self.power_modifier = power_modifier
-        self.damage_modifier = damage_modifier
+    id: int
+    name: str
+    jpname: str
+    short_effect: str
+    effect: str
+    power_modifier: Optional[Callable[[CalculateContext], float]]
+    damage_modifier: Optional[Callable[[CalculateContext], float]]
 
     @classmethod
     def from_dict(cls, key_id: str, data: Dict[str, Any]) -> "Ability":
         """JSONなどの辞書データから自動で補正関数を紐付けてインスタンス化"""
         eng_name = data["name"]
         return cls(
-            ability_id=int(key_id),
+            id=int(key_id),
             name=eng_name,
             jpname=data.get("jpname", ""),
             short_effect=data.get("short_effect", ""),
             effect=data.get("effect", ""),
-            power_modifier=POWER_MODIFIERS.get(eng_name),
-            damage_modifier=DAMAGE_MODIFIERS.get(eng_name),
+            power_modifier=POWER_MODIFIERS.get(eng_name, None),
+            damage_modifier=DAMAGE_MODIFIERS.get(eng_name, None),
         )
 
     def get_power_mod(self, ctx: CalculateContext) -> float:

@@ -252,6 +252,38 @@ class PowerCalculator:
             return 100
         return 120
 
+    def calc_effective_attack_stat(self, context: CalculateContext) -> int:
+        """攻撃側の有効な攻撃ステータスを計算するメソッド。"""
+
+        if context.move.id == 776:
+            # ボディプレスは攻撃側の防御ステータスを使用する
+            return context.attacker.rank_calced_real_stats("DEFENSE")
+        if context.move.id == 492:
+            # イカサマは防御側の攻撃ステータスを使用する
+            return context.defender.rank_calced_real_stats("ATTACK")
+        move_damage_class = context.move_damage_class
+        if move_damage_class == move_enums.MoveDamageClass.PHYSICAL:
+            effective_attack_stat = context.attacker.rank_calced_real_stats("ATTACK")
+        else:
+            effective_attack_stat = context.attacker.rank_calced_real_stats(
+                "SPECIAL_ATTACK"
+            )
+        return effective_attack_stat
+
+    def calc_effective_defense_stat(self, context: CalculateContext) -> int:
+        """防御側の有効な防御ステータスを計算するメソッド。"""
+        if context.move.id == 473:
+            # サイコショックは特殊技だが防御側の防御ステータスを使用する
+            return context.defender.rank_calced_real_stats("DEFENSE")
+        move_damage_class = context.move_damage_class
+        if move_damage_class == move_enums.MoveDamageClass.PHYSICAL:
+            effective_defense_stat = context.defender.rank_calced_real_stats("DEFENSE")
+        else:
+            effective_defense_stat = context.defender.rank_calced_real_stats(
+                "SPECIAL_DEFENSE"
+            )
+        return effective_defense_stat
+
 
 def rounding_half_down(value: float) -> int:
     """半分を下に丸める。

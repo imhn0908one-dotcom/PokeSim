@@ -25,6 +25,16 @@ class Stats(IntEnum):
 Statslist: TypeAlias = dict[Stats, int]  # Statsをキー、intを値とする辞書型のエイリアス
 
 
+class Acc_Eva(IntEnum):
+    """命中・回避ランクの種類"""
+
+    ACCURACY = 1
+    EVASION = 2
+
+
+Acc_Eva_rank: TypeAlias = dict[Acc_Eva, int]
+
+
 class Natures(IntEnum):
     Hardy = 1
     Bold = 2

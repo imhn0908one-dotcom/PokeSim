@@ -237,12 +237,34 @@ class BuiltPokemon:
         return total_evs <= maxsum
 
     def check_moves(self) -> bool:
-        """Check if the selected moves are valid for this Pokémon.
+        """Check if the selected moves are valid for this Pokémon, 4 or fewer moves are selected.
 
         Returns:
             bool: True if all moves are valid, False otherwise.
         """
-        return all(move in self.MasterData.learnt_moves for move in self.movelist)
+        return (
+            all(move in self.MasterData.learnt_moves for move in self.movelist)
+            and len(self.movelist) <= 4
+        )
+
+    def check_all(self, maxsum_of_evs: int) -> bool:
+        """Check if the Pokémon's configuration is valid.
+
+        Returns:
+            bool: True if all checks pass, False otherwise.
+        """
+        return (
+            self.check_gender()
+            and self.check_ability()
+            and self.check_evs(maxsum_of_evs)
+            and self.check_moves()
+        )
+
+    def set_move(self, slot_index: int, move_id: int) -> None:
+        """技スロット（0〜3）に技をセットする"""
+        if 0 <= slot_index < 4:
+            if move_id in self.MasterData.learnt_moves:
+                self.movelist[slot_index] = move_id
 
 
 # =======================================================
@@ -306,7 +328,7 @@ class BattlePokemon:
     master_data: MasterPokemonData
     built_data: BuiltPokemon
     ability: ability_object.Ability
-    real_stats: Dict[pokemon_enums.Stats, int] = field(
+    real_stats: pokemon_enums.Statslist = field(
         metadata={"description": "実数値"},
         default_factory=lambda: {
             pokemon_enums.Stats.HP: 0,
@@ -317,7 +339,7 @@ class BattlePokemon:
             pokemon_enums.Stats.SPEED: 0,
         },
     )
-    rank: Dict[pokemon_enums.Stats, int] = field(
+    rank: pokemon_enums.Statslist = field(
         metadata={"description": "ランク"},
         default_factory=lambda: {
             pokemon_enums.Stats.HP: 0,
@@ -326,6 +348,13 @@ class BattlePokemon:
             pokemon_enums.Stats.SPECIAL_ATTACK: 0,
             pokemon_enums.Stats.SPECIAL_DEFENSE: 0,
             pokemon_enums.Stats.SPEED: 0,
+        },
+    )
+    acc_eva_rank: pokemon_enums.Acc_Eva_rank = field(
+        metadata={"description": "命中・回避ランク"},
+        default_factory=lambda: {
+            pokemon_enums.Acc_Eva.ACCURACY: 0,
+            pokemon_enums.Acc_Eva.EVASION: 0,
         },
     )
     terastal: bool = field(
@@ -337,14 +366,37 @@ class BattlePokemon:
         default=False,
     )
 
-    def calculate_real_stat(self, stat_name: str) -> int:
-        """目的ステータス名を引数に実数値を返す
+    def reset_ranks(self) -> None:
+        """交代時や戦闘終了時にランクをすべて0に戻す"""
+        for key in self.rank:
+            self.rank[key] = 0
+
+    def to_dict(self) -> dict:
+        """JSON化や保存用にデータクラスを辞書化する"""
+        import dataclasses
+
+        return dataclasses.asdict(self)
+
+    @property
+    def base_stat(self) -> Dict[pokemon_enums.Stats, int]:
+        return self.master_data.base_stats
+
+    @property
+    def evs(self) -> Dict[pokemon_enums.Stats, int]:
+        return self.built_data.evs
+
+    @property
+    def nature(self) -> pokemon_enums.Natures:
+        return self.built_data.nature
+
+    def _calculate_real_stat(self, stat_name: str) -> int:
+        """目的ステータス名を引数に実数値を返す。HPは別計算式。性格補正含む。
 
         Args:
             stat_name (str): 目的ステータス名
 
         Returns:
-            int: 実数値
+            int: 実数値 modified by nature and EVs.
         """
         if stat_name == "HP":
             return (
@@ -365,47 +417,15 @@ class BattlePokemon:
                 * change_rate
             )
 
-    def reset_ranks(self) -> None:
-        """交代時や戦闘終了時にランクをすべて0に戻す"""
-        for key in self.rank:
-            self.rank[key] = 0
-
-    def set_move(self, slot_index: int, move_id: int) -> None:
-        """技スロット（0〜3）に技をセットする"""
-        if 0 <= slot_index < 4:
-            if move_id in self.master_data.learnt_moves:
-                self.built_data.movelist[slot_index] = move_id
-
-    def to_dict(self) -> dict:
-        """JSON化や保存用にデータクラスを辞書化する"""
-        import dataclasses
-
-        return dataclasses.asdict(self)
-
-    @property
-    def base_stat(self) -> Dict[pokemon_enums.Stats, int]:
-        return self.master_data.base_stats
-
-    @property
-    def evs(self) -> Dict[pokemon_enums.Stats, int]:
-        return self.built_data.evs
-
-    @property
-    def nature(self) -> pokemon_enums.Natures:
-        return self.built_data.nature
-
-    @property
-    def rank_calced_real_stats(self) -> Dict[pokemon_enums.Stats, int]:
+    def rank_calced_real_stats(self, stat_name: str) -> int:
         """ランク補正後の実数値を返す"""
-        rank_calced_stats = {}
-        for stat in pokemon_enums.Stats:
-            rank_value = self.rank[stat]
-            if rank_value >= 0:
-                rank_multiplier = (2 + rank_value) / 2
-            else:
-                rank_multiplier = 2 / (2 - rank_value)
-            rank_calced_stats[stat] = int(self.real_stats[stat] * rank_multiplier)
-        return rank_calced_stats
+
+        rank_value = self.rank[pokemon_enums.Stats[stat_name]]
+        if rank_value >= 0:
+            rank_multiplier = (2 + rank_value) / 2
+        else:
+            rank_multiplier = 2 / (2 - rank_value)
+        return int(self.real_stats[pokemon_enums.Stats[stat_name]] * rank_multiplier)
 
     @classmethod
     def create_from_built(cls, built_pokemon: BuiltPokemon) -> "BattlePokemon":
@@ -439,7 +459,7 @@ class BattlePokemon:
     def update_real_stats(self) -> None:
         """Update the real_stats attribute based on the current base stats, EVs, and nature."""
         for stat in pokemon_enums.Stats:
-            self.real_stats[stat] = self.calculate_real_stat(stat.name)
+            self.real_stats[stat] = self._calculate_real_stat(stat.name)
 
 
 # =======================================================
