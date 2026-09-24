@@ -1,5 +1,6 @@
 import math
 from dataclasses import dataclass
+from typing import TYPE_CHECKING, Any, Callable, Dict, Optional
 
 from ENUMS import basic_enums, field_enums, move_enums, pokemon_enums
 from FIELD import field
@@ -43,3 +44,34 @@ class CalculateContext:
         """防御側のポケモンの素早さを取得するプロパティ。"""
 
         return self.defender.rank_calced_real_stats("SPEED")
+
+
+@dataclass
+class CalculateResult:
+    """計算結果を管理するクラス。"""
+
+    eff_attacker_speed: float
+    """補正後の攻撃側の素早さを表す浮動小数点数。"""
+    eff_defender_speed: float
+    """補正後の防御側の素早さを表す浮動小数点数。"""
+    eff_power: float
+    """補正後の技の威力を表す浮動小数点数。"""
+    damage_range: tuple[int, int]
+    """ダメージの範囲を表すタプル。最小ダメージと最大ダメージを含む。"""
+    damage_list: list[int]
+    """ダメージのリスト。各ダメージ値を含む。"""
+    critical_damage_range: tuple[int, int]
+    """クリティカルヒット時のダメージの範囲を表すタプル。最小ダメージと最大ダメージを含む。"""
+    critical_damage_list: list[int]
+    """クリティカルヒット時のダメージのリスト。各ダメージ値を含む。"""
+    meta_data: dict[str, Any]
+    """計算に関連するメタデータを格納する辞書。"""
+
+    def __str__(self):
+        return (
+            f"CalculateResult(damage_range={self.damage_range}, "
+            f"damage_list={self.damage_list}, "
+            f"critical_damage_range={self.critical_damage_range}, "
+            f"critical_damage_list={self.critical_damage_list}, "
+            f"meta_data={self.meta_data})"
+        )

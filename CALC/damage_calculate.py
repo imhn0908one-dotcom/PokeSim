@@ -5,8 +5,7 @@ from email.mime import base
 
 from numpy import power
 
-from CALC.calculate_context import CalculateContext
-from CALC.calculate_manager import CalculateResult
+from CALC.calculate_context import CalculateContext, CalculateResult
 from ENUMS import basic_enums, move_enums, pokemon_enums
 
 
@@ -28,7 +27,7 @@ class DamageCalculater:
     def __init__(self) -> None:
         self.power_calculator = PowerCalculator()
 
-    def damage_calculate(self, context: CalculateContext) -> CalculateResult:
+    def damage_calculate(self, context: CalculateContext):
         """ダメージ計算を行うメソッド。
 
         Args:
@@ -46,21 +45,6 @@ class DamageCalculater:
                 context
             ),  # calc_flow.md(l36)
             damage_modifier=1.0,  # TODO: ダメージ補正の計算を実装する #calc_flow.md (l120)
-        )
-        if context.move.power is None:
-            return CalculateResult(
-                damage_range=(0, 0),
-                damage_list=[],
-                critical_damage_range=(0, 0),
-                critical_damage_list=[],
-                meta_data={},
-            )
-        return CalculateResult(
-            damage_range=(0, 0),
-            damage_list=[],
-            critical_damage_range=(0, 0),
-            critical_damage_list=[],
-            meta_data={},
         )
 
     @classmethod
@@ -144,7 +128,9 @@ class PowerCalculator:
         return 4096
 
     @classmethod
-    def calc_modified_power(cls, context: CalculateContext) -> int:
+    def calc_modified_power(
+        cls, context: CalculateContext, result: CalculateResult
+    ) -> int:
         """技の威力を補正するメソッド。
 
         Args:
@@ -157,19 +143,21 @@ class PowerCalculator:
             return 0
         power_modifier = cls._power_modifier_calculate(context)
         finaly_power = rounding_half_down(
-            cls.calc_move_base_power(context) * power_modifier / 4096
+            cls.calc_move_base_power(context, result) * power_modifier / 4096
         )
         return finaly_power
 
     @classmethod
-    def calc_move_base_power(cls, context: CalculateContext) -> int:
+    def calc_move_base_power(
+        cls, context: CalculateContext, result: CalculateResult
+    ) -> float:
         """特定の技の威力を計算するメソッド。"""
         if context.move.power is None:
             return 0
         if context.move.id == 360:
-            return cls._calc_gyro_ball_power(context)
+            return cls._calc_gyro_ball_power(context, result)
         if context.move.id == 486:
-            return cls._calc_electro_ball_power(context)
+            return cls._calc_electro_ball_power(context, result)
         if context.move.id in (323, 284):
             return cls._calc_hp_depended_power(context)
         if context.move.id in (179, 175):
@@ -179,19 +167,23 @@ class PowerCalculator:
         return context.move.power
 
     @classmethod
-    def _calc_gyro_ball_power(cls, context: CalculateContext) -> int:
+    def _calc_gyro_ball_power(
+        cls, context: CalculateContext, result: CalculateResult
+    ) -> float:
         """ジャイロボールの威力を計算するメソッド。"""
-        attacker_speed = context.attacker.real_stats[pokemon_enums.Stats.SPEED]
-        defender_speed = context.defender.real_stats[pokemon_enums.Stats.SPEED]
+        attacker_speed = result.eff_attacker_speed
+        defender_speed = result.eff_defender_speed
         if attacker_speed <= 0:
             return 150
         return min(150, 25 * defender_speed // attacker_speed + 1)
 
     @classmethod
-    def _calc_electro_ball_power(cls, context: CalculateContext) -> int:
+    def _calc_electro_ball_power(
+        cls, context: CalculateContext, result: CalculateResult
+    ) -> float:
         """エレキボールの威力を計算するメソッド。"""
-        attacker_speed = context.attacker.real_stats[pokemon_enums.Stats.SPEED]
-        defender_speed = context.defender.real_stats[pokemon_enums.Stats.SPEED]
+        attacker_speed = result.eff_attacker_speed
+        defender_speed = result.eff_defender_speed
         if defender_speed <= 0:
             return 150
         speed_ratio = attacker_speed // defender_speed

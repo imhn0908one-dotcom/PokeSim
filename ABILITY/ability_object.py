@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 # 2. 補正関数の自動登録用レジストリとデコレータ
 POWER_MODIFIERS: Dict[str, Callable[[CalculateContext], float]] = {}
 DAMAGE_MODIFIERS: Dict[str, Callable[[CalculateContext], float]] = {}
+SPEED_MODIFIERS: Dict[str, Callable[[CalculateContext], float]] = {}
 
 
 def register_power(name: str):
@@ -26,6 +27,16 @@ def register_damage(name: str):
 
     def decorator(func: Callable[[CalculateContext], float]):
         DAMAGE_MODIFIERS[name] = func
+        return func
+
+    return decorator
+
+
+def register_speed(name: str):
+    """素早さ補正関数を登録するデコレータ"""
+
+    def decorator(func: Callable[[CalculateContext], float]):
+        SPEED_MODIFIERS[name] = func
         return func
 
     return decorator
@@ -127,6 +138,7 @@ class Ability:
     effect: str
     power_modifier: Optional[Callable[[CalculateContext], float]]
     damage_modifier: Optional[Callable[[CalculateContext], float]]
+    speed_modifier: Optional[Callable[[CalculateContext], float]] = None
 
     @classmethod
     def from_dict(cls, key_id: str, data: Dict[str, Any]) -> "Ability":
